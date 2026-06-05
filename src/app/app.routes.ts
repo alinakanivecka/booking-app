@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { NotFound } from './features/not-found/not-found';
 import { authGuard } from './core/guards/auth-guard';
-import { Search } from './features/search/search';
+import { authRoutes } from './features/auth/auth.routes';
 
 export const routes: Routes = [
   {
@@ -12,46 +12,67 @@ export const routes: Routes = [
 
   {
     path: 'search',
-    loadComponent: () => import('./features/search/search').then((c) => Search),
+    loadComponent: () => import('./features/search/search').then((c) => c.Search),
   },
 
   {
     path: 'accommodation/:id',
+    redirectTo: 'search',
   },
+
   {
     path: 'login',
+    redirectTo: 'search',
   },
+
   {
     path: 'register',
+    loadChildren: () => import('./features/auth/auth.routes').then((r) => r.authRoutes),
   },
+
   {
     path: 'bookings',
+    redirectTo: 'search',
   },
+
   {
     path: 'favorites',
+    redirectTo: 'search',
   },
+
   {
     path: 'profile',
     canActivate: [authGuard],
+    loadChildren: () => import('./features/auth/auth.routes').then((r) => r.authRoutes),
   },
 
   {
     path: 'host/dashboard',
+    redirectTo: 'search',
   },
+
   {
     path: 'host/accommodations',
+    redirectTo: 'search',
   },
+
   {
     path: 'host/accommodations/new',
+    redirectTo: 'search',
   },
+
   {
     path: 'host/accommodations/:id/edit',
+    redirectTo: 'search',
   },
+
   {
     path: 'host/bookings',
+    redirectTo: 'search',
   },
+
   {
     path: '**',
-    loadComponent: () => import('./features/not-found/not-found').then((c) => NotFound),
+    loadComponent: () => import('./features/not-found/not-found').then((c) => c.NotFound),
   },
 ];

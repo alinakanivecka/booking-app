@@ -6,8 +6,8 @@
 
   @if (!isAuthenticated()) {
   <div class="auth-menu">
-    <button type="button">Register</button>
-    <button type="button">Sign in</button>
+    <a routerLink="/register">Register</a>
+    <a routerLink="/login">Sign in</a>
   </div>
   } @else {
   <div class="user-menu">

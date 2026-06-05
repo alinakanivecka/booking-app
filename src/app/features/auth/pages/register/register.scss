@@ -1,0 +1,31 @@
+.register-page {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .error-slot {
+    min-height: 1rem;
+    margin-top: 0.1rem;
+  }
+
+  .error-text {
+    color: red;
+    font-size: 0.8rem;
+  }
+
+  .input-error {
+    outline: 1px solid red;
+  }
+}
