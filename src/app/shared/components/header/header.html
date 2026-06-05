@@ -1,0 +1,17 @@
+<header class="header">
+  <div class="app-logo">
+    <img class="logo-icon" src="assets/logo.png" alt="logo-icon">
+    <span class="header-title"> BOOKING</span>
+  </div>
+
+  @if (!isAuthenticated()) {
+  <div class="auth-menu">
+    <button type="button">Register</button>
+    <button type="button">Sign in</button>
+  </div>
+  } @else {
+  <div class="user-menu">
+    <button type="button">User menu</button>
+  </div>
+  }
+</header>

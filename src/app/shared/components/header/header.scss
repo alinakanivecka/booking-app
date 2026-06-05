@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(129 129 237);
+  padding: 3rem 10rem;
+
+  .app-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .logo-icon {
+      height: 2rem;
+    }
+
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+}
