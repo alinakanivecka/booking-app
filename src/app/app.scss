@@ -1,6 +1,9 @@
 :host {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
+}
+
+main {
+  padding: 3rem 10rem;
 }
