@@ -9,7 +9,7 @@ export interface RegisterPayload {
   name: string;
 }
 
-export interface RegisterResponse {
+export interface AuthResponse {
   accessToken: string;
   expiresAt: string;
   user: User;
@@ -23,17 +23,27 @@ export interface User {
   roles: string[];
 }
 
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
 
-  register(payload: RegisterPayload): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
+  register(payload: RegisterPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
-  saveAuthData(response: RegisterResponse) {
+  saveAuthData(response: AuthResponse) {
     localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('user', JSON.stringify(response.user));
+  }
+
+  login(payload: LoginPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload);
   }
 }

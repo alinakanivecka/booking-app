@@ -21,12 +21,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'login',
-    redirectTo: 'search',
-  },
-
-  {
-    path: 'register',
+    path: '',
     loadChildren: () => import('./features/auth/auth.routes').then((r) => r.authRoutes),
   },
 
