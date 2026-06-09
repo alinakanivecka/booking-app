@@ -1,15 +1,15 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   imports: [ReactiveFormsModule],
-  templateUrl: './register.html',
-  styleUrl: './register.scss',
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
-export class Register implements OnInit {
+export class Login {
   private authService = inject(AuthService);
   private formBuilder = inject(NonNullableFormBuilder);
   private router = inject(Router);
@@ -17,28 +17,27 @@ export class Register implements OnInit {
   isLoading = signal(false);
   serverError = signal<string | null>(null);
 
-  registerForm = this.formBuilder.group({
+  loginForm = this.formBuilder.group({
     email: this.formBuilder.control('', {
       validators: [Validators.required, Validators.email],
     }),
     password: this.formBuilder.control('', {
-      validators: [Validators.required, Validators.minLength(8)],
+      validators: [Validators.required],
     }),
-    name: this.formBuilder.control('', Validators.required),
   });
 
   onSubmit() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    const formValue = this.registerForm.getRawValue();
+    const formValue = this.loginForm.getRawValue();
 
     this.isLoading.set(true);
     this.serverError.set(null);
 
-    this.authService.register(formValue).subscribe({
+    this.authService.login(formValue).subscribe({
       next: (response) => {
         console.log('succses', response);
         this.authService.saveAuthData(response);
@@ -47,14 +46,14 @@ export class Register implements OnInit {
       },
       error: (error) => {
         console.log('error:', error);
-        this.serverError.set('This email is already registered.');
+        this.serverError.set('Invalid email or password.');
         this.isLoading.set(false);
       },
     });
   }
 
   get emailErrorMessage(): string | null {
-    const email = this.registerForm.controls.email;
+    const email = this.loginForm.controls.email;
 
     if (!email.touched) return null;
 
@@ -70,7 +69,7 @@ export class Register implements OnInit {
   }
 
   get passwordErrorMessage(): string | null {
-    const password = this.registerForm.controls.password;
+    const password = this.loginForm.controls.password;
 
     if (!password.touched) return null;
 
@@ -78,27 +77,11 @@ export class Register implements OnInit {
       return 'Password is required.';
     }
 
-    if (password.hasError('minlength')) {
-      return 'Password must be at least 8 characters.';
-    }
-
-    return null;
-  }
-
-  get nameErrorMessage(): string | null {
-    const name = this.registerForm.controls.name;
-
-    if (!name.touched) return null;
-
-    if (name.hasError('required')) {
-      return 'Name is required';
-    }
-
     return null;
   }
 
   ngOnInit(): void {
-    this.registerForm.valueChanges.subscribe(() => {
+    this.loginForm.valueChanges.subscribe(() => {
       this.serverError.set(null);
     });
   }
