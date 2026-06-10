@@ -46,4 +46,21 @@ export class AuthService {
   login(payload: LoginPayload): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload);
   }
+
+  refreshToken(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/refresh`,
+      {},
+      { withCredentials: true },
+    );
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
+  clearSession(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+  }
 }
