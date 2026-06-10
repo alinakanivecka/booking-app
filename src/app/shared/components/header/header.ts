@@ -1,12 +1,40 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { ClickOutsideDirective } from "../../directives/click-outside.directive";
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, ClickOutsideDirective],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
-  isAuthenticated = signal(false);
+  authService = inject(AuthService);
+  router = inject(Router);
+
+  isDropdownOpen = signal(false);
+
+  toggleDropdown() {
+    this.isDropdownOpen.set(!this.isDropdownOpen());
+  }
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+        this.isDropdownOpen.set(false);
+      },
+      error: () => {
+        this.authService.clearSession();
+        this.router.navigate(['/login']);
+      },
+    });
+  }
+
+  showFirstLetterCurrentUser = computed(() => {
+    const name = this.authService.currentUser()?.name;
+
+    return name ? name[0].toUpperCase() : '';
+  });
 }
