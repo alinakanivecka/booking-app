@@ -1,0 +1,139 @@
+.search-panel {
+  display: grid;
+  grid-template-columns: 1.3fr 1.1fr 1.2fr auto;
+  border: 4px solid rgb(213, 213, 213);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transform: translateY(50%);
+  background-color: white;
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: white;
+  padding: 0.4rem 1rem;
+  border-right: 4px solid rgb(213, 213, 213);
+
+  > i {
+    font-size: 1.4rem;
+    color: #595959;
+    flex-shrink: 0;
+  }
+}
+
+.date-item {
+  cursor: pointer;
+  position: relative;
+}
+
+.date-display {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.hidden-date-field {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+}
+
+.booking-field {
+  width: 100%;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  ::ng-deep .mat-mdc-form-field-flex {
+    min-height: 3.5rem;
+    align-items: center;
+  }
+
+  ::ng-deep .mdc-notched-outline {
+    display: none;
+  }
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  input {
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+}
+
+.clear-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #595959;
+}
+
+.guests-item {
+  gap: 1.2rem;
+}
+
+.guest-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.45rem;
+  white-space: nowrap;
+
+  .guest-control__amount {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  button {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    border: 1px solid rgb(129, 129, 237);
+    background-color: white;
+    color: rgb(129, 129, 237);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+
+    &:hover {
+      background-color: rgba(129, 129, 237, 0.1);
+    }
+  }
+
+  strong {
+    min-width: 1rem;
+    text-align: center;
+  }
+}
+
+.search-btn {
+  background-color: rgb(129, 129, 237);
+  color: white;
+  border: none;
+  padding: 0 2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(101, 101, 206);
+  }
+}
