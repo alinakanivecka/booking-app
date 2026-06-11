@@ -1,1 +1,4 @@
-<p>search works!</p>
+<app-search-panel (search)="search($event)"></app-search-panel>
+
+<app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()"
+  [accItems]="accItems()"></app-accommodations-list>

@@ -1,0 +1,71 @@
+<section class="accommodations-section">
+  @if (isLoading()) {
+  <div class="accommodations-list">
+    @for (_ of [1, 2, 3]; track _) {
+    <div class="accommodation-card skeleton-card"></div>
+    }
+  </div>
+  } @else if (errorMessage()) {
+  <p class="error-text">{{ errorMessage() }}</p>
+  } @else {
+  <div class="accommodations-list">
+    @for (item of accItems(); track item.id) {
+    <article class="accommodation-card">
+      <div class="image-wrapper">
+        <img class="accommodation-image" [src]="getImageUrl(item)" [alt]="item.name" />
+
+        <button class="favorite-btn" type="button">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </div>
+
+      <div class="accommodation-content">
+        <div class="main-info">
+          <h3>{{ item.name }}</h3>
+
+          <p class="location">
+            <i class="fa-solid fa-location-dot"></i>
+            {{ item.city }}, {{ item.country }}
+          </p>
+
+          <div class="amenities">
+            @for (amenity of item.amenities; track amenity) {
+            <span>{{ amenity }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="side-info">
+          <div class="rating-row">
+            <div>
+              <strong>
+                {{ item.rating >= 4 ? 'Wonderful' : 'New' }}
+              </strong>
+              <span>Rating</span>
+            </div>
+
+            <span class="rating-badge">
+              {{ item.rating || '—' }}
+            </span>
+          </div>
+
+          <div class="price-box">
+
+            <strong>
+              €{{ item.pricePerNight }}
+            </strong>
+
+            <span class="tax-text">Includes taxes and fees</span>
+          </div>
+
+          <button class="details-btn" type="button">
+            See availability
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+  }
+</section>

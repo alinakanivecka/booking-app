@@ -1,0 +1,33 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AccommodationsResponse } from '../../models/accommodations.model';
+import { environment } from '../../../environments/environment';
+import { FiltersType } from '../../models/filters-type.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AccommodationsService {
+  private http = inject(HttpClient);
+
+  getAccommodations(filters: FiltersType): Observable<AccommodationsResponse> {
+    let params = new HttpParams().set('page', filters.page).set('pageSize', filters.pageSize);
+
+    if (filters.city) {
+      params = params.set('city', filters.city);
+    }
+
+    if (filters.country) {
+      params = params.set('country', filters.country);
+    }
+
+    if (filters.guests) {
+      params = params.set('guests', filters.guests);
+    }
+
+    return this.http.get<AccommodationsResponse>(`${environment.apiUrl}/accommodations`, {
+      params,
+    });
+  }
+}

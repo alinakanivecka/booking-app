@@ -1,32 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, take, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface RegisterPayload {
-  email: string;
-  password: string;
-  name: string;
-}
-
-export interface AuthResponse {
-  accessToken: string;
-  expiresAt: string;
-  user: User;
-}
-
-export interface User {
-  avatarUrl: string;
-  email: string;
-  id: number;
-  name: string;
-  roles: string[];
-}
-
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
+import { User } from '../../models/user.model';
+import { AuthResponse } from '../../features/auth/models/auth-response.model';
+import { RegisterPayload } from '../../features/auth/models/register-payload.model';
+import { LoginPayload } from '../../features/auth/models/login-payload.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,17 +19,16 @@ export class AuthService {
   userRoles = computed(() => this.currentUser()?.roles ?? []);
 
   register(payload: RegisterPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload);
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload, { withCredentials: true });
   }
 
   saveAuthData(response: AuthResponse) {
     localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('user', JSON.stringify(response.user));
     this.currentUser.set(response.user);
   }
 
   login(payload: LoginPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload);
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload, { withCredentials: true });
   }
 
   me(): Observable<User> {
@@ -76,7 +54,9 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post(`${environment.apiUrl}/auth/logout`, {}).pipe(tap(() => this.clearSession()));
+    return this.http
+      .post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true })
+      .pipe(tap(() => this.clearSession()));
   }
 
   refreshToken(): Observable<AuthResponse> {
@@ -93,7 +73,6 @@ export class AuthService {
 
   clearSession(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
     this.currentUser.set(null);
   }
 }
