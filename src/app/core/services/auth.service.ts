@@ -15,11 +15,12 @@ export class AuthService {
 
   currentUser = signal<User | null>(null);
   isAuthenticated = computed(() => this.currentUser() !== null);
-  // isAuthenticated = signal(false);
   userRoles = computed(() => this.currentUser()?.roles ?? []);
 
   register(payload: RegisterPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload, { withCredentials: true });
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload, {
+      withCredentials: true,
+    });
   }
 
   saveAuthData(response: AuthResponse) {
@@ -28,7 +29,17 @@ export class AuthService {
   }
 
   login(payload: LoginPayload): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload, { withCredentials: true });
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  loginWithGoogle(idToken: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/google`,
+      { identityToken: idToken },
+      { withCredentials: true },
+    );
   }
 
   me(): Observable<User> {

@@ -1,39 +1,45 @@
 <div class="login-page">
-  <h1>Sign in an account</h1>
+  <div class="login-card">
+    <h1>Sign in to your account</h1>
 
-  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-field">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="Enter your email address" formControlName="email"
-        [class.input-error]="loginForm.controls.email.invalid && loginForm.controls.email.touched">
+    <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email address" formControlName="email"
+          [class.input-error]="loginForm.controls.email.invalid && loginForm.controls.email.touched">
 
-      <div class="error-slot">
-        @if(emailErrorMessage) {
-        <p class="error-text">{{emailErrorMessage}}</p>
-        }
+        <div class="error-slot">
+          @if(emailErrorMessage) {
+          <p class="error-text">{{emailErrorMessage}}</p>
+          }
+        </div>
       </div>
-    </div>
 
-    <div class="form-field">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter your password" formControlName="password"
-        [class.input-error]="loginForm.controls.password.invalid && loginForm.controls.password.touched">
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" formControlName="password"
+          [class.input-error]="loginForm.controls.password.invalid && loginForm.controls.password.touched">
 
-      <div class="error-slot">
-        @if(passwordErrorMessage) {
-        <p class="error-text">{{passwordErrorMessage}}</p>
-        }
+        <div class="error-slot">
+          @if(passwordErrorMessage) {
+          <p class="error-text">{{passwordErrorMessage}}</p>
+          }
+
+          @if (serverError()) {
+          <p class="error-text">{{ serverError() }}</p>
+          }
+        </div>
       </div>
-    </div>
 
-    <div class="error-slot">
-      @if (serverError()) {
-      <p class="error-text">{{ serverError() }}</p>
-      }
-    </div>
+      <button class="submit-btn" type="submit" [disabled]="loginForm.invalid || isLoading()">
+        Sign In
+      </button>
 
-    <button type="submit" [disabled]="loginForm.invalid || isLoading()">
-      Sign In
-    </button>
-  </form>
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <div id="google-button"></div>
+    </form>
+  </div>
 </div>
