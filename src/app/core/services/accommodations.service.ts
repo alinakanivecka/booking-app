@@ -22,8 +22,28 @@ export class AccommodationsService {
       params = params.set('country', filters.country);
     }
 
-    if (filters.guests) {
+    if (filters.guests != null) {
       params = params.set('guests', filters.guests);
+    }
+
+    if (filters.minPrice != null) {
+      params = params.set('minPrice', filters.minPrice);
+    }
+
+    if (filters.maxPrice != null) {
+      params = params.set('maxPrice', filters.maxPrice);
+    }
+
+    if (filters.checkIn) {
+      params = params.set('checkIn', filters.checkIn);
+    }
+
+    if (filters.checkOut) {
+      params = params.set('checkOut', filters.checkOut);
+    }
+
+    if (filters.amenities?.length) {
+      params = params.set('amenities', filters.amenities.join(','));
     }
 
     return this.http.get<AccommodationsResponse>(`${environment.apiUrl}/accommodations`, {

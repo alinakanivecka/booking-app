@@ -8,6 +8,6 @@ export interface FiltersType {
   guests?: number;
   checkIn?: string;
   checkOut?: string;
-  amenities?: string;
+  amenities?: string[];
   sort?: string;
 }
