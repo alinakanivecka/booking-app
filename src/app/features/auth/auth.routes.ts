@@ -7,6 +7,7 @@ export const authRoutes: Routes = [
     path: 'register',
     component: Register,
   },
+
   {
     path: 'login',
     component: Login,

@@ -1,7 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, NgZone, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
+
+declare const google: any;
 
 @Component({
   selector: 'app-login',
@@ -9,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements AfterViewInit {
   private authService = inject(AuthService);
   private formBuilder = inject(NonNullableFormBuilder);
   private router = inject(Router);
@@ -78,6 +81,41 @@ export class Login {
     }
 
     return null;
+  }
+
+  ngAfterViewInit() {
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+
+      callback: (googleResponse: any) => {
+        const identityToken = googleResponse.credential;
+
+        this.isLoading.set(true);
+        this.serverError.set(null);
+
+        this.authService.loginWithGoogle(identityToken).subscribe({
+          next: (authResponse) => {
+            this.authService.saveAuthData(authResponse);
+            this.router.navigate(['/search']);
+            this.isLoading.set(false);
+          },
+          error: (error) => {
+            this.router.navigate(['/login']);
+            this.serverError.set('Google login failed. Please try again.');
+            this.isLoading.set(false);
+          },
+        });
+      },
+    });
+
+    google.accounts.id.renderButton(document.getElementById('google-button'), {
+      theme: 'outline',
+      size: 'large',
+      text: 'continue_with',
+      locale: 'en',
+    });
+
+    google.accounts.id.prompt();
   }
 
   ngOnInit(): void {
