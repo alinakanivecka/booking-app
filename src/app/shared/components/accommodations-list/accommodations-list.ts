@@ -12,6 +12,9 @@ export class AccommodationsList {
   isLoading = input.required<boolean>();
   errorMessage = input.required<string>();
   accItems = input.required<Items[]>();
+  totalItems = input.required<number>();
+  getDestinationName = input.required<string | undefined>();
+  noResults = input.required()
 
   getImageUrl(item: Items): string {
     const firstImage = item.images[0];

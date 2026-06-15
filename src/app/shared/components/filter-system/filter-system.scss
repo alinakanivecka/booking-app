@@ -1,0 +1,91 @@
+:host {
+  flex: 1;
+}
+
+::ng-deep .mat-mdc-slider-visual-thumb .mat-ripple {
+  display: none;
+}
+
+::ng-deep .mdc-slider__thumb-knob {
+  border-width: 0.5rem !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.filter-system {
+  background-color: white;
+  border: 1px solid #dedede;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  height: 100%;
+  position: sticky;
+  top: 1rem;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ececec;
+}
+
+.filter-box {
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid #ececec;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.filter-title {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.slider-range {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgb(78, 78, 218);
+
+  i {
+    font-size: 0.85rem;
+  }
+}
+
+.price-slider {
+  width: 100%;
+  margin: auto !important;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  text-transform: capitalize;
+
+  input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: rgb(129, 129, 237);
+    cursor: pointer;
+  }
+
+  &:hover {
+    color: rgb(78, 78, 218);
+  }
+}

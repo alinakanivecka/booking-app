@@ -1,4 +1,8 @@
 <section class="accommodations-section">
+  @if (getDestinationName()) {
+  <h2>{{getDestinationName()}}: {{totalItems()}} properties found</h2>
+  }
+
   @if (isLoading()) {
   <div class="accommodations-list">
     @for (_ of [1, 2, 3]; track _) {
@@ -7,6 +11,11 @@
   </div>
   } @else if (errorMessage()) {
   <p class="error-text">{{ errorMessage() }}</p>
+  } @else if (noResults()) {
+  <div class="not-found-result">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <h1>No properties found in {{getDestinationName()}}</h1>
+  </div>
   } @else {
   <div class="accommodations-list">
     @for (item of accItems(); track item.id) {
@@ -52,7 +61,7 @@
           <div class="price-box">
 
             <strong>
-              €{{ item.pricePerNight }}
+              <i class="fa-solid fa-euro-sign"></i> {{ item.pricePerNight }}
             </strong>
 
             <span class="tax-text">Includes taxes and fees</span>

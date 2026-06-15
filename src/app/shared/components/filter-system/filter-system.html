@@ -1,0 +1,33 @@
+<section class="filter-system">
+  <h2 class="title">Filter by:</h2>
+
+  <form class="filters" [formGroup]="filterForm">
+    <div class="filter-box">
+      <h3 class="filter-title">Your budget (per night)</h3>
+
+      <div class="slider-range">
+        <span><i class="fa-solid fa-euro-sign"></i> {{filterForm.controls.minPrice.value}} —</span>
+        <span><i class="fa-solid fa-euro-sign"></i> {{filterForm.controls.maxPrice.value}}</span>
+      </div>
+
+      <mat-slider class="price-slider" min="0" max="1000" step="10">
+        <input [value]="filterForm.controls.minPrice.value" matSliderStartThumb
+          (input)="filterForm.controls.minPrice.setValue(+minPriceSlider.value)" #minPriceSlider>
+        <input [value]="filterForm.controls.maxPrice.value" matSliderEndThumb
+          (input)="filterForm.controls.maxPrice.setValue(+maxPriceSlider.value)" #maxPriceSlider>
+      </mat-slider>
+    </div>
+
+    <div class="filter-box">
+      <h3 class="filter-title">Amenities</h3>
+
+      @for (amenity of availableAmenities(); track amenity) {
+      <label class="checkbox-row">
+        <input type="checkbox" [checked]="filterForm.controls.amenities.value?.includes(amenity)"
+          (change)="toggleAmenity(amenity)">
+        {{amenity}}
+      </label>
+      }
+    </div>
+  </form>
+</section>

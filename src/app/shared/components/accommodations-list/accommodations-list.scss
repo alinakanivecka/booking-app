@@ -1,11 +1,12 @@
-.accommodations-section {
-  margin-top: 5rem;
+:host {
+  flex: 3;
 }
 
 .accommodations-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .accommodation-card {
