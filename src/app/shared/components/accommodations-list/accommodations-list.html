@@ -2,7 +2,6 @@
   @if (getDestinationName()) {
   <h2>{{getDestinationName()}}: {{totalItems()}} properties found</h2>
   }
-
   @if (isLoading()) {
   <div class="accommodations-list">
     @for (_ of [1, 2, 3]; track _) {
@@ -18,6 +17,9 @@
   </div>
   } @else {
   <div class="accommodations-list">
+
+   
+
     @for (item of accItems(); track item.id) {
     <article class="accommodation-card">
       <div class="image-wrapper">

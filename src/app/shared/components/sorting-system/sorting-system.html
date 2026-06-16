@@ -1,0 +1,18 @@
+<div class="sort-wrapper">
+  <button class="sort-btn" type="button" (click)="toggleDropdown()" appClickOutside
+    (appClickOutside)="isDropdownOpen.set(false)">
+    <span>Sort by:</span>
+    <strong>{{ selectedOption()?.label || 'Select option' }}</strong>
+    <i class="fa-solid fa-chevron-down" [class.open]="isDropdownOpen()"></i>
+  </button>
+
+  @if(isDropdownOpen()) {
+  <div class="sort-dropdown">
+    @for (option of sortOptions(); track option.value) {
+    <button type="button" class="dropdown-row" (click)="selectOption(option.value)">
+      {{ option.label }}
+    </button>
+    }
+  </div>
+  }
+</div>

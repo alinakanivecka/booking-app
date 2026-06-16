@@ -21,11 +21,11 @@
         content: "";
         flex: 1;
         height: 1px;
-        background-color: #e5e5f4;
+        background-color: var(--color-border-dropdown);
       }
 
       span {
-        color: #8a8aa8;
+        color: var(--color-text-subtle);
         font-size: 0.85rem;
         font-weight: 500;
       }

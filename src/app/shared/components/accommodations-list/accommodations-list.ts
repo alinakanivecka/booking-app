@@ -14,7 +14,7 @@ export class AccommodationsList {
   accItems = input.required<Items[]>();
   totalItems = input.required<number>();
   getDestinationName = input.required<string | undefined>();
-  noResults = input.required()
+  noResults = input.required();
 
   getImageUrl(item: Items): string {
     const firstImage = item.images[0];

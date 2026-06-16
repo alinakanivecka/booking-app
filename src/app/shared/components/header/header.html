@@ -9,19 +9,19 @@
     <a routerLink="/register">Register</a>
     <a routerLink="/login">Sign in</a>
     } @else {
-    <div class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside (appClickOutside)="isDropdownOpen.set(false)">
+    <button type="button" class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside (appClickOutside)="isDropdownOpen.set(false)">
       <div class="user-name-icon">{{ showFirstLetterCurrentUser() }}</div>
       <span class="user-name">{{ authService.currentUser()?.name }}</span>
-    </div>
+    </button>
 
     <div class="user-menu-dropdown" [class.open]="isDropdownOpen()">
-      <span class="dropdown-row">
+      <button type="button" class="dropdown-row">
         <i class="fa-regular fa-heart"></i> Favorites
-      </span>
+      </button>
 
-      <span class="dropdown-row" (click)="logout()">
+      <button type="button" class="dropdown-row" (click)="logout()">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
-      </span>
+      </button>
     </div>
     }
   </div>
