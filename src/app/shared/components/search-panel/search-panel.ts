@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FiltersType } from '../../../models/filters-type.model';
+import { U } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-search-panel',
@@ -48,6 +49,10 @@ export class SearchPanel implements OnInit {
         {
           destination: filters.city ?? '',
           adults: filters.guests ?? 2,
+          // dateRange: {
+          //   start: filters.checkIn ? new Date(filters.checkIn) : null,
+          //   end: filters.checkOut ? new Date(filters.checkOut) : null,
+          // },
         },
         { emitEvent: false },
       );

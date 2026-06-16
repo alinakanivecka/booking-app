@@ -8,10 +8,11 @@ import { AccommodationsList } from '../../shared/components/accommodations-list/
 import { FilterSystem } from '../../shared/components/filter-system/filter-system';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, Subject } from 'rxjs';
+import { SortingSystem } from '../../shared/components/sorting-system/sorting-system';
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [SearchPanel, AccommodationsList, FilterSystem],
+  imports: [SearchPanel, AccommodationsList, FilterSystem, SortingSystem],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
@@ -27,6 +28,24 @@ export class Search implements OnInit {
   pageSize = signal(20);
   hasMore = computed(() => this.accItems().length < this.totalItems());
   activeFilters = signal<Partial<FiltersType>>({});
+  selectedSort = signal<'priceAsc' | 'priceDesc' | 'ratingDesc'>('priceAsc');
+
+  sortOptions = [
+    { label: 'Price (lowest first)', value: 'priceAsc' },
+    { label: 'Price (highest first)', value: 'priceDesc' },
+    { label: 'Rating (high to low)', value: 'ratingDesc' },
+  ];
+
+  selectSortMode(mode: string) {
+    if (mode !== 'priceAsc' && mode !== 'priceDesc' && mode !== 'ratingDesc') {
+      return;
+    }
+
+    this.selectedSort.set(mode);
+    this.currentPage.set(1);
+    this.updateQueryParams();
+    this.loadAccommodations(true);
+  }
 
   errorMessage = signal('');
   isLoading = signal(false);
@@ -47,6 +66,7 @@ export class Search implements OnInit {
   private buildFilters(): FiltersType {
     return {
       ...this.activeFilters(),
+      sort: this.selectedSort(),
       page: this.currentPage(),
       pageSize: this.pageSize(),
     };
@@ -84,6 +104,7 @@ export class Search implements OnInit {
       guests: filters.guests ?? null,
       checkIn: filters.checkIn || null,
       checkOut: filters.checkOut || null,
+      sort: this.selectedSort() || null,
     };
   }
 
@@ -97,6 +118,11 @@ export class Search implements OnInit {
   private loadFiltersFromQueryParams() {
     const params = this.route.snapshot.queryParamMap;
     const amenities = params.get('amenities');
+    const sort = params.get('sort');
+
+    if (sort === 'priceAsc' || sort === 'priceDesc' || sort === 'ratingDesc') {
+      this.selectedSort.set(sort);
+    }
 
     this.activeFilters.set({
       city: params.get('city') || undefined,

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, NgZone, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';

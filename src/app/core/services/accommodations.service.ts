@@ -46,6 +46,10 @@ export class AccommodationsService {
       params = params.set('amenities', filters.amenities.join(','));
     }
 
+    if (filters.sort) {
+      params = params.set('sort', filters.sort);
+    }
+
     return this.http.get<AccommodationsResponse>(`${environment.apiUrl}/accommodations`, {
       params,
     });
