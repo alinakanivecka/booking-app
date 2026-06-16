@@ -105,6 +105,8 @@ export class Search implements OnInit {
       checkIn: filters.checkIn || null,
       checkOut: filters.checkOut || null,
       sort: this.selectedSort() || null,
+      page: this.currentPage() || null,
+      pageSize: this.pageSize() || null,
     };
   }
 
@@ -119,9 +121,19 @@ export class Search implements OnInit {
     const params = this.route.snapshot.queryParamMap;
     const amenities = params.get('amenities');
     const sort = params.get('sort');
+    const page = this.getNumberParam('page');
+    const pageSize = this.getNumberParam('pageSize');
 
     if (sort === 'priceAsc' || sort === 'priceDesc' || sort === 'ratingDesc') {
       this.selectedSort.set(sort);
+    }
+
+    if (page && page > 0) {
+      this.currentPage.set(page);
+    }
+
+    if (pageSize && pageSize > 0) {
+      this.pageSize.set(pageSize);
     }
 
     this.activeFilters.set({
@@ -174,6 +186,7 @@ export class Search implements OnInit {
     if (this.isLoading() || !this.hasMore()) return;
 
     this.currentPage.update((page) => page + 1);
+    this.updateQueryParams();
     this.loadAccommodations();
   }
 
