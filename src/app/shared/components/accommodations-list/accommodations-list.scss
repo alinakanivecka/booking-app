@@ -18,7 +18,7 @@
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 4px 14px var(--primary-shadow-card);
+    box-shadow: 0 4px 14px var(rgba(129, 129, 237, 0.22));
   }
 }
 
@@ -44,7 +44,7 @@
   border: none;
   border-radius: 50%;
   background-color: white;
-  color: var(--color-text-body);
+  color: var(--color-text-neutral);
   font-size: 1.1rem;
   cursor: pointer;
   box-shadow: 0 2px 8px var(--shadow-black-soft);
@@ -121,14 +121,14 @@
 
   span {
     font-size: 0.75rem;
-    color: --color-text-muted;
+    color: #666;
   }
 }
 
 .rating-badge {
-  background-color: --color-text-strong;
+  background-color: var(--color-primary-strong);
   color: white !important;
-  padding: 0.35rem 0.45rem;
+  padding: 0.5rem 0.6rem;
   border-radius: 0.35rem;
   font-size: 0.9rem !important;
   font-weight: 700;
@@ -144,13 +144,13 @@
 .night-text,
 .tax-text {
   font-size: 0.75rem;
-  color: --color-text-muted;
+  color: var(--color-text-muted);
 }
 
 .price-box strong {
   font-size: 1.35rem;
   font-weight: 500;
-  color: --color-text-strong;
+  color: var( --color-text-strong);
 }
 
 .details-btn {

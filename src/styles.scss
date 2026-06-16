@@ -31,7 +31,7 @@ html {
 :root {
   --color-primary: rgb(129, 129, 237);
   --color-primary-rgb: 129, 129, 237;
-  --color-text-strong: rgb(78, 78, 218);
+  --color-primary-strong: rgb(78, 78, 218);
   --color-primary-dark: rgb(76, 76, 186);
   --color-primary-hover: rgb(112, 112, 224);
   --color-primary-action-hover: rgb(101, 101, 206);
@@ -53,6 +53,7 @@ html {
   --color-text-secondary: #4b4b64;
   --color-text-placeholder: #aaaac2;
   --color-text-subtle: #8a8aa8;
+  --color-text-neutral: #333
   --color-icon-muted: #918f8f;
 
   --color-border: #dedede;
