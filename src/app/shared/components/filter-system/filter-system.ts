@@ -1,9 +1,19 @@
-import { Component, computed, effect, inject, input, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { Item } from '../../../models/accommodations.model';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FiltersType } from '../../../models/filters-type.model';
 import { AccommodationsService } from '../../../core/services/accommodations.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-filter-system',
@@ -14,10 +24,13 @@ import { AccommodationsService } from '../../../core/services/accommodations.ser
 export class FilterSystem {
   private accommodationService = inject(AccommodationsService);
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
 
   accItems = input.required<Item[]>();
   filters = input<Partial<FiltersType>>({});
   filterChanged = output<Partial<FiltersType>>();
+
+  isShowAllAmenities = signal(false);
 
   filterForm = this.fb.group({
     minPrice: [0],
@@ -25,19 +38,8 @@ export class FilterSystem {
     amenities: [[] as string[]],
   });
 
-  constructor() {
-    effect(() => {
-      const filters = this.filters();
-
-      this.filterForm.patchValue(
-        {
-          minPrice: filters.minPrice ?? 0,
-          maxPrice: filters.maxPrice ?? 1000,
-          amenities: filters.amenities ?? [],
-        },
-        { emitEvent: false },
-      );
-    });
+  toggleShowAll() {
+    this.isShowAllAmenities.set(!this.isShowAllAmenities());
   }
 
   toggleAmenity(amenity: string) {
@@ -54,23 +56,46 @@ export class FilterSystem {
     amenitiesControl.setValue(newAmenities);
   }
 
-  ngOnInit() {
-    this.filterForm.valueChanges.subscribe((value) => {
-      this.filterChanged.emit({
-        minPrice: value.minPrice ?? undefined,
-        maxPrice: value.maxPrice ?? undefined,
-        amenities: value.amenities ?? undefined,
-      });
-    });
-  }
-
   availableAmenities = computed(() => {
     const allAmenities = this.accItems().flatMap((item) => item.amenities);
 
     return [...new Set(allAmenities)];
   });
 
+  defaultAmenities = computed(() => {
+    return this.availableAmenities().slice(0, 6);
+  });
+
+  extraAmenities = computed(() => {
+    return this.availableAmenities().slice(6);
+  });
+
   replaceAmenity(ammenity: string): string {
     return this.accommodationService.replaceAmenity(ammenity);
+  }
+
+  constructor() {
+    effect(() => {
+      const filters = this.filters();
+
+      this.filterForm.patchValue(
+        {
+          minPrice: filters.minPrice ?? 0,
+          maxPrice: filters.maxPrice ?? 1000,
+          amenities: filters.amenities ?? [],
+        },
+        { emitEvent: false },
+      );
+    });
+  }
+
+  ngOnInit() {
+    this.filterForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      this.filterChanged.emit({
+        minPrice: value.minPrice ?? undefined,
+        maxPrice: value.maxPrice ?? undefined,
+        amenities: value.amenities ?? undefined,
+      });
+    });
   }
 }
