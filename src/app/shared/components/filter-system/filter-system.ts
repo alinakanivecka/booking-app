@@ -1,8 +1,9 @@
 import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
-import { Items } from '../../../models/accommodations.model';
+import { Item } from '../../../models/accommodations.model';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FiltersType } from '../../../models/filters-type.model';
+import { AccommodationsService } from '../../../core/services/accommodations.service';
 
 @Component({
   selector: 'app-filter-system',
@@ -11,9 +12,10 @@ import { FiltersType } from '../../../models/filters-type.model';
   styleUrl: './filter-system.scss',
 })
 export class FilterSystem {
+  private accommodationService = inject(AccommodationsService);
   private fb = inject(FormBuilder);
 
-  accItems = input.required<Items[]>();
+  accItems = input.required<Item[]>();
   filters = input<Partial<FiltersType>>({});
   filterChanged = output<Partial<FiltersType>>();
 
@@ -23,7 +25,7 @@ export class FilterSystem {
     amenities: [[] as string[]],
   });
 
-   constructor() {
+  constructor() {
     effect(() => {
       const filters = this.filters();
 
@@ -67,4 +69,8 @@ export class FilterSystem {
 
     return [...new Set(allAmenities)];
   });
+
+  replaceAmenity(ammenity: string): string {
+    return this.accommodationService.replaceAmenity(ammenity);
+  }
 }

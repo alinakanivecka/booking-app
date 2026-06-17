@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AccommodationsResponse } from '../../models/accommodations.model';
+import { AccommodationsResponse, Item } from '../../models/accommodations.model';
 import { environment } from '../../../environments/environment';
 import { FiltersType } from '../../models/filters-type.model';
 
@@ -53,5 +53,23 @@ export class AccommodationsService {
     return this.http.get<AccommodationsResponse>(`${environment.apiUrl}/accommodations`, {
       params,
     });
+  }
+
+  getAccommodationDetails(id: number): Observable<Item> {
+    return this.http.get<Item>(`${environment.apiUrl}/accommodations/${id}`);
+  }
+
+  getImageUrl(item: Item): string {
+    const firstImage = item.images[0];
+
+    if (!firstImage) {
+      return 'assets/no-image.png';
+    }
+
+    return `${environment.apiUrl}${firstImage}`;
+  }
+
+  replaceAmenity(ammenity: string): string {
+    return ammenity.replaceAll('_', ' ');
   }
 }

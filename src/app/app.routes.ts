@@ -17,7 +17,10 @@ export const routes: Routes = [
 
   {
     path: 'accommodation/:id',
-    redirectTo: 'search',
+    loadComponent: () =>
+      import('./features/accommodation-details-page/accommodation-details-page').then(
+        (c) => c.AccommodationDetailsPage,
+      ),
   },
 
   {
