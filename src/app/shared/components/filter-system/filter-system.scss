@@ -73,7 +73,6 @@
   gap: 0.55rem;
   padding: 0.45rem 0;
   font-size: 0.95rem;
-  font-weight: 500;
   color: var(--color-text-body);
   cursor: pointer;
   text-transform: capitalize;
@@ -88,4 +87,51 @@
   &:hover {
     color: var(--color-primary-strong);
   }
+}
+
+.show-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  cursor: pointer;
+
+  &:hover span {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.arrow-icon {
+  font-size: 11px;
+  transition: transform 0.2s ease;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.extra-amenities-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 0.3s ease;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.extra-amenities-inner {
+  overflow: hidden;
+  min-height: 0;
 }

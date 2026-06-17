@@ -21,13 +21,33 @@
     <div class="filter-box">
       <h3 class="filter-title">Amenities</h3>
 
-      @for (amenity of availableAmenities(); track amenity) {
+      @for (amenity of defaultAmenities(); track amenity) {
       <label class="checkbox-row">
         <input type="checkbox" [checked]="filterForm.controls.amenities.value?.includes(amenity)"
           (change)="toggleAmenity(amenity)">
         {{replaceAmenity(amenity)}}
       </label>
       }
+
+      <div class="extra-amenities-wrapper" [class.expanded]="isShowAllAmenities()">
+        <div class="extra-amenities-inner">
+          @for (amenity of extraAmenities(); track amenity) {
+          <label class="checkbox-row">
+            <input type="checkbox" [checked]="filterForm.controls.amenities.value?.includes(amenity)"
+              (change)="toggleAmenity(amenity)">
+            {{replaceAmenity(amenity)}}
+          </label>
+          }
+        </div>
+      </div>
+
+      @if (availableAmenities().length > 6) {
+      <button type="button" class="show-all-btn" (click)="toggleShowAll()">
+        <span>{{ isShowAllAmenities() ? 'Show less' : 'Show All ' + availableAmenities().length }}</span>
+        <i class="fa-solid fa-chevron-down arrow-icon" [class.rotated]="isShowAllAmenities()"></i>
+      </button>
+      }
+
     </div>
   </form>
 </section>
