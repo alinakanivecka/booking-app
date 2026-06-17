@@ -1,0 +1,96 @@
+@if (accommodation(); as accommodation) {
+<section class="details-page">
+  <div class="details-container">
+    <div class="top-row">
+      <div>
+        <h1>{{ accommodation.name }}</h1>
+        <p class="location">
+          <i class="fa-solid fa-location-dot"></i>
+          {{ accommodation.city }}, {{ accommodation.country }}
+        </p>
+      </div>
+
+      <div class="rating-box">
+        <div>
+          <strong>{{ accommodation.rating >= 4 ? 'Wonderful' : 'New' }}</strong>
+          <span>Guest rating</span>
+        </div>
+
+        <span class="rating-badge">
+          {{ accommodation.rating || '—' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="gallery">
+      <img [src]="getImageUrl(accommodation)" [alt]="accommodation.name" />
+    </div>
+
+    <div class="content-layout">
+      <main class="main-content">
+        <section class="info-card">
+          <h2>Description</h2>
+          <p>{{ accommodation.description }}</p>
+        </section>
+
+        <section class="info-card">
+          <h2>What this place offers</h2>
+
+          <div class="amenities-grid">
+            @for (amenity of accommodation.amenities; track amenity) {
+            <div class="amenity-item">
+              <i class="fa-solid fa-check"></i>
+              <span>{{ replaceAmenity(amenity) }}</span>
+            </div>
+            }
+          </div>
+        </section>
+
+        <section class="info-card">
+          <h2>Hosted by</h2>
+
+          <div class="host-row">
+            <div class="host-avatar">
+              @if (accommodation.host.avatarUrl) {
+              <img [src]="accommodation.host.avatarUrl" [alt]="accommodation.host.name" />
+              } @else {
+              <span>{{ accommodation.host.name.charAt(0) }}</span>
+              }
+            </div>
+
+            <div>
+              <strong>{{ accommodation.host.name }}</strong>
+              <p>Host ID: {{ accommodation.host.id }}</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="booking-card">
+        <div class="price">
+          <strong>€{{ accommodation.pricePerNight }}</strong>
+          <span>per night</span>
+        </div>
+
+        <div class="mini-info">
+          <span>
+            <i class="fa-solid fa-user-group"></i>
+            Up to {{ accommodation.maxGuests }} guests
+          </span>
+
+          <span>
+            <i class="fa-solid fa-star"></i>
+            {{ accommodation.rating || 'No rating yet' }}
+          </span>
+        </div>
+
+        <!-- <button type="button">
+          Reserve
+        </button>
+
+        <p class="note">You won’t be charged yet</p> -->
+      </aside>
+    </div>
+  </div>
+</section>
+}

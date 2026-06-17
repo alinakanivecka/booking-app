@@ -66,6 +66,10 @@
     color: var(--color-primary-strong);
     font-size: 1.25rem;
     font-weight: 700;
+
+    &:hover {
+      color: var( --color-text-strong);
+    }
   }
 }
 
