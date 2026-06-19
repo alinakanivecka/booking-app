@@ -33,8 +33,6 @@ export class Search implements OnInit {
   isLoading = signal(false);
   noResults = signal(false);
 
-  favoriteIds = signal<Set<number>>(new Set());
-
   hasMore = computed(() => this.accItems().length < this.totalItems());
   activeFilters = signal<Partial<FiltersType>>({});
   selectedSort = signal<'priceAsc' | 'priceDesc' | 'ratingDesc'>('priceAsc');
@@ -56,19 +54,15 @@ export class Search implements OnInit {
     this.loadAccommodations(true);
   }
 
-  isFavorite = (id: number): boolean => {
-    return this.favoriteIds().has(id);
+  isFavorite = (accommodationId: number): boolean => {
+    return this.favoritesService.isFavorite(accommodationId);
   };
 
   toggleFavorite(accommodationId: number) {
-    if (this.favoriteIds().has(accommodationId)) {
-      this.favoritesService.deleteFavorite(accommodationId).subscribe({
-        next: () => {
-          this.favoriteIds.update((ids) => {
-            const updated = new Set(ids);
-            updated.delete(accommodationId);
-            return updated;
-          });
+    if (this.favoritesService.isFavorite(accommodationId)) {
+      this.favoritesService.removeFavorite(accommodationId).subscribe({
+        error: () => {
+          this.errorMessage.set('Unable to remove favorite');
         },
       });
 
@@ -76,12 +70,8 @@ export class Search implements OnInit {
     }
 
     this.favoritesService.addFavorite(accommodationId).subscribe({
-      next: () => {
-        this.favoriteIds.update((ids) => {
-          const updated = new Set(ids);
-          updated.add(accommodationId);
-          return updated;
-        });
+      error: () => {
+        this.errorMessage.set('Unable to add favorite');
       },
     });
   }

@@ -1,5 +1,5 @@
 <header class="header">
-  <div class="app-logo">
+  <div class="app-logo" routerLink="/search">
     <img class="logo-icon" src="assets/logo.png" alt="logo-icon">
     <span class="header-title"> Booking</span>
   </div>
@@ -9,18 +9,21 @@
     <a routerLink="/register">Register</a>
     <a routerLink="/login">Sign in</a>
     } @else {
-    <button type="button" class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside (appClickOutside)="isDropdownOpen.set(false)">
+    <button type="button" class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside
+      (appClickOutside)="isDropdownOpen.set(false)">
       <div class="user-name-icon">{{ showFirstLetterCurrentUser() }}</div>
       <span class="user-name">{{ authService.currentUser()?.name }}</span>
     </button>
 
     <div class="user-menu-dropdown" [class.open]="isDropdownOpen()">
-      <button type="button" class="dropdown-row">
-        <i class="fa-regular fa-heart"></i> Favorites
+      <button type="button" class="dropdown-row" routerLink="/favorites">
+        <i class="fa-regular fa-heart"></i>
+        Favorites
       </button>
 
       <button type="button" class="dropdown-row" (click)="logout()">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        Sign out
       </button>
     </div>
     }

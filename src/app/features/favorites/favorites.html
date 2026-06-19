@@ -1,0 +1,7 @@
+@if (favoritesService.favorites().length > 0) {
+<span class="saved-amount"><i class="fa-heart fa-solid"></i> {{totalItems()}} saved properties</span>
+}
+<app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()"
+  [accItems]="favoritesService.favorites()" [noResults]="noResults()" [isFavorite]="isFavorite"
+  (toggleFavorite)="removeFavorite($event)" [emptyTitle]="'No saved accommodations yet'"
+  [emptyState]="'favorites'"></app-accommodations-list>

@@ -12,8 +12,12 @@
   <p class="error-text">{{ errorMessage() }}</p>
   } @else if (noResults()) {
   <div class="not-found-result">
+    @if (emptyState() === 'search') {
     <i class="fa-solid fa-magnifying-glass"></i>
-    <h1>No properties found in {{getDestinationName()}}</h1>
+    } @else {
+    <i class="fa-regular fa-heart"></i>
+    }
+    <h1>{{emptyTitle()}}</h1>
   </div>
   } @else {
   <div class="accommodations-list">

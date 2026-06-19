@@ -9,7 +9,8 @@
       (sortChanged)="selectSortMode($event)"></app-sorting-system>
     <app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()" [accItems]="accItems()"
       [totalItems]="totalItems()" [noResults]="noResults()" [getDestinationName]="getDestinationName()"
-      [isFavorite]="isFavorite" (toggleFavorite)="toggleFavorite($event)">
+      [isFavorite]="isFavorite" (toggleFavorite)="toggleFavorite($event)"
+      [emptyTitle]="'No properties found in ' + getDestinationName()" [emptyState]="'search'">
     </app-accommodations-list>
   </div>
 </main>
