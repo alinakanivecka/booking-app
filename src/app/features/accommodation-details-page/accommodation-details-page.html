@@ -2,28 +2,67 @@
 <section class="details-page">
   <div class="details-container">
     <div class="top-row">
-      <div>
-        <h1>{{ accommodation.name }}</h1>
-        <p class="location">
-          <i class="fa-solid fa-location-dot"></i>
-          {{ accommodation.city }}, {{ accommodation.country }}
-        </p>
-      </div>
+      <h1>{{ accommodation.name }}</h1>
 
-      <div class="rating-box">
-        <div>
-          <strong>{{ accommodation.rating >= 4 ? 'Wonderful' : 'New' }}</strong>
-          <span>Guest rating</span>
-        </div>
-
-        <span class="rating-badge">
-          {{ accommodation.rating || '—' }}
-        </span>
-      </div>
+      <p class="location">
+        <i class="fa-solid fa-location-dot"></i>
+        {{ accommodation.city }}, {{ accommodation.country }}
+      </p>
     </div>
 
-    <div class="gallery">
-      <img [src]="getImageUrl(accommodation)" [alt]="accommodation.name" />
+    <div class="preview-layout">
+      <div class="gallery">
+        <div class="main-image">
+          <img [src]="getMainImage(accommodation)" [alt]="accommodation.name" />
+        </div>
+
+        @if (accommodation.images.length > 1) {
+        <div class="thumbnails">
+          @for (image of accommodation.images; track image) {
+          <button type="button" class="thumbnail"
+            [class.active]="(selectedImage() || accommodation.images[0]) === image" (click)="selectImage(image)">
+            <img [src]="getImageUrlByPath(image)" [alt]="accommodation.name" />
+          </button>
+          }
+        </div>
+        }
+      </div>
+
+      <aside class="booking-card">
+        <div class="rating-box">
+          <div>
+            <strong>{{ accommodation.rating >= 4 ? 'Wonderful' : 'New' }}</strong>
+            <span>Guest rating</span>
+          </div>
+
+          <span class="rating-badge">
+            {{ accommodation.rating || '—' }}
+          </span>
+        </div>
+
+        <div class="price">
+          <strong>€{{ accommodation.pricePerNight }}</strong>
+          <span>per night</span>
+        </div>
+
+        <div class="mini-info">
+          <span>
+            <i class="fa-solid fa-user-group"></i>
+            Up to {{ accommodation.maxGuests }} guests
+          </span>
+
+          <span>
+            <i class="fa-solid fa-star"></i>
+            {{ accommodation.rating || 'No rating yet' }}
+          </span>
+        </div>
+
+        <!-- <button type="button">
+          Reserve
+        </button>
+
+        <p class="note">You won’t be charged yet</p> -->
+      </aside>
     </div>
 
     <div class="content-layout">
@@ -65,31 +104,6 @@
           </div>
         </section>
       </main>
-
-      <aside class="booking-card">
-        <div class="price">
-          <strong>€{{ accommodation.pricePerNight }}</strong>
-          <span>per night</span>
-        </div>
-
-        <div class="mini-info">
-          <span>
-            <i class="fa-solid fa-user-group"></i>
-            Up to {{ accommodation.maxGuests }} guests
-          </span>
-
-          <span>
-            <i class="fa-solid fa-star"></i>
-            {{ accommodation.rating || 'No rating yet' }}
-          </span>
-        </div>
-
-        <!-- <button type="button">
-          Reserve
-        </button>
-
-        <p class="note">You won’t be charged yet</p> -->
-      </aside>
     </div>
   </div>
 </section>

@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { Item } from '../../../models/accommodations.model';
+import { Accommodation } from '../../../models/accommodations.model';
 import { environment } from '../../../../environments/environment';
 import { RouterLink } from '@angular/router';
 import { AccommodationsService } from '../../../core/services/accommodations.service';
@@ -15,12 +15,12 @@ export class AccommodationsList {
 
   isLoading = input.required<boolean>();
   errorMessage = input.required<string>();
-  accItems = input.required<Item[]>();
+  accItems = input.required<Accommodation[]>();
   totalItems = input.required<number>();
   getDestinationName = input.required<string | undefined>();
   noResults = input.required();
 
-  getImageUrl(item: Item): string {
+  getImageUrl(item: Accommodation): string {
     return this.accommodationService.getImageUrl(item);
   }
 

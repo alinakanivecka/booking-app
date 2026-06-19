@@ -1,12 +1,12 @@
 export interface AccommodationsResponse {
-  items: Item[];
+  items: Accommodation[];
   page: number;
   pageSize: number;
   totalItems: number;
   totalPages: number;
 }
 
-export interface Item {
+export interface Accommodation {
   id: number;
   name: string;
   description: string;
