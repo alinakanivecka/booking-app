@@ -6,11 +6,14 @@ import { User } from '../../models/user.model';
 import { AuthResponse } from '../../features/auth/models/auth-response.model';
 import { RegisterPayload } from '../../features/auth/models/register-payload.model';
 import { LoginPayload } from '../../features/auth/models/login-payload.model';
+import { FavoritesService } from './favorites.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private favoritesService = inject(FavoritesService);
+
   private http = inject(HttpClient);
 
   currentUser = signal<User | null>(null);
@@ -26,6 +29,8 @@ export class AuthService {
   saveAuthData(response: AuthResponse) {
     localStorage.setItem('accessToken', response.accessToken);
     this.currentUser.set(response.user);
+
+    this.favoritesService.loadFavorites().subscribe();
   }
 
   login(payload: LoginPayload): Observable<AuthResponse> {
@@ -57,6 +62,7 @@ export class AuthService {
     this.me().subscribe({
       next: (user) => {
         this.currentUser.set(user);
+        this.favoritesService.loadFavorites().subscribe();
       },
       error: () => {
         this.clearSession();
@@ -85,5 +91,6 @@ export class AuthService {
   clearSession(): void {
     localStorage.removeItem('accessToken');
     this.currentUser.set(null);
+    this.favoritesService.clearFavorites()
   }
 }

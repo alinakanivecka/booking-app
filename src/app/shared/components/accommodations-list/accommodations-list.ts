@@ -17,10 +17,12 @@ export class AccommodationsList {
   isLoading = input.required<boolean>();
   errorMessage = input.required<string>();
   accItems = input.required<Accommodation[]>();
-  totalItems = input.required<number>();
-  getDestinationName = input.required<string | undefined>();
+  totalItems = input<number>();
+  getDestinationName = input<string | undefined>();
   noResults = input.required();
-  isFavorite = input.required<(id: number) => boolean>();
+  emptyTitle = input('No properties found');
+  emptyState = input<'search' | 'favorites'>('search');
+  isFavorite = input<(id: number) => boolean>(() => false);
 
   toggleFavorite = output<number>();
 

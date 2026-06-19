@@ -20,7 +20,6 @@ export class AccommodationDetailsPage {
   authService = inject(AuthService);
 
   accommodation = signal<Accommodation | null>(null);
-  isFavorite = signal(false);
 
   isLoading = signal(false);
   noResults = signal(false);
@@ -46,22 +45,18 @@ export class AccommodationDetailsPage {
     return this.accommodationService.replaceAmenity(ammenity);
   }
 
+  isFavorite = (accommodationId: number): boolean => {
+    return this.favoritesService.isFavorite(accommodationId);
+  };
+
   toggleFavorite(accommodationId: number) {
-    if (this.isFavorite()) {
-      this.favoritesService.deleteFavorite(accommodationId).subscribe({
-        next: () => {
-          this.isFavorite.set(false);
-        },
-      });
+    if (this.favoritesService.isFavorite(accommodationId)) {
+      this.favoritesService.removeFavorite(accommodationId).subscribe();
 
       return;
     }
 
-    this.favoritesService.addFavorite(accommodationId).subscribe({
-      next: () => {
-        this.isFavorite.set(true);
-      },
-    });
+    this.favoritesService.addFavorite(accommodationId).subscribe();
   }
 
   constructor(route: ActivatedRoute) {

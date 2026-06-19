@@ -5,10 +5,11 @@
       <h1>{{ accommodation.name }}</h1>
 
       @if (authService.isAuthenticated()) {
-      <button type="button" class="favorite-btn" [class.active]="isFavorite()"
-        [attr.data-tooltip]="isFavorite() ? 'Remove this item' : 'Save this item'"
+      <button type="button" class="favorite-btn" [class.active]="isFavorite(accommodation.id)"
+        [attr.data-tooltip]="isFavorite(accommodation.id) ? 'Remove this item' : 'Save this item'"
         (click)="toggleFavorite(accommodation.id)">
-        <i class="fa-heart" [class.fa-solid]="isFavorite()" [class.fa-regular]="!isFavorite()"></i>
+        <i class="fa-heart" [class.fa-solid]="isFavorite(accommodation.id)"
+          [class.fa-regular]="!isFavorite(accommodation.id)"></i>
       </button>
       }
 

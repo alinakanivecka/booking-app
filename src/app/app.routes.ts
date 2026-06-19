@@ -35,7 +35,8 @@ export const routes: Routes = [
 
   {
     path: 'favorites',
-    redirectTo: 'search',
+    loadComponent: () => import('./features/favorites/favorites').then((c) => c.Favorites),
+    canActivate: [authGuard],
   },
 
   {
