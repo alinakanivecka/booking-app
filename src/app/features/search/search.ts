@@ -1,7 +1,7 @@
 import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 
 import { AccommodationsService } from '../../core/services/accommodations.service';
-import { Item } from '../../models/accommodations.model';
+import { Accommodation } from '../../models/accommodations.model';
 import { FiltersType } from '../../models/filters-type.model';
 import { SearchPanel } from '../../shared/components/search-panel/search-panel';
 import { AccommodationsList } from '../../shared/components/accommodations-list/accommodations-list';
@@ -22,7 +22,7 @@ export class Search implements OnInit {
   private route = inject(ActivatedRoute);
   private filtersChanged$ = new Subject<Partial<FiltersType>>();
 
-  accItems = signal<Item[]>([]);
+  accItems = signal<Accommodation[]>([]);
   totalItems = signal(0);
   currentPage = signal(1);
   pageSize = signal(20);

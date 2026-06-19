@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
-import { Item } from '../../../models/accommodations.model';
+import { Accommodation } from '../../../models/accommodations.model';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FiltersType } from '../../../models/filters-type.model';
 import { AccommodationsService } from '../../../core/services/accommodations.service';
@@ -26,7 +26,7 @@ export class FilterSystem {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
 
-  accItems = input.required<Item[]>();
+  accItems = input.required<Accommodation[]>();
   filters = input<Partial<FiltersType>>({});
   filterChanged = output<Partial<FiltersType>>();
 
