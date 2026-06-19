@@ -42,7 +42,6 @@ export class Login implements AfterViewInit {
 
     this.authService.login(formValue).subscribe({
       next: (response) => {
-        console.log('succses', response);
         this.authService.saveAuthData(response);
         this.router.navigate(['/search']);
         this.isLoading.set(false);

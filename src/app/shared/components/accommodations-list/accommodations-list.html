@@ -22,9 +22,13 @@
       <div class="image-wrapper">
         <img class="accommodation-image" [src]="getImageUrl(item)" [alt]="item.name" />
 
-        <button class="favorite-btn" type="button">
-          <i class="fa-regular fa-heart"></i>
+        @if (authService.isAuthenticated()) {
+        <button type="button" class="favorite-btn" [class.active]="isFavorite()(item.id)"
+          [attr.data-tooltip]="isFavorite()(item.id) ? 'Remove this item' : 'Save this item'"
+          (click)="favoriteClicked(item.id)">
+          <i class="fa-heart" [class.fa-solid]="isFavorite()(item.id)" [class.fa-regular]="!isFavorite()(item.id)"></i>
         </button>
+        }
       </div>
 
       <div class="accommodation-content">

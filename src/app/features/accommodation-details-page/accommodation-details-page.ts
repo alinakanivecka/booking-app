@@ -5,6 +5,8 @@ import { AccommodationsService } from '../../core/services/accommodations.servic
 import { N } from '@angular/cdk/keycodes';
 import { Accommodation } from '../../models/accommodations.model';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/services/auth.service';
+import { FavoritesService } from '../../core/services/favorites.service';
 
 @Component({
   selector: 'app-accommodation-details-page',
@@ -14,7 +16,11 @@ import { environment } from '../../../environments/environment';
 })
 export class AccommodationDetailsPage {
   private accommodationService = inject(AccommodationsService);
+  private favoritesService = inject(FavoritesService);
+  authService = inject(AuthService);
+
   accommodation = signal<Accommodation | null>(null);
+  isFavorite = signal(false);
 
   isLoading = signal(false);
   noResults = signal(false);
@@ -38,6 +44,24 @@ export class AccommodationDetailsPage {
 
   replaceAmenity(ammenity: string): string {
     return this.accommodationService.replaceAmenity(ammenity);
+  }
+
+  toggleFavorite(accommodationId: number) {
+    if (this.isFavorite()) {
+      this.favoritesService.deleteFavorite(accommodationId).subscribe({
+        next: () => {
+          this.isFavorite.set(false);
+        },
+      });
+
+      return;
+    }
+
+    this.favoritesService.addFavorite(accommodationId).subscribe({
+      next: () => {
+        this.isFavorite.set(true);
+      },
+    });
   }
 
   constructor(route: ActivatedRoute) {

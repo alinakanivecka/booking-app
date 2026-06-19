@@ -4,6 +4,14 @@
     <div class="top-row">
       <h1>{{ accommodation.name }}</h1>
 
+      @if (authService.isAuthenticated()) {
+      <button type="button" class="favorite-btn" [class.active]="isFavorite()"
+        [attr.data-tooltip]="isFavorite() ? 'Remove this item' : 'Save this item'"
+        (click)="toggleFavorite(accommodation.id)">
+        <i class="fa-heart" [class.fa-solid]="isFavorite()" [class.fa-regular]="!isFavorite()"></i>
+      </button>
+      }
+
       <p class="location">
         <i class="fa-solid fa-location-dot"></i>
         {{ accommodation.city }}, {{ accommodation.country }}

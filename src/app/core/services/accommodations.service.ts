@@ -69,8 +69,6 @@ export class AccommodationsService {
     return `${environment.apiUrl}${firstImage}`;
   }
 
-  
-
   replaceAmenity(amenity: string): string {
     return amenity.replaceAll('_', ' ');
   }
