@@ -9,6 +9,7 @@ import { FilterSystem } from '../../shared/components/filter-system/filter-syste
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, Subject } from 'rxjs';
 import { SortingSystem } from '../../shared/components/sorting-system/sorting-system';
+import { FavoritesService } from '../../core/services/favorites.service';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -18,6 +19,7 @@ import { SortingSystem } from '../../shared/components/sorting-system/sorting-sy
 })
 export class Search implements OnInit {
   private accommodationService = inject(AccommodationsService);
+  private favoritesService = inject(FavoritesService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private filtersChanged$ = new Subject<Partial<FiltersType>>();
@@ -26,6 +28,13 @@ export class Search implements OnInit {
   totalItems = signal(0);
   currentPage = signal(1);
   pageSize = signal(20);
+
+  errorMessage = signal('');
+  isLoading = signal(false);
+  noResults = signal(false);
+
+  favoriteIds = signal<Set<number>>(new Set());
+
   hasMore = computed(() => this.accItems().length < this.totalItems());
   activeFilters = signal<Partial<FiltersType>>({});
   selectedSort = signal<'priceAsc' | 'priceDesc' | 'ratingDesc'>('priceAsc');
@@ -47,9 +56,35 @@ export class Search implements OnInit {
     this.loadAccommodations(true);
   }
 
-  errorMessage = signal('');
-  isLoading = signal(false);
-  noResults = signal(false);
+  isFavorite = (id: number): boolean => {
+    return this.favoriteIds().has(id);
+  };
+
+  toggleFavorite(accommodationId: number) {
+    if (this.favoriteIds().has(accommodationId)) {
+      this.favoritesService.deleteFavorite(accommodationId).subscribe({
+        next: () => {
+          this.favoriteIds.update((ids) => {
+            const updated = new Set(ids);
+            updated.delete(accommodationId);
+            return updated;
+          });
+        },
+      });
+
+      return;
+    }
+
+    this.favoritesService.addFavorite(accommodationId).subscribe({
+      next: () => {
+        this.favoriteIds.update((ids) => {
+          const updated = new Set(ids);
+          updated.add(accommodationId);
+          return updated;
+        });
+      },
+    });
+  }
 
   @HostListener('window:scroll')
   onWindowScroll() {

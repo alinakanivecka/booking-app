@@ -4,11 +4,12 @@
   <app-filter-system [filters]="activeFilters()" [accItems]="accItems()"
     (filterChanged)="onFilterChanged($event)"></app-filter-system>
 
-<div class="main-wrap">
+  <div class="main-wrap">
     <app-sorting-system [sortOptions]="sortOptions" [selectedSort]="selectedSort()"
-    (sortChanged)="selectSortMode($event)"></app-sorting-system>
-  <app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()" [accItems]="accItems()"
-    [totalItems]="totalItems()" [noResults]="noResults()" [getDestinationName]="getDestinationName()">
-  </app-accommodations-list>
-</div>
+      (sortChanged)="selectSortMode($event)"></app-sorting-system>
+    <app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()" [accItems]="accItems()"
+      [totalItems]="totalItems()" [noResults]="noResults()" [getDestinationName]="getDestinationName()"
+      [isFavorite]="isFavorite" (toggleFavorite)="toggleFavorite($event)">
+    </app-accommodations-list>
+  </div>
 </main>
