@@ -1,13 +1,13 @@
 import { Component, effect, inject, input, OnInit, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FiltersType } from '../../../models/filters-type.model';
-import { U } from '@angular/cdk/keycodes';
+import { DateRangePicker } from '../date-range-picker/date-range-picker';
+import { DateRange } from '../../../models/date-range.model';
+import { GuestControl } from '../guest-control/guest-control';
 
 @Component({
   selector: 'app-search-panel',
@@ -15,9 +15,10 @@ import { U } from '@angular/cdk/keycodes';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule,
     MatIconModule,
     MatButtonModule,
+    DateRangePicker,
+    GuestControl,
   ],
   templateUrl: './search-panel.html',
   styleUrl: './search-panel.scss',
@@ -30,11 +31,11 @@ export class SearchPanel implements OnInit {
 
   searchForm = this.fb.group({
     destination: [''],
-    dateRange: this.fb.group({
-      start: [null as Date | null],
-      end: [null as Date | null],
+    dateRange: this.fb.control<DateRange>({
+      start: null,
+      end: null,
     }),
-    adults: [1],
+    guests: this.fb.control(1),
   });
 
   submitSearch() {
@@ -48,11 +49,11 @@ export class SearchPanel implements OnInit {
       this.searchForm.patchValue(
         {
           destination: filters.city ?? '',
-          adults: filters.guests ?? 2,
-          // dateRange: {
-          //   start: filters.checkIn ? new Date(filters.checkIn) : null,
-          //   end: filters.checkOut ? new Date(filters.checkOut) : null,
-          // },
+          guests: filters.guests ?? 1,
+          dateRange: {
+            start: filters.checkIn ? new Date(filters.checkIn) : null,
+            end: filters.checkOut ? new Date(filters.checkOut) : null,
+          },
         },
         { emitEvent: false },
       );
@@ -63,7 +64,7 @@ export class SearchPanel implements OnInit {
     this.searchForm.valueChanges.subscribe((value) => {
       this.search.emit({
         city: value.destination?.trim() || undefined,
-        guests: value.adults ?? undefined,
+        guests: value.guests ?? undefined,
         checkIn: value.dateRange?.start ? this.formatDateForApi(value.dateRange.start) : undefined,
         checkOut: value.dateRange?.end ? this.formatDateForApi(value.dateRange.end) : undefined,
       });
@@ -74,40 +75,7 @@ export class SearchPanel implements OnInit {
     this.searchForm.controls.destination.setValue('');
   }
 
-  formattedDateRange(): string {
-    const start = this.searchForm.controls.dateRange.controls.start.value;
-    const end = this.searchForm.controls.dateRange.controls.end.value;
-
-    if (!start || !end) {
-      return 'Check-in  —  Check-out';
-    }
-
-    return `${this.formatDate(start)} - ${this.formatDate(end)}`;
-  }
-
-  private formatDate(date: Date): string {
-    return new Intl.DateTimeFormat('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    }).format(date);
-  }
-
   private formatDateForApi(date: Date): string {
     return date.toISOString().split('T')[0];
-  }
-
-  increase(controlName: 'adults') {
-    const control = this.searchForm.controls[controlName];
-    control.setValue((control.value ?? 0) + 1);
-  }
-
-  decrease(controlName: 'adults') {
-    const control = this.searchForm.controls[controlName];
-    const currentValue = control.value ?? 0;
-
-    if (controlName === 'adults' && currentValue <= 1) return;
-
-    control.setValue(currentValue - 1);
   }
 }

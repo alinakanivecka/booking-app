@@ -1,0 +1,13 @@
+<div class="guests-item">
+  <i class="fa-regular fa-user"></i>
+
+  <div class="guest-control">
+    <span>{{ value }} guests</span>
+
+    <div class="guest-control__amount">
+      <button type="button" (click)="decrease()">−</button>
+      <strong>{{ value }}</strong>
+      <button type="button" (click)="increase()">+</button>
+    </div>
+  </div>
+</div>

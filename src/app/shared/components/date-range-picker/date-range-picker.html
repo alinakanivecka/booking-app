@@ -1,0 +1,16 @@
+<div class="search-item date-item" (click)="picker.open()">
+  <i class="fa-regular fa-calendar"></i>
+
+  <div class="date-display">
+    {{ formattedDateRange() }}
+  </div>
+
+  <mat-form-field appearance="outline" class="hidden-date-field">
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate [value]="value.start" (dateChange)="setStart($event.value)" placeholder="Check-in">
+      <input matEndDate [value]="value.end" (dateChange)="setEnd($event.value)" placeholder="Check-out">
+    </mat-date-range-input>
+
+    <mat-date-range-picker #picker panelClass="booking-datepicker"></mat-date-range-picker>
+  </mat-form-field>
+</div>

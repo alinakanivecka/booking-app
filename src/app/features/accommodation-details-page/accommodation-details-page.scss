@@ -237,6 +237,22 @@
   }
 }
 
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.message {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.error {
+  min-height: 1.4rem;
+  margin-top: 0.6rem;
+}
+
 .note {
   margin: 0.8rem 0 0;
   text-align: center;

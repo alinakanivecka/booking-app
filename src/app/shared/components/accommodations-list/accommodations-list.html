@@ -37,7 +37,7 @@
 
       <div class="accommodation-content">
         <div class="main-info">
-          <h3 [routerLink]="['/accommodation', item.id]">{{ item.name }}</h3>
+          <h3 [routerLink]="['/accommodation', item.id]" queryParamsHandling="preserve">{{ item.name }}</h3>
 
           <p class="location">
             <i class="fa-solid fa-location-dot"></i>
@@ -74,7 +74,8 @@
             <span class="tax-text">Includes taxes and fees</span>
           </div>
 
-          <button class="details-btn" type="button" [routerLink]="['/accommodation', item.id]">
+          <button class="details-btn" type="button" [routerLink]="['/accommodation', item.id]"
+            queryParamsHandling="preserve">
             See details
             <i class="fa-solid fa-chevron-right"></i>
           </button>

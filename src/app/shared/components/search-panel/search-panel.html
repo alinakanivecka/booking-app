@@ -12,36 +12,9 @@
       </button>
     </div>
 
-    <div class="search-item date-item" formGroupName="dateRange" (click)="picker.open()">
-      <i class="fa-regular fa-calendar"></i>
+    <app-date-range-picker formControlName="dateRange"></app-date-range-picker>
 
-      <div class="date-display">
-        {{ formattedDateRange() }}
-      </div>
-
-      <mat-form-field appearance="outline" class="hidden-date-field">
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Check-in">
-          <input matEndDate formControlName="end" placeholder="Check-out">
-        </mat-date-range-input>
-
-        <mat-date-range-picker #picker panelClass="booking-datepicker"></mat-date-range-picker>
-      </mat-form-field>
-    </div>
-
-    <div class="search-item guests-item">
-      <i class="fa-regular fa-user"></i>
-
-      <div class="guest-control">
-        <span>{{searchForm.controls.adults.value}} adults</span>
-
-        <div class="guest-control__amount">
-          <button type="button" (click)="decrease('adults')">−</button>
-          <strong>{{ searchForm.controls.adults.value }}</strong>
-          <button type="button" (click)="increase('adults')">+</button>
-        </div>
-      </div>
-    </div>
+    <app-guest-control formControlName="guests"></app-guest-control>
 
     <button class="search-btn" type="submit">
       Search
