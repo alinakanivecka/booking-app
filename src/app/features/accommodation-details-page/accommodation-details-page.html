@@ -66,11 +66,21 @@
           </span>
         </div>
 
-        <!-- <button type="button">
-          Reserve
-        </button>
+        @if (authService.isAuthenticated()) {
+        <form class="booking-form" [formGroup]="bookingForm">
+          <app-date-range-picker formControlName="dateRange"></app-date-range-picker>
+          <app-guest-control formControlName="guests"></app-guest-control>
+          <button type="button" (click)="bookNow()">Book now</button>
+        </form>
+        @if (errorMessage()) {
+          <div class="error">
+            <p class="error-text">{{errorMessage()}}</p>
+          </div>
+        }
+        } @else {
+        <span class="message">Sign in to reserve this accommodation</span>
+        }
 
-        <p class="note">You won’t be charged yet</p> -->
       </aside>
     </div>
 

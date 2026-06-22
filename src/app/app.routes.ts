@@ -30,7 +30,8 @@ export const routes: Routes = [
 
   {
     path: 'bookings',
-    redirectTo: 'search',
+    loadComponent: () => import('./features/bookings/bookings').then((c) => c.Bookings),
+    canActivate: [authGuard],
   },
 
   {
