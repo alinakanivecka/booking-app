@@ -65,6 +65,10 @@ export class AccommodationsService {
     return this.http.post<Booking>(`${environment.apiUrl}/bookings`, bookingsPayload);
   }
 
+  getBookings(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${environment.apiUrl}/bookings`, {});
+  }
+
   getImageUrl(item: Accommodation): string {
     const firstImage = item.images[0];
 

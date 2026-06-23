@@ -25,6 +25,13 @@ export class AccommodationDetailsPage {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
 
+  accommodation = signal<Accommodation | null>(null);
+  selectedImage = signal<string | null>(null);
+
+  isLoading = signal(false);
+  noResults = signal(false);
+  errorMessage = signal('');
+
   bookingForm = this.fb.group({
     dateRange: this.fb.control<DateRange>({
       start: null,
@@ -33,52 +40,12 @@ export class AccommodationDetailsPage {
     guests: this.fb.control(1),
   });
 
-  accommodation = signal<Accommodation | null>(null);
-
-  isLoading = signal(false);
-  noResults = signal(false);
-  errorMessage = signal('');
-
-  selectedImage = signal<string | null>(null);
-
   private formatDate(date: Date | null | undefined): string {
     if (!date) {
       return '';
     }
 
     return date.toISOString().split('T')[0];
-  }
-
-  selectImage(image: string) {
-    this.selectedImage.set(image);
-  }
-
-  getMainImage(accommodation: Accommodation): string {
-    const image = this.selectedImage() || accommodation.images?.[0];
-
-    return image ? `${environment.apiUrl}${image}` : 'assets/placeholder.jpg';
-  }
-
-  getImageUrlByPath(image: string): string {
-    return `${environment.apiUrl}${image}`;
-  }
-
-  replaceAmenity(ammenity: string): string {
-    return this.accommodationService.replaceAmenity(ammenity);
-  }
-
-  isFavorite = (accommodationId: number): boolean => {
-    return this.favoritesService.isFavorite(accommodationId);
-  };
-
-  toggleFavorite(accommodationId: number) {
-    if (this.favoritesService.isFavorite(accommodationId)) {
-      this.favoritesService.removeFavorite(accommodationId).subscribe();
-
-      return;
-    }
-
-    this.favoritesService.addFavorite(accommodationId).subscribe();
   }
 
   bookNow() {
@@ -119,6 +86,38 @@ export class AccommodationDetailsPage {
         this.isLoading.set(false);
       },
     });
+  }
+
+  selectImage(image: string) {
+    this.selectedImage.set(image);
+  }
+
+  getMainImage(accommodation: Accommodation): string {
+    const image = this.selectedImage() || accommodation.images?.[0];
+
+    return image ? `${environment.apiUrl}${image}` : 'assets/placeholder.jpg';
+  }
+
+  getImageUrlByPath(image: string): string {
+    return `${environment.apiUrl}${image}`;
+  }
+
+  replaceAmenity(ammenity: string): string {
+    return this.accommodationService.replaceAmenity(ammenity);
+  }
+
+  isFavorite = (accommodationId: number): boolean => {
+    return this.favoritesService.isFavorite(accommodationId);
+  };
+
+  toggleFavorite(accommodationId: number) {
+    if (this.favoritesService.isFavorite(accommodationId)) {
+      this.favoritesService.removeFavorite(accommodationId).subscribe();
+
+      return;
+    }
+
+    this.favoritesService.addFavorite(accommodationId).subscribe();
   }
 
   constructor(route: ActivatedRoute) {
