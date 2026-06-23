@@ -34,6 +34,10 @@ export class AccommodationsList {
     return this.accommodationService.getImageUrl(item);
   }
 
+  accommodationRatingLabel(item: Accommodation) {
+    return this.accommodationService.getAccommodationRating(item);
+  }
+
   replaceAmenity(ammenity: string): string {
     return this.accommodationService.replaceAmenity(ammenity);
   }

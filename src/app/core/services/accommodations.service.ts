@@ -69,6 +69,28 @@ export class AccommodationsService {
     return `${environment.apiUrl}${firstImage}`;
   }
 
+  getAccommodationRating(item: Accommodation): string {
+    const rating = item.rating ?? 0;
+
+    if (rating >= 4.5) {
+      return 'Exceptional';
+    }
+
+    if (rating >= 4) {
+      return 'Wonderful';
+    }
+
+    if (rating >= 3) {
+      return 'Very good';
+    }
+
+    if (rating >= 2) {
+      return 'Good';
+    }
+
+    return 'Pleasant';
+  }
+
   replaceAmenity(amenity: string): string {
     return amenity.replaceAll('_', ' ');
   }

@@ -1,0 +1,61 @@
+<section class="reviews-section">
+  @if (isLoading()) {
+  <div class="reviews-state">
+    <i class="fa-solid fa-spinner"></i>
+    <p>Loading reviews...</p>
+  </div>
+  } @else if (errorMessage()) {
+  <div class="reviews-state error">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>{{ errorMessage() }}</p>
+  </div>
+  } @else if (noResults()) {
+  <div class="reviews-state empty">
+    <i class="fa-regular fa-message"></i>
+    <h3>No reviews yet</h3>
+    <p>Be the first guest to share your experience.</p>
+  </div>
+  } @else {
+  <div class="reviews-header">
+    <div class="reviews-summary">
+      <div class="score-badge">
+        {{ accommodation()?.rating || '—' }}
+      </div>
+
+      <div class="score-info">
+        <strong>{{ accommodationRating() }}</strong>
+        <span>{{ reviews().length }} reviews</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-list">
+    @for (review of reviews(); track review.id) {
+    <article class="review-card">
+      <div class="review-top">
+        <div class="guest-info">
+          <div class="guest-avatar">
+            {{ review.customerName.charAt(0) }}
+          </div>
+
+          <div>
+            <h4>{{ review.customerName }}</h4>
+            <span>Reviewed: {{review.createdAt | date}}</span>
+          </div>
+        </div>
+
+        @if (review.rating) {
+        <div class="review-rating">
+          {{ review.rating }}
+        </div>
+        }
+      </div>
+
+      <p class="review-comment">
+        {{ review.comment }}
+      </p>
+    </article>
+    }
+  </div>
+  }
+</section>
