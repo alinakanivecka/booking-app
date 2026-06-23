@@ -11,6 +11,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { DateRange } from '../../models/date-range.model';
 import { GuestControl } from '../../shared/components/guest-control/guest-control';
 import { CreateBookingPayload } from '../../models/bookings.model';
+import { BookingsService } from '../../core/services/bookings.service';
 
 @Component({
   selector: 'app-accommodation-details-page',
@@ -20,6 +21,7 @@ import { CreateBookingPayload } from '../../models/bookings.model';
 })
 export class AccommodationDetailsPage {
   private accommodationService = inject(AccommodationsService);
+   private bookingsService = inject(BookingsService);
   private favoritesService = inject(FavoritesService);
   private router = inject(Router);
   authService = inject(AuthService);
@@ -72,7 +74,7 @@ export class AccommodationDetailsPage {
 
     this.isLoading.set(true);
 
-    this.accommodationService.bookingCreate(bookingsPayload).subscribe({
+    this.bookingsService.bookingCreate(bookingsPayload).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/bookings']);

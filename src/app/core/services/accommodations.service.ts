@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { AccommodationsResponse, Accommodation } from '../../models/accommodations.model';
 import { environment } from '../../../environments/environment';
 import { FiltersType } from '../../models/filters-type.model';
-import { Bookings } from '../../features/bookings/bookings';
-import { Booking, CreateBookingPayload } from '../../models/bookings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,14 +57,6 @@ export class AccommodationsService {
 
   getAccommodationDetails(id: number): Observable<Accommodation> {
     return this.http.get<Accommodation>(`${environment.apiUrl}/accommodations/${id}`);
-  }
-
-  bookingCreate(bookingsPayload: CreateBookingPayload): Observable<Booking> {
-    return this.http.post<Booking>(`${environment.apiUrl}/bookings`, bookingsPayload);
-  }
-
-  getBookings(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${environment.apiUrl}/bookings`, {});
   }
 
   getImageUrl(item: Accommodation): string {
