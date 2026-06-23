@@ -1,1 +1,82 @@
-<p>bookings works!</p>
+<section class="bookings-page">
+  <div class="bookings-container">
+    <div class="page-header">
+      <div>
+        <h1>My bookings</h1>
+        <p class="subtitle">
+          Here you can check your accommodation bookings and their status.
+        </p>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="state-card">
+      <p>Loading your bookings...</p>
+    </div>
+    }
+
+    @if (errorMessage() && !isLoading()) {
+    <div class="state-card error">
+      <p>{{ errorMessage() }}</p>
+    </div>
+    }
+
+    @if (noResults() && !isLoading() && !errorMessage()) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="fa-regular fa-calendar-xmark"></i>
+      </div>
+
+      <h2>No bookings yet</h2>
+      <p>
+        When you book an accommodation, it will appear here.
+      </p>
+    </div>
+    }
+
+    @if (!isLoading() && !errorMessage() && bookingsItems().length > 0) {
+    <div class="bookings-list">
+      @for (booking of bookingsItems(); track booking.id) {
+      <article class="booking-card">
+        <div class="booking-main">
+          <div class="booking-icon">
+            <i class="fa-solid fa-bed"></i>
+          </div>
+
+          <div class="booking-info">
+            <h2>{{ booking.accommodationName }}</h2>
+
+            <div class="booking-dates">
+              <div class="date-box">
+                <span class="label">Check-in</span>
+                <strong>{{ booking.checkIn }}</strong>
+              </div>
+
+              <div class="date-divider"></div>
+
+              <div class="date-box">
+                <span class="label">Check-out</span>
+                <strong>{{ booking.checkOut }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-side">
+          <span class="status" [class]="booking.status">
+            {{ booking.status }}
+          </span>
+
+          @if (booking.totalPrice) {
+          <div class="price">
+            <span>Total price</span>
+            <strong>€{{ booking.totalPrice }}</strong>
+          </div>
+          }
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </div>
+</section>
