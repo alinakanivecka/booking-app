@@ -12,16 +12,17 @@ import { DateRange } from '../../models/date-range.model';
 import { GuestControl } from '../../shared/components/guest-control/guest-control';
 import { CreateBookingPayload } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
+import { Reviews } from '../../shared/components/reviews/reviews';
 
 @Component({
   selector: 'app-accommodation-details-page',
-  imports: [DateRangePicker, ReactiveFormsModule, GuestControl],
+  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews],
   templateUrl: './accommodation-details-page.html',
   styleUrl: './accommodation-details-page.scss',
 })
 export class AccommodationDetailsPage {
   private accommodationService = inject(AccommodationsService);
-   private bookingsService = inject(BookingsService);
+  private bookingsService = inject(BookingsService);
   private favoritesService = inject(FavoritesService);
   private router = inject(Router);
   authService = inject(AuthService);
@@ -29,6 +30,7 @@ export class AccommodationDetailsPage {
 
   accommodation = signal<Accommodation | null>(null);
   selectedImage = signal<string | null>(null);
+  reviewsCount = signal(0)
 
   isLoading = signal(false);
   noResults = signal(false);
@@ -120,6 +122,11 @@ export class AccommodationDetailsPage {
     }
 
     this.favoritesService.addFavorite(accommodationId).subscribe();
+  }
+
+  accommodationRatingLabel() {
+    const item = this.accommodation()!;
+    return this.accommodationService.getAccommodationRating(item);
   }
 
   constructor(route: ActivatedRoute) {

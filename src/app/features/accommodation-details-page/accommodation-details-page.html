@@ -40,8 +40,8 @@
       <aside class="booking-card">
         <div class="rating-box">
           <div>
-            <strong>{{ accommodation.rating >= 4 ? 'Wonderful' : 'New' }}</strong>
-            <span>Guest rating</span>
+            <strong>{{ accommodationRatingLabel() }}</strong>
+            <span>{{reviewsCount()}} reviews</span>
           </div>
 
           <span class="rating-badge">
@@ -73,9 +73,9 @@
           <button type="button" (click)="bookNow()">Book now</button>
         </form>
         @if (errorMessage()) {
-          <div class="error">
-            <p class="error-text">{{errorMessage()}}</p>
-          </div>
+        <div class="error">
+          <p class="error-text">{{errorMessage()}}</p>
+        </div>
         }
         } @else {
         <span class="message">Sign in to reserve this accommodation</span>
@@ -102,6 +102,11 @@
             </div>
             }
           </div>
+        </section>
+
+        <section class="info-card">
+          <h2>Guest reviews</h2>
+          <app-reviews [accommodation]="accommodation" [accommodationRating]="accommodationRatingLabel()" (reviewsCountChange)="reviewsCount.set($event)"></app-reviews>
         </section>
 
         <section class="info-card">
