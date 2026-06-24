@@ -9,3 +9,13 @@ export interface HostAccommodation {
   images: string[];
   hostId: number;
 }
+
+export interface CreateHostAccommodationPayload {
+  name: string;
+  description: string;
+  city: string;
+  country: string;
+  pricePerNight: number;
+  maxGuests: number;
+  amenities: string[];
+}
