@@ -51,6 +51,14 @@ export class AuthService {
     return this.http.get<User>(`${environment.apiUrl}/me`);
   }
 
+  becomeHost(): Observable<User> {
+    return this.http.post<User>(`${environment.apiUrl}/me/become-host`, {}).pipe(
+      tap((user) => {
+        this.currentUser.set(user);
+      }),
+    );
+  }
+
   restoreSession(): void {
     const token = this.getAccessToken();
 
@@ -91,6 +99,6 @@ export class AuthService {
   clearSession(): void {
     localStorage.removeItem('accessToken');
     this.currentUser.set(null);
-    this.favoritesService.clearFavorites()
+    this.favoritesService.clearFavorites();
   }
 }

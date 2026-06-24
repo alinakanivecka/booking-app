@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { NotFound } from './features/not-found/not-found';
 import { authGuard } from './core/guards/auth-guard';
 import { authRoutes } from './features/auth/auth.routes';
+import { hostGuard } from './core/guards/host-guard/host-guard';
 
 export const routes: Routes = [
   {
@@ -42,13 +43,14 @@ export const routes: Routes = [
 
   {
     path: 'profile',
+    loadComponent: () => import('./features/profile/profile').then((c) => c.Profile),
     canActivate: [authGuard],
-    loadChildren: () => import('./features/auth/auth.routes').then((r) => r.authRoutes),
   },
 
   {
     path: 'host/dashboard',
-    redirectTo: 'search',
+    loadComponent: () => import('./features/host/dashboard/dashboard').then((c) => c.Dashboard),
+    canActivate: [authGuard, hostGuard],
   },
 
   {
