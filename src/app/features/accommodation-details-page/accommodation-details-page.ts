@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccommodationsService } from '../../core/services/accommodations.service';
@@ -10,13 +10,14 @@ import { DateRangePicker } from '../../shared/components/date-range-picker/date-
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { DateRange } from '../../models/date-range.model';
 import { GuestControl } from '../../shared/components/guest-control/guest-control';
-import { CreateBookingPayload } from '../../models/bookings.model';
+import { Booking, CreateBookingPayload } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
 import { Reviews } from '../../shared/components/reviews/reviews';
+import { ReviewForm } from '../../shared/components/review-form/review-form';
 
 @Component({
   selector: 'app-accommodation-details-page',
-  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews],
+  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews, ReviewForm],
   templateUrl: './accommodation-details-page.html',
   styleUrl: './accommodation-details-page.scss',
 })
@@ -30,11 +31,19 @@ export class AccommodationDetailsPage {
 
   accommodation = signal<Accommodation | null>(null);
   selectedImage = signal<string | null>(null);
-  reviewsCount = signal(0)
+  reviewsCount = signal(0);
+  isReviewModalOpen = signal(false);
+  hasCurrentUserReview = signal<boolean | null>(null);
+
+  userBookings = signal<Booking[]>([]);
+  bookingsLoaded = signal(false);
 
   isLoading = signal(false);
   noResults = signal(false);
   errorMessage = signal('');
+
+  @ViewChild(Reviews)
+  reviewsComponent!: Reviews;
 
   bookingForm = this.fb.group({
     dateRange: this.fb.control<DateRange>({
@@ -50,6 +59,33 @@ export class AccommodationDetailsPage {
     }
 
     return date.toISOString().split('T')[0];
+  }
+
+  canLeaveReview = computed(() => {
+    const accommodation = this.accommodation();
+
+    if (!accommodation || !this.authService.isAuthenticated()) {
+      return false;
+    }
+
+    const today = new Date();
+
+    return this.userBookings().some((booking) => {
+      const isSameAccommodation = booking.accommodationId === accommodation.id;
+      const isNotCancelled = booking.status !== 'cancelled';
+      const stayFinished = new Date(booking.checkOut) < today;
+
+      return isSameAccommodation && isNotCancelled && stayFinished;
+    });
+  });
+
+  reloadReviews() {
+    this.reviewsComponent.loadReviews(this.accommodation()!.id);
+  }
+
+  onReviewCreated() {
+    this.hasCurrentUserReview.set(true);
+    this.reloadReviews();
   }
 
   bookNow() {
@@ -129,6 +165,27 @@ export class AccommodationDetailsPage {
     return this.accommodationService.getAccommodationRating(item);
   }
 
+  loadUserBookings() {
+    if (!this.authService.isAuthenticated()) {
+      this.userBookings.set([]);
+      this.bookingsLoaded.set(true);
+      return;
+    }
+
+    this.bookingsLoaded.set(false);
+
+    this.bookingsService.getBookings().subscribe({
+      next: (bookings) => {
+        this.userBookings.set(bookings);
+        this.bookingsLoaded.set(true);
+      },
+      error: () => {
+        this.userBookings.set([]);
+        this.bookingsLoaded.set(true);
+      },
+    });
+  }
+
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const id = Number(params.get('id'));
@@ -137,7 +194,9 @@ export class AccommodationDetailsPage {
 
       this.accommodationService.getAccommodationDetails(id).subscribe({
         next: (response) => {
+          this.hasCurrentUserReview.set(null);
           this.accommodation.set(response);
+          this.loadUserBookings();
           this.isLoading.set(false);
         },
         error: () => {

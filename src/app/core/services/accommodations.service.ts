@@ -88,6 +88,10 @@ export class AccommodationsService {
       return 'Good';
     }
 
+    if (rating >= 1) {
+      return 'Bad';
+    }
+
     return 'Pleasant';
   }
 
