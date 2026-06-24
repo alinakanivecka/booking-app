@@ -1,11 +1,16 @@
 <section class="accommodation-form-page">
   <div class="form-container">
     <div class="page-header">
+      @if (editMode()) {
+      <h1>Edit accommodation</h1>
+      <p>Update the details of your property listing.</p>
+      } @else {
       <h1>Create accommodation</h1>
       <p>Add the main details for your new property listing.</p>
+      }
     </div>
 
-    <form class="accommodation-form" [formGroup]="hostAccommodationForm" (ngSubmit)="addNewAccommodation()">
+    <form class="accommodation-form" [formGroup]="hostAccommodationForm" (ngSubmit)="submitForm()">
       <div class="form-field">
         <label for="name">Name</label>
         <input id="name" type="text" formControlName="name" placeholder="Central Apartment" />
@@ -82,11 +87,20 @@
       </div>
       }
 
-      <button type="submit" [disabled]="hostAccommodationForm.invalid || isLoading()">
+      <button type="submit"
+        [disabled]="isLoading() || hostAccommodationForm.invalid || (editMode() && !hostAccommodationForm.dirty)">
         @if (isLoading()) {
+        @if(editMode()) {
+        Saving...
+        } @else {
         Creating...
+        }
+        } @else {
+        @if(editMode()) {
+        Save changes
         } @else {
         Create accommodation
+        }
         }
       </button>
     </form>

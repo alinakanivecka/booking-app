@@ -74,7 +74,11 @@ export const routes: Routes = [
 
   {
     path: 'host/accommodations/:id/edit',
-    redirectTo: 'search',
+    loadComponent: () =>
+      import('./features/host/pages/host-accommodation-form/host-accommodation-form').then(
+        (c) => c.HostAccommodationForm,
+      ),
+    canActivate: [authGuard, hostGuard],
   },
 
   {

@@ -192,7 +192,7 @@ export class AccommodationDetailsPage {
 
       this.isLoading.set(true);
 
-      this.accommodationService.getAccommodationDetails(id).subscribe({
+      this.accommodationService.getAccommodationById(id).subscribe({
         next: (response) => {
           this.hasCurrentUserReview.set(null);
           this.accommodation.set(response);

@@ -26,4 +26,15 @@ export class HostService {
   createHostAccommodation(payload: CreateHostAccommodationPayload): Observable<Accommodation> {
     return this.http.post<Accommodation>(`${environment.apiUrl}/host/accommodations`, payload);
   }
+
+  editHostAccommodation(
+    id: number,
+    payload: CreateHostAccommodationPayload,
+  ): Observable<Accommodation> {
+    return this.http.patch<Accommodation>(
+      `${environment.apiUrl}/host/accommodations/${id}`,
+      payload,
+      {},
+    );
+  }
 }
