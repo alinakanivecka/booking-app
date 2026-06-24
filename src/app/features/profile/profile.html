@@ -1,0 +1,34 @@
+<section class="profile-page">
+  <h1>My profile</h1>
+
+  @if (authService.currentUser(); as user) {
+  <div class="profile-card">
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+
+    <div class="roles">
+      @for (role of user.roles; track role) {
+      <span>{{ role }}</span>
+      }
+    </div>
+
+    @if (!user.roles.includes('host')) {
+    <button type="button" (click)="becomeHost()" [disabled]="isLoading()">
+      @if (isLoading()) {
+      Becoming host...
+      } @else {
+      Become a host
+      }
+    </button>
+    } @else {
+    <button type="button" routerLink="/host/dashboard">
+      Go to host dashboard
+    </button>
+    }
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+  </div>
+  }
+</section>
