@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { Review } from '../../models/reviews.model';
+import { CreateReviewPayload, Review } from '../../models/reviews.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +12,9 @@ export class ReviewsService {
 
   getAccommodationsReviews(id: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${environment.apiUrl}/accommodations/${id}/reviews`, {});
+  }
+
+  createReview(reviewPayload: CreateReviewPayload): Observable<Review> {
+    return this.http.post<Review>(`${environment.apiUrl}/reviews`, reviewPayload, {});
   }
 }

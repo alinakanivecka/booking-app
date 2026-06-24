@@ -106,7 +106,30 @@
 
         <section class="info-card">
           <h2>Guest reviews</h2>
-          <app-reviews [accommodation]="accommodation" [accommodationRating]="accommodationRatingLabel()" (reviewsCountChange)="reviewsCount.set($event)"></app-reviews>
+
+          @if (!authService.isAuthenticated()) {
+          <p class="message">Sign in to leave a review.</p>
+          } @else if (!bookingsLoaded() || hasCurrentUserReview() === null) {
+          <p class="message">Checking your review availability...</p>
+          } @else if (hasCurrentUserReview()) {
+          <p class="message">You already reviewed this accommodation.</p>
+          } @else if (canLeaveReview()) {
+          <button type="button" class="leave-review-btn" (click)="isReviewModalOpen.set(true)">
+            Leave your review
+          </button>
+
+          @if (isReviewModalOpen()) {
+          <app-review-form [accommodationId]="accommodation.id" (close)="isReviewModalOpen.set(false)"
+            (reviewCreated)="onReviewCreated()">
+          </app-review-form>
+          }
+          } @else {
+          <p class="message">You can leave a review after your stay.</p>
+          }
+
+          <app-reviews [accommodation]="accommodation" [accommodationRating]="accommodationRatingLabel()"
+            (reviewsCountChange)="reviewsCount.set($event)"
+            (currentUserReviewChange)="hasCurrentUserReview.set($event)"></app-reviews>
         </section>
 
         <section class="info-card">

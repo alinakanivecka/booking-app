@@ -252,6 +252,7 @@
 .message {
   font-size: 1rem;
   font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 .error {
@@ -291,9 +292,23 @@
   }
 
   p {
-    margin: 0;
     color: var(--color-text-body);
     line-height: 1.6;
+  }
+}
+
+.leave-review-btn {
+  color: var(--color-primary);
+  border: none;
+  background-color: transparent;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
   }
 }
 
