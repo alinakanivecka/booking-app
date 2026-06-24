@@ -16,7 +16,7 @@
         <input id="name" type="text" formControlName="name" placeholder="Central Apartment" />
 
         @if (hostAccommodationForm.controls.name.touched && hostAccommodationForm.controls.name.invalid) {
-        <span class="field-error">Name is required</span>
+        <span class="error-text">Name is required</span>
         }
       </div>
 
@@ -26,7 +26,7 @@
           placeholder="Bright apartment near public transport."></textarea>
 
         @if (hostAccommodationForm.controls.description.touched && hostAccommodationForm.controls.description.invalid) {
-        <span class="field-error">Description is required</span>
+        <span class="error-text">Description is required</span>
         }
       </div>
 
@@ -36,7 +36,7 @@
           <input id="city" type="text" formControlName="city" placeholder="Budapest" />
 
           @if (hostAccommodationForm.controls.city.touched && hostAccommodationForm.controls.city.invalid) {
-          <span class="field-error">City is required</span>
+          <span class="error-text">City is required</span>
           }
         </div>
 
@@ -45,7 +45,7 @@
           <input id="country" type="text" formControlName="country" placeholder="Hungary" />
 
           @if (hostAccommodationForm.controls.country.touched && hostAccommodationForm.controls.country.invalid) {
-          <span class="field-error">Country is required</span>
+          <span class="error-text">Country is required</span>
           }
         </div>
       </div>
@@ -57,7 +57,7 @@
 
           @if (hostAccommodationForm.controls.pricePerNight.touched &&
           hostAccommodationForm.controls.pricePerNight.invalid) {
-          <span class="field-error">Price must be at least 1</span>
+          <span class="error-text">Price must be at least 1</span>
           }
         </div>
 
@@ -66,7 +66,7 @@
           <input id="maxGuests" type="number" formControlName="maxGuests" min="1" />
 
           @if (hostAccommodationForm.controls.maxGuests.touched && hostAccommodationForm.controls.maxGuests.invalid) {
-          <span class="field-error">Guests must be at least 1</span>
+          <span class="error-text">Guests must be at least 1</span>
           }
         </div>
       </div>
@@ -77,7 +77,7 @@
         <small>Separate amenities with commas.</small>
 
         @if (hostAccommodationForm.controls.amenities.touched && hostAccommodationForm.controls.amenities.invalid) {
-        <span class="field-error">Amenities are required</span>
+        <span class="error-text">Amenities are required</span>
         }
       </div>
 

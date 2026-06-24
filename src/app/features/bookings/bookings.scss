@@ -368,29 +368,6 @@
   }
 }
 
-@media (max-width: 700px) {
-  .booking-card {
-    flex-direction: column;
-  }
-
-  .booking-side {
-    align-items: flex-start;
-    min-width: auto;
-  }
-
-  .booking-dates {
-    flex-direction: column;
-  }
-
-  .date-divider {
-    display: none;
-  }
-
-  .date-box {
-    min-width: auto;
-  }
-}
-
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -519,5 +496,28 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 700px) {
+  .booking-card {
+    flex-direction: column;
+  }
+
+  .booking-side {
+    align-items: flex-start;
+    min-width: auto;
+  }
+
+  .booking-dates {
+    flex-direction: column;
+  }
+
+  .date-divider {
+    display: none;
+  }
+
+  .date-box {
+    min-width: auto;
   }
 }

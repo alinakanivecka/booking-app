@@ -37,4 +37,8 @@ export class HostService {
       {},
     );
   }
+
+  removeHostAccommodation(id: number) {
+    return this.http.delete<Accommodation>(`${environment.apiUrl}/host/accommodations/${id}`);
+  }
 }
