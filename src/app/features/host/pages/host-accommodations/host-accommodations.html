@@ -1,0 +1,66 @@
+<section class="host-accommodations">
+  <div class="accommodations-container">
+    <div class="page-header">
+      <div>
+        <h1>My accommodations</h1>
+        <p>View and manage your property listings.</p>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="state-card">
+      Loading accommodations...
+    </div>
+    } @else if (errorMessage()) {
+    <div class="state-card error">
+      {{ errorMessage() }}
+    </div>
+    } @else if (!accommodations().length) {
+    <div class="empty-state">
+      <h2>No accommodations yet</h2>
+      <p>
+        You haven’t created any property listings yet.
+      </p>
+    </div>
+    } @else {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Price</th>
+            <th class="actions-header">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (accommodation of accommodations(); track accommodation.id) {
+          <tr>
+            <td>
+              <strong>{{ accommodation.name }}</strong>
+            </td>
+
+            <td>{{ accommodation.city }}</td>
+
+            <td>
+              €{{ accommodation.pricePerNight }}
+            </td>
+
+            <td class="actions-cell">
+              <a [routerLink]="['/host/accommodations', accommodation.id, 'edit']" class="action-link edit">
+                Edit
+              </a>
+
+              <button type="button" class="action-link delete">
+                Delete
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+</section>

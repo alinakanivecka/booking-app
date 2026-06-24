@@ -54,6 +54,21 @@
     font-weight: 800;
     line-height: 1;
   }
+
+  .manage-btn {
+    display: inline-flex;
+    margin-top: 1rem;
+    color: var(--color-primary);
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: 800;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .bookings-card {
