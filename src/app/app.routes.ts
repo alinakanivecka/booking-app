@@ -49,13 +49,18 @@ export const routes: Routes = [
 
   {
     path: 'host/dashboard',
-    loadComponent: () => import('./features/host/pages/host-dashboard/host-dashboard').then((c) => c.HostDashboard),
+    loadComponent: () =>
+      import('./features/host/pages/host-dashboard/host-dashboard').then((c) => c.HostDashboard),
     canActivate: [authGuard, hostGuard],
   },
 
   {
     path: 'host/accommodations',
-    redirectTo: 'search',
+    loadComponent: () =>
+      import('./features/host/pages/host-accommodations/host-accommodations').then(
+        (c) => c.HostAccommodations,
+      ),
+    canActivate: [authGuard, hostGuard],
   },
 
   {

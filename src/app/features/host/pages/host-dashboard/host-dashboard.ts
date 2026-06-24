@@ -4,10 +4,11 @@ import { forkJoin } from 'rxjs';
 import { HostService } from '../../../../core/services/host.service';
 import { HostAccommodation } from '../../../../models/host-accommodations.model';
 import { HostBooking } from '../../../../models/host-bookings.model';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './host-dashboard.html',
   styleUrl: './host-dashboard.scss',
 })
