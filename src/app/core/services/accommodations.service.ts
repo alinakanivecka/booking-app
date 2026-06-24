@@ -55,7 +55,7 @@ export class AccommodationsService {
     });
   }
 
-  getAccommodationDetails(id: number): Observable<Accommodation> {
+  getAccommodationById(id: number): Observable<Accommodation> {
     return this.http.get<Accommodation>(`${environment.apiUrl}/accommodations/${id}`);
   }
 
