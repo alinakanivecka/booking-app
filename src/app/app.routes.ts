@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { NotFound } from './features/not-found/not-found';
-import { authGuard } from './core/guards/auth-guard';
+import { authGuard } from './core/guards/auth-guard/auth-guard';
 import { authRoutes } from './features/auth/auth.routes';
 import { hostGuard } from './core/guards/host-guard/host-guard';
 
@@ -49,7 +49,7 @@ export const routes: Routes = [
 
   {
     path: 'host/dashboard',
-    loadComponent: () => import('./features/host/dashboard/dashboard').then((c) => c.Dashboard),
+    loadComponent: () => import('./features/host/pages/host-dashboard/host-dashboard').then((c) => c.HostDashboard),
     canActivate: [authGuard, hostGuard],
   },
 
