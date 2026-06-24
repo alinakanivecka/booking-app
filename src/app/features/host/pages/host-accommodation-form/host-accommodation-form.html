@@ -1,0 +1,94 @@
+<section class="accommodation-form-page">
+  <div class="form-container">
+    <div class="page-header">
+      <h1>Create accommodation</h1>
+      <p>Add the main details for your new property listing.</p>
+    </div>
+
+    <form class="accommodation-form" [formGroup]="hostAccommodationForm" (ngSubmit)="addNewAccommodation()">
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="Central Apartment" />
+
+        @if (hostAccommodationForm.controls.name.touched && hostAccommodationForm.controls.name.invalid) {
+        <span class="field-error">Name is required</span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description"
+          placeholder="Bright apartment near public transport."></textarea>
+
+        @if (hostAccommodationForm.controls.description.touched && hostAccommodationForm.controls.description.invalid) {
+        <span class="field-error">Description is required</span>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="city">City</label>
+          <input id="city" type="text" formControlName="city" placeholder="Budapest" />
+
+          @if (hostAccommodationForm.controls.city.touched && hostAccommodationForm.controls.city.invalid) {
+          <span class="field-error">City is required</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="country">Country</label>
+          <input id="country" type="text" formControlName="country" placeholder="Hungary" />
+
+          @if (hostAccommodationForm.controls.country.touched && hostAccommodationForm.controls.country.invalid) {
+          <span class="field-error">Country is required</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="pricePerNight">Price per night</label>
+          <input id="pricePerNight" type="number" formControlName="pricePerNight" min="1" />
+
+          @if (hostAccommodationForm.controls.pricePerNight.touched &&
+          hostAccommodationForm.controls.pricePerNight.invalid) {
+          <span class="field-error">Price must be at least 1</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="maxGuests">Max guests</label>
+          <input id="maxGuests" type="number" formControlName="maxGuests" min="1" />
+
+          @if (hostAccommodationForm.controls.maxGuests.touched && hostAccommodationForm.controls.maxGuests.invalid) {
+          <span class="field-error">Guests must be at least 1</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="amenities">Amenities</label>
+        <input id="amenities" type="text" formControlName="amenities" placeholder="wifi, parking, kitchen" />
+        <small>Separate amenities with commas.</small>
+
+        @if (hostAccommodationForm.controls.amenities.touched && hostAccommodationForm.controls.amenities.invalid) {
+        <span class="field-error">Amenities are required</span>
+        }
+      </div>
+
+      @if (errorMessage()) {
+      <div class="form-error">
+        {{ errorMessage() }}
+      </div>
+      }
+
+      <button type="submit" [disabled]="hostAccommodationForm.invalid || isLoading()">
+        @if (isLoading()) {
+        Creating...
+        } @else {
+        Create accommodation
+        }
+      </button>
+    </form>
+  </div>
+</section>
