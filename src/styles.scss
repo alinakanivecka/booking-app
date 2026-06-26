@@ -26,6 +26,11 @@ html {
       focus-handle-color: var(--color-primary)
     )
   );
+  @include mat.badge-overrides(
+    (
+      background-color: var(--color-primary-strong)
+    )
+  );
 }
 
 :root {
@@ -53,8 +58,7 @@ html {
   --color-text-secondary: #4b4b64;
   --color-text-placeholder: #aaaac2;
   --color-text-subtle: #8a8aa8;
-  --color-text-neutral: #333
-  --color-icon-muted: #918f8f;
+  --color-text-neutral: #333 --color-icon-muted: #918f8f;
 
   --color-border: #dedede;
   --color-border-soft: #ececec;
@@ -90,6 +94,9 @@ html {
   --color-warning: #92400e;
   --color-success: #166534;
   --color-danger: #991b1b;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 body {

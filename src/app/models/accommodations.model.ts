@@ -10,6 +10,7 @@ export interface Accommodation {
   id: number;
   name: string;
   description: string;
+  destination: string;
   city: string;
   country: string;
   pricePerNight: number;

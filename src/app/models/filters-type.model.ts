@@ -3,6 +3,7 @@ export interface FiltersType {
   pageSize: number;
   city?: string;
   country?: string;
+  destination?: string;
   minPrice?: number;
   maxPrice?: number;
   guests?: number;

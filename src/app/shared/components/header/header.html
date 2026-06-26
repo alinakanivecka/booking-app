@@ -9,6 +9,18 @@
     <a routerLink="/register">Register</a>
     <a routerLink="/login">Sign in</a>
     } @else {
+
+    @if (authService.currentUser()?.roles!.includes('host')) {
+    <button type="button" class="notifications-link" routerLink="/notifications">
+
+      @if (notificationsService.unreadCount()) {
+      <i class="fa-regular fa-bell" [matBadge]="notificationsService.unreadCount()"></i>
+      } @else {
+      <i class="fa-regular fa-bell"></i>
+      }
+    </button>
+    }
+
     <button type="button" class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside
       (appClickOutside)="isDropdownOpen.set(false)">
       <div class="user-name-icon">{{ showFirstLetterCurrentUser() }}</div>
@@ -20,6 +32,13 @@
         <i class="fa-regular fa-user"></i>
         Profile
       </button>
+
+      @if (authService.currentUser()?.roles!.includes('host')) {
+      <button type="button" class="dropdown-row" routerLink="/host/dashboard">
+        <i class="fa-solid fa-table-columns"></i>
+        Host dashboard
+      </button>
+      }
 
       <button type="button" class="dropdown-row" routerLink="/bookings">
         <i class="fa-solid fa-suitcase"></i>

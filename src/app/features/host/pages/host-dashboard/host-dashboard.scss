@@ -123,8 +123,9 @@
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: capitalize;
+  
   &.confirmed {
-    background-color: var(--color-warning);
+    background-color: var(--color-success-soft);
     color: var(--color-success);
   }
 

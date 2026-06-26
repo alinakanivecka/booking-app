@@ -121,8 +121,7 @@ export class Search implements OnInit {
     const filters = this.activeFilters();
 
     return {
-      city: filters.city || null,
-      country: filters.country || null,
+      destination: filters.destination || null,
       amenities: filters.amenities?.length ? filters.amenities.join(',') : null,
       minPrice: filters.minPrice ?? null,
       maxPrice: filters.maxPrice ?? null,
@@ -162,8 +161,7 @@ export class Search implements OnInit {
     }
 
     this.activeFilters.set({
-      city: params.get('city') || undefined,
-      country: params.get('country') || undefined,
+      destination: params.get('destination') || undefined,
       guests: this.getNumberParam('guests'),
       minPrice: this.getNumberParam('minPrice'),
       maxPrice: this.getNumberParam('maxPrice'),
@@ -216,10 +214,10 @@ export class Search implements OnInit {
   }
 
   getDestinationName() {
-    const cityName = this.activeFilters().city;
+    const destinationName = this.activeFilters().destination;
 
-    return cityName
-      ? cityName
+    return destinationName
+      ? destinationName
           .split(' ')
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(' ')
