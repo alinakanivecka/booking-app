@@ -19,3 +19,9 @@ export interface CreateHostAccommodationPayload {
   maxGuests: number;
   amenities: string[];
 }
+
+export interface HostAccommodationImageResponse {
+  id: number;
+  url: string;
+  fileName: string;
+}

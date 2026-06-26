@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {
   CreateHostAccommodationPayload,
   HostAccommodation,
+  HostAccommodationImageResponse,
 } from '../../models/host-accommodations.model';
 import { HostBookinsResponse } from '../../models/host-bookings.model';
 import { Accommodation } from '../../models/accommodations.model';
@@ -40,5 +41,21 @@ export class HostService {
 
   removeHostAccommodation(id: number) {
     return this.http.delete<Accommodation>(`${environment.apiUrl}/host/accommodations/${id}`);
+  }
+
+  uploadHostAccommodationImages(
+    id: number,
+    files: File[],  
+  ): Observable<HostAccommodationImageResponse[]> {
+    const formData = new FormData();
+
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
+
+    return this.http.post<HostAccommodationImageResponse[]>(
+      `${environment.apiUrl}/host/accommodations/${id}/images`,
+      formData,
+    );
   }
 }

@@ -118,12 +118,21 @@ export class AccommodationDetailsPage {
         this.router.navigate(['/bookings']);
       },
       error: (error) => {
-        if (error.status === 400) {
-          this.errorMessage.set('These dates are already booked. Please choose different dates.');
+        this.isLoading.set(false);
+
+        const guestsError = error.error?.errors?.guests?.[0];
+        const datesError = error.error?.errors?.dates;
+
+        if (error.status === 400 && guestsError) {
+          this.errorMessage.set(guestsError);
           return;
         }
+
+        if (error.status === 400 && datesError) {
+          this.errorMessage.set(datesError)
+          return
+        }
         this.errorMessage.set('Something went wrong. Please try again.');
-        this.isLoading.set(false);
       },
     });
   }

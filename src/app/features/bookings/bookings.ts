@@ -75,8 +75,6 @@ export class Bookings {
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.log(error);
-
         this.bookingsItems.set([]);
         this.noResults.set(false);
         this.errorMessage.set(
