@@ -123,20 +123,19 @@
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: capitalize;
-
-  &.pending {
-    background-color: #fff7e6;
-    color: #ad6800;
+  &.confirmed {
+    background-color: var(--color-warning);
+    color: var(--color-success);
   }
 
-  &.confirmed {
-    background-color: #f0fdf4;
-    color: #15803d;
+  &.pending {
+    background-color: var(--color-warning-soft);
+    color: var(--color-warning);
   }
 
   &.cancelled {
-    background-color: #fff1f0;
-    color: #cf1322;
+    background-color: var(--color-danger-soft);
+    color: var(--color-danger);
   }
 }
 

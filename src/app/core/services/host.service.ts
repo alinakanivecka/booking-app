@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import {
 } from '../../models/host-accommodations.model';
 import { HostBookinsResponse } from '../../models/host-bookings.model';
 import { Accommodation } from '../../models/accommodations.model';
+import { HostFiltersType } from '../../models/filters-type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,26 @@ export class HostService {
     return this.http.get<HostAccommodation[]>(`${environment.apiUrl}/host/accommodations`);
   }
 
-  getHostBookings(): Observable<HostBookinsResponse> {
-    return this.http.get<HostBookinsResponse>(`${environment.apiUrl}/host/bookings`);
+  getHostBookings(filters?: HostFiltersType): Observable<HostBookinsResponse> {
+    let params = new HttpParams();
+
+    if (filters?.accommodationId) {
+      params = params.set('accommodationId', filters.accommodationId);
+    }
+
+    if (filters?.status) {
+      params = params.set('status', filters.status);
+    }
+
+    if (filters?.page) {
+      params = params.set('page', filters.page);
+    }
+
+    if (filters?.pageSize) {
+      params = params.set('pageSize', filters.pageSize);
+    }
+
+    return this.http.get<HostBookinsResponse>(`${environment.apiUrl}/host/bookings`, { params });
   }
 
   createHostAccommodation(payload: CreateHostAccommodationPayload): Observable<Accommodation> {
@@ -45,7 +64,7 @@ export class HostService {
 
   uploadHostAccommodationImages(
     id: number,
-    files: File[],  
+    files: File[],
   ): Observable<HostAccommodationImageResponse[]> {
     const formData = new FormData();
 

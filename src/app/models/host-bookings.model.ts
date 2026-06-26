@@ -12,8 +12,14 @@ export interface HostBooking {
   accommodationName: string;
   checkIn: string;
   checkOut: string;
+  guest: HostBookingGuest;
   guests: number;
   totalPrice: number;
   status: string;
   createdAt: string;
+}
+
+export interface HostBookingGuest {
+  id: number;
+  name: string;
 }

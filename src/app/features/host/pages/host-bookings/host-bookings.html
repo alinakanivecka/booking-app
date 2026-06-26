@@ -1,0 +1,108 @@
+<section class="host-bookings-page">
+  <div class="host-bookings-container">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Host area</p>
+        <h1>Bookings</h1>
+        <p class="subtitle">Review and manage bookings for your properties.</p>
+      </div>
+
+      @if (totalItems() > 0) {
+      <div class="summary-card">
+        <span class="summary-number">{{ totalItems() }}</span>
+        <span class="summary-label">total bookings</span>
+      </div>
+      }
+    </div>
+
+    <div class="filters-card">
+      <div class="filter-group">
+        <label for="status">Status</label>
+
+        <app-dropdown label="Status" [options]="statusOptions" [selectedValue]="selectedStatus()"
+          [disabled]="isLoading()" (valueChanged)="updateFilters({ status: $event?.toString() || '' })">
+        </app-dropdown>
+
+      </div>
+
+      <div class="filter-group">
+        <label for="accommodation">Accommodation</label>
+
+        <app-dropdown label="Accommodation" [options]="accommodationOptions()"
+          [selectedValue]="selectedAccommodationId()" [disabled]="isLoading()"
+          (valueChanged)="updateFilters({ accommodationId: $event === null ? null : +$event })">
+        </app-dropdown>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>Loading bookings...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="state-card error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else if (noResults()) {
+    <div class="state-card empty">
+      <i class="fa-regular fa-calendar-xmark"></i>
+      <h2>No bookings found</h2>
+      <p>Try changing the filters or check again later.</p>
+    </div>
+    } @else {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Guest</th>
+            <th>Property</th>
+            <th>Dates</th>
+            <th>Guests</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (booking of bookings(); track booking.id) {
+          <tr>
+            <td>
+              <div class="guest-cell">
+                <div class="avatar">
+                  {{ booking.guest.name.charAt(0) }}
+                </div>
+                <span>{{ booking.guest.name }}</span>
+              </div>
+            </td>
+
+            <td>
+              <strong>{{ booking.accommodationName }}</strong>
+            </td>
+
+            <td>
+              <span class="date-range">
+                {{ booking.checkIn }} — {{ booking.checkOut }}
+              </span>
+            </td>
+
+            <td>{{ booking.guests }}</td>
+
+            <td>
+              <strong>€{{ booking.totalPrice }}</strong>
+            </td>
+
+            <td>
+              <span class="status-badge" [class]="booking.status">
+                {{ booking.status }}
+              </span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+</section>
