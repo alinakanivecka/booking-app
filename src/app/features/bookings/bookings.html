@@ -44,7 +44,7 @@
           </div>
 
           <div class="booking-info">
-            <h2>{{ booking.accommodationName }}</h2>
+            <h2 [routerLink]="['/accommodation', booking.accommodationId]">{{ booking.accommodationName }}</h2>
 
             <div class="booking-dates">
               <div class="date-box">

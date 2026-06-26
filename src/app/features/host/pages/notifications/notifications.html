@@ -1,0 +1,108 @@
+<section class="notifications-page">
+  <div class="notifications-container">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Host area</p>
+        <h1>Notifications</h1>
+        <p class="subtitle">
+          Stay informed about bookings and reviews.
+        </p>
+      </div>
+
+      @if (notifications().length) {
+      <div class="summary-card">
+        <span class="summary-number">{{ notifications().length }}</span>
+        <span class="summary-label">notifications</span>
+      </div>
+      }
+    </div>
+
+    @if (isLoading()) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>Loading notifications...</p>
+    </div>
+
+    } @else if (errorMessage()) {
+    <div class="state-card error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>{{ errorMessage() }}</p>
+    </div>
+
+    } @else if (!notifications().length) {
+    <div class="state-card empty">
+      <i class="fa-regular fa-bell-slash"></i>
+      <h2>No notifications</h2>
+      <p>
+        You're all caught up. New notifications will appear here.
+      </p>
+    </div>
+
+    } @else {
+    <div class="notifications-list">
+      @for (notification of notifications(); track notification.id) {
+      <article class="notification-card" [class.unread]="!notification.isRead">
+        <div class="notification-icon">
+          @switch (notification.type) {
+
+          @case ('booking_confirmed') {
+          <i class="fa-solid fa-circle-check"></i>
+          }
+
+          @case ('booking_cancelled') {
+          <i class="fa-solid fa-ban"></i>
+          }
+
+          @case ('review_received') {
+          <i class="fa-solid fa-star"></i>
+          }
+
+          @default {
+          <i class="fa-regular fa-bell"></i>
+          }
+          }
+        </div>
+        <div class="notification-content">
+          <div class="notification-header">
+            <span class="notification-title">
+              @switch (notification.type) {
+
+              @case ('booking_confirmed') {
+              Booking confirmed
+              }
+
+              @case ('booking_cancelled') {
+              Booking cancelled
+              }
+
+              @case ('review_received') {
+              New review received
+              }
+
+              @default {
+              Notification
+              }
+              }
+            </span>
+
+            @if (!notification.isRead) {
+            <span class="unread-badge">
+              New
+            </span>
+            }
+          </div>
+          <p class="message">
+            {{ notification.message }}
+          </p>
+
+          <span class="date">
+            {{ notification.createdAt | date:'medium' }}
+          </span>
+
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </div>
+</section>

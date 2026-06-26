@@ -48,7 +48,7 @@ export class SearchPanel implements OnInit {
 
       this.searchForm.patchValue(
         {
-          destination: filters.city ?? '',
+          destination: filters.destination ?? '',
           guests: filters.guests ?? 1,
           dateRange: {
             start: filters.checkIn ? new Date(filters.checkIn) : null,
@@ -63,7 +63,7 @@ export class SearchPanel implements OnInit {
   ngOnInit() {
     this.searchForm.valueChanges.subscribe((value) => {
       this.search.emit({
-        city: value.destination?.trim() || undefined,
+        destination: value.destination?.trim() || undefined,
         guests: value.guests ?? undefined,
         checkIn: value.dateRange?.start ? this.formatDateForApi(value.dateRange.start) : undefined,
         checkOut: value.dateRange?.end ? this.formatDateForApi(value.dateRange.end) : undefined,

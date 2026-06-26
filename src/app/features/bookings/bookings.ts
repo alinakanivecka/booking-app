@@ -3,10 +3,11 @@ import { Booking } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { AuthService } from '../../core/services/auth.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-bookings',
-  imports: [ClickOutsideDirective],
+  imports: [ClickOutsideDirective, RouterLink],
   templateUrl: './bookings.html',
   styleUrl: './bookings.scss',
 })

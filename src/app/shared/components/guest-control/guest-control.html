@@ -2,7 +2,13 @@
   <i class="fa-regular fa-user"></i>
 
   <div class="guest-control">
-    <span>{{ value }} guests</span>
+    <span>{{ value }}
+      @if(value > 1) {
+      guests
+      } @else {
+      guest
+      }
+    </span>
 
     <div class="guest-control__amount">
       <button type="button" (click)="decrease()">−</button>

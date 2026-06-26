@@ -14,12 +14,8 @@ export class AccommodationsService {
   getAccommodations(filters: FiltersType): Observable<AccommodationsResponse> {
     let params = new HttpParams().set('page', filters.page).set('pageSize', filters.pageSize);
 
-    if (filters.city) {
-      params = params.set('city', filters.city);
-    }
-
-    if (filters.country) {
-      params = params.set('country', filters.country);
+    if (filters.destination) {
+      params = params.set('destination', filters.destination);
     }
 
     if (filters.guests != null) {
