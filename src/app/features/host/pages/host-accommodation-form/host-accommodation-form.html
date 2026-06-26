@@ -81,14 +81,62 @@
         }
       </div>
 
+      <div class="form-field image-upload-field">
+        <label for="files">Property images</label>
+
+        <div class="upload-box">
+          <div class="upload-container">
+            <input id="files" type="file" multiple accept="image/*" (change)="onFilesSelected($event)" hidden />
+
+            <label for="files" class="upload-button">
+              <i class="fa-solid fa-image"></i>
+              Choose images
+            </label>
+
+            @if (selectedFiles().length > 0) {
+            <p class="selected-files">
+              {{ selectedFiles().length }}
+              {{ selectedFiles().length === 1 ? 'image selected' : 'images selected' }}
+            </p>
+            } @else {
+            <p class="selected-files empty">
+              No images selected yet
+            </p>
+            }
+          </div>
+
+          <p class="upload-hint">
+            Upload one or more property photos. JPG, PNG or WebP. Max 5 MB each.
+          </p>
+        </div>
+
+        @if (imageError()) {
+        <p class="error-text">{{ imageError() }}</p>
+        }
+
+        @if (previewUrls().length > 0) {
+        <div class="preview-grid">
+          @for (url of previewUrls(); track url; let i = $index) {
+          <div class="preview-card">
+            <img [src]="url" alt="Property preview">
+
+            <button type="button" class="close-btn" (click)="removeImage(i)">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
       @if (errorMessage()) {
       <div class="form-error">
         {{ errorMessage() }}
       </div>
       }
 
-      <button type="submit"
-        [disabled]="isLoading() || hostAccommodationForm.invalid || (editMode() && !hostAccommodationForm.dirty)">
+      <button class="submit-btn" type="submit"
+        [disabled]="isLoading() || hostAccommodationForm.invalid || (editMode() && !hostAccommodationForm.dirty && selectedFiles().length === 0)">
         @if (isLoading()) {
         @if(editMode()) {
         Saving...
