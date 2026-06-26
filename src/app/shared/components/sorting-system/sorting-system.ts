@@ -1,27 +1,19 @@
-import { Component, computed, input, output, signal } from '@angular/core';
-import { ClickOutsideDirective } from "../../directives/click-outside.directive";
+import { Component, input, output } from '@angular/core';
+import { DropdownOption, DropdownValue } from '../../../models/dropdown.model';
+import { Dropdown } from "../dropdown/dropdown";
 
 @Component({
   selector: 'app-sorting-system',
-  imports: [ClickOutsideDirective],
+  imports: [Dropdown],
   templateUrl: './sorting-system.html',
   styleUrl: './sorting-system.scss',
 })
 export class SortingSystem {
-  isDropdownOpen = signal(false);
-
-  sortOptions = input([{ label: '', value: '' }]);
-  selectedSort = input<string>();
+  sortOptions = input<DropdownOption[]>([]);
+  selectedSort = input<string>('');
   sortChanged = output<string>();
 
-  selectedOption = computed(() => this.sortOptions().find((o) => o.value === this.selectedSort()));
-
-  selectOption(value: string) {
-    this.sortChanged.emit(value);
-    this.isDropdownOpen.set(false);
-  }
-
-  toggleDropdown() {
-    this.isDropdownOpen.set(!this.isDropdownOpen());
+  selectSort(value: DropdownValue) {
+    this.sortChanged.emit(value?.toString() || '');
   }
 }

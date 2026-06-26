@@ -83,7 +83,9 @@ export const routes: Routes = [
 
   {
     path: 'host/bookings',
-    redirectTo: 'search',
+    loadComponent: () =>
+      import('./features/host/pages/host-bookings/host-bookings').then((c) => c.HostBookings),
+    canActivate: [authGuard, hostGuard],
   },
 
   {

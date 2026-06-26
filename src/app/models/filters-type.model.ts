@@ -11,3 +11,10 @@ export interface FiltersType {
   amenities?: string[];
   sort?: string;
 }
+
+export interface HostFiltersType {
+  accommodationId?: number;
+  status?: string;
+  page: number;
+  pageSize: number;
+}
