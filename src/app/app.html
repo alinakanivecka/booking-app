@@ -1,7 +1,14 @@
-<app-header />
+<mat-drawer-container>
+  <mat-drawer #drawer>
+    <app-notifications></app-notifications>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-header [drawer]="drawer" />
 
-<main>
-  <router-outlet />
-</main>
+    <main>
+      <router-outlet />
+    </main>
 
-<app-footer />
+    <app-footer />
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, Subject } from 'rxjs';
 import { SortingSystem } from '../../shared/components/sorting-system/sorting-system';
 import { FavoritesService } from '../../core/services/favorites.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -20,6 +21,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 export class Search implements OnInit {
   private accommodationService = inject(AccommodationsService);
   private favoritesService = inject(FavoritesService);
+  private snackbarService = inject(SnackbarService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private filtersChanged$ = new Subject<Partial<FiltersType>>();
@@ -61,8 +63,11 @@ export class Search implements OnInit {
   toggleFavorite(accommodationId: number) {
     if (this.favoritesService.isFavorite(accommodationId)) {
       this.favoritesService.removeFavorite(accommodationId).subscribe({
+        next: () => {
+          this.snackbarService.success('Removed from favorites');
+        },
         error: () => {
-          this.errorMessage.set('Unable to remove favorite');
+          this.snackbarService.error('Unable to remove favorite');
         },
       });
 
@@ -70,8 +75,11 @@ export class Search implements OnInit {
     }
 
     this.favoritesService.addFavorite(accommodationId).subscribe({
+      next: () => {
+        this.snackbarService.success('Added to favorites');
+      },
       error: () => {
-        this.errorMessage.set('Unable to add favorite');
+        this.snackbarService.error('Unable to add favorite');
       },
     });
   }

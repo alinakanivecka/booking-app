@@ -11,7 +11,7 @@
     } @else {
 
     @if (authService.currentUser()?.roles!.includes('host')) {
-    <button type="button" class="notifications-link" routerLink="/notifications">
+    <button type="button" class="notifications-link" (click)="toggleDrawer()">
 
       @if (notificationsService.unreadCount()) {
       <i class="fa-regular fa-bell" [matBadge]="notificationsService.unreadCount()"></i>
@@ -20,6 +20,7 @@
       }
     </button>
     }
+
 
     <button type="button" class="user-menu-trigger" (click)="toggleDropdown()" appClickOutside
       (appClickOutside)="isDropdownOpen.set(false)">
