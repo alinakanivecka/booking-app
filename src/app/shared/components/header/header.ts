@@ -1,9 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { MatBadge, MatBadgeModule } from '@angular/material/badge';
+import { MatSidenavModule, MatDrawer } from '@angular/material/sidenav';
+import { Notifications } from "../../../features/host/pages/notifications/notifications";
 
 @Component({
   selector: 'app-header',
@@ -17,6 +19,12 @@ export class Header {
   router = inject(Router);
 
   isDropdownOpen = signal(false);
+
+  drawer = input<MatDrawer>()
+
+   toggleDrawer() {
+    this.drawer()!.toggle();
+  }
 
   toggleDropdown() {
     this.isDropdownOpen.set(!this.isDropdownOpen());

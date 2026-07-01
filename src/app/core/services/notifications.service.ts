@@ -20,4 +20,18 @@ export class NotificationsService {
       }),
     );
   }
+
+  markNotificationAsRead(id: number): Observable<Notification> {
+    return this.http.patch<Notification>(`${environment.apiUrl}/notifications/${id}/read`, {}).pipe(
+      tap((updatedNotification) => {
+        this.notifications.update((items) =>
+          items.map((item) => (item.id === id ? updatedNotification : item)),
+        );
+      }),
+    );
+  }
+
+  deleteNotification(id: number) {
+    this.notifications.update((items) => items.filter((item) => item.id !== id));
+  }
 }

@@ -7,3 +7,25 @@
 main {
   padding: 3rem 10rem;
 }
+
+mat-drawer {
+  width: 50%;
+  border-radius: 0;
+}
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar {
+  width: 0.35rem;
+}
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}

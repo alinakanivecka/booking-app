@@ -27,35 +27,29 @@ export class FavoritesService {
   }
 
   addFavorite(accommodationId: number) {
-    return this.http
-      .post<Accommodation>(`${environment.apiUrl}/favorites/${accommodationId}`, {})
-      .pipe(
-        tap((accommodation) => {
-          this.favoriteIds.update((ids) => {
-            const updated = new Set(ids);
-            updated.add(accommodationId);
-            return updated;
-          });
-
-          this.favorites.update((items) => [...items, accommodation]);
-        }),
-      );
+    return this.http.post<void>(`${environment.apiUrl}/favorites/${accommodationId}`, {}).pipe(
+      tap(() => {
+        this.favoriteIds.update((ids) => {
+          const updated = new Set(ids);
+          updated.add(accommodationId);
+          return updated;
+        });
+      }),
+    );
   }
 
   removeFavorite(accommodationId: number) {
-    return this.http
-      .delete<Accommodation>(`${environment.apiUrl}/favorites/${accommodationId}`, {})
-      .pipe(
-        tap(() => {
-          this.favoriteIds.update((ids) => {
-            const updated = new Set(ids);
-            updated.delete(accommodationId);
-            return updated;
-          });
+    return this.http.delete<void>(`${environment.apiUrl}/favorites/${accommodationId}`, {}).pipe(
+      tap(() => {
+        this.favoriteIds.update((ids) => {
+          const updated = new Set(ids);
+          updated.delete(accommodationId);
+          return updated;
+        });
 
-          this.favorites.update((items) => items.filter((item) => item.id !== accommodationId));
-        }),
-      );
+        this.favorites.update((items) => items.filter((item) => item.id !== accommodationId));
+      }),
+    );
   }
 
   clearFavorites() {

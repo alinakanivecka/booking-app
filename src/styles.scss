@@ -31,6 +31,13 @@ html {
       background-color: var(--color-primary-strong)
     )
   );
+  @include mat.snack-bar-overrides(
+    (
+      button-color: var(--color-primary),
+      container-color: var(--color-surface-hover-soft),
+      supporting-text-color: var(--color-text-strong)
+    )
+  );
 }
 
 :root {
@@ -58,7 +65,8 @@ html {
   --color-text-secondary: #4b4b64;
   --color-text-placeholder: #aaaac2;
   --color-text-subtle: #8a8aa8;
-  --color-text-neutral: #333 --color-icon-muted: #918f8f;
+  --color-text-neutral: #333;
+  --color-icon-muted: #918f8f;
 
   --color-border: #dedede;
   --color-border-soft: #ececec;

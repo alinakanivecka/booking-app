@@ -14,6 +14,7 @@ import { Booking, CreateBookingPayload } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
 import { Reviews } from '../../shared/components/reviews/reviews';
 import { ReviewForm } from '../../shared/components/review-form/review-form';
+import { SnackbarService } from '../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-accommodation-details-page',
@@ -25,6 +26,7 @@ export class AccommodationDetailsPage {
   private accommodationService = inject(AccommodationsService);
   private bookingsService = inject(BookingsService);
   private favoritesService = inject(FavoritesService);
+  private snackbarService = inject(SnackbarService);
   private router = inject(Router);
   authService = inject(AuthService);
   fb = inject(FormBuilder);
@@ -129,8 +131,8 @@ export class AccommodationDetailsPage {
         }
 
         if (error.status === 400 && datesError) {
-          this.errorMessage.set(datesError)
-          return
+          this.errorMessage.set(datesError);
+          return;
         }
         this.errorMessage.set('Something went wrong. Please try again.');
       },
@@ -161,12 +163,26 @@ export class AccommodationDetailsPage {
 
   toggleFavorite(accommodationId: number) {
     if (this.favoritesService.isFavorite(accommodationId)) {
-      this.favoritesService.removeFavorite(accommodationId).subscribe();
+      this.favoritesService.removeFavorite(accommodationId).subscribe({
+        next: () => {
+          this.snackbarService.success('Removed from favorites');
+        },
+        error: () => {
+          this.snackbarService.error('Unable to remove favorite');
+        },
+      });
 
       return;
     }
 
-    this.favoritesService.addFavorite(accommodationId).subscribe();
+    this.favoritesService.addFavorite(accommodationId).subscribe({
+      next: () => {
+        this.snackbarService.success('Added to favorites');
+      },
+      error: () => {
+        this.snackbarService.error('Unable to add favorite');
+      },
+    });
   }
 
   accommodationRatingLabel() {

@@ -11,8 +11,8 @@
 
       @if (notifications().length) {
       <div class="summary-card">
-        <span class="summary-number">{{ notifications().length }}</span>
-        <span class="summary-label">notifications</span>
+        <span class="summary-number">{{ notificationsService.unreadCount() }}</span>
+        <span class="summary-label">unread notifications</span>
       </div>
       }
     </div>
@@ -85,11 +85,31 @@
               }
             </span>
 
-            @if (!notification.isRead) {
             <span class="unread-badge">
+              @if (!notification.isRead) {
               New
+              }
             </span>
+
+            <button type="button" class="option-btn" (click)="toggleDropdown(notification.id, $event)">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+
+            @if (openedDropdownId() === notification.id) {
+            <div class="dropdown" (click)="$event.stopPropagation()">
+
+              @if (!notification.isRead) {
+              <button class="dropdown-btn-row" type="button" (click)="readNotification(notification.id)">
+                Mark as read
+              </button>
+              }
+
+              <button class="dropdown-btn-row " type="button" (click)="removeNotification(notification.id)">
+                Remove notification
+              </button>
+            </div>
             }
+
           </div>
           <p class="message">
             {{ notification.message }}
