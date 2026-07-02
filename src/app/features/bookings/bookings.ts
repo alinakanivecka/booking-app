@@ -3,7 +3,8 @@ import { Booking } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { AuthService } from '../../core/services/auth.service';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { getApiErrorMessage } from '../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-bookings',
@@ -28,24 +29,36 @@ export class Bookings {
   );
 
   confirmCancelBooking() {
+    if (this.isLoading()) {
+      return;
+    }
+
+    const id = this.selectedBookingId();
+
+    if (id === null) {
+      this.errorMessage.set('Booking id is missing.');
+      this.isModalOpen.set(false);
+      return;
+    }
+
     this.isModalOpen.set(false);
-
-    const id = Number(this.selectedBookingId());
-
     this.isLoading.set(true);
+    this.errorMessage.set('');
 
     this.bookingsService.cancelBooking(id).subscribe({
       next: () => {
         this.bookingsItems.update((items) =>
           items.map((item) => (item.id === id ? { ...item, status: 'cancelled' } : item)),
         );
+
         this.isLoading.set(false);
         this.selectedBookingId.set(null);
-        this.isModalOpen.set(false);
       },
-      error: () => {
+      error: (error) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Something went wrong');
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to cancel booking. Please try again.'),
+        );
       },
     });
   }
@@ -79,7 +92,7 @@ export class Bookings {
         this.bookingsItems.set([]);
         this.noResults.set(false);
         this.errorMessage.set(
-          error.error?.detail || 'Unable to load your bookings. Please try again.',
+          getApiErrorMessage(error, 'Unable to load your bookings. Please try again.'),
         );
         this.isLoading.set(false);
       },

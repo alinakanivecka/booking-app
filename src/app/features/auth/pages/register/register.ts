@@ -1,7 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +15,7 @@ export class Register implements OnInit {
   private authService = inject(AuthService);
   private formBuilder = inject(NonNullableFormBuilder);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   isLoading = signal(false);
   serverError = signal<string | null>(null);
@@ -34,20 +37,25 @@ export class Register implements OnInit {
     }
 
     const formValue = this.registerForm.getRawValue();
+    const registerPayload = {
+      email: formValue.email.trim().toLowerCase(),
+      password: formValue.password,
+      name: formValue.name.trim(),
+    };
 
     this.isLoading.set(true);
     this.serverError.set(null);
 
-    this.authService.register(formValue).subscribe({
+    this.authService.register(registerPayload).subscribe({
       next: (response) => {
-        console.log('succses', response);
         this.authService.saveAuthData(response);
         this.router.navigate(['/search']);
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.log('error:', error);
-        this.serverError.set('This email is already registered.');
+        this.serverError.set(
+          getApiErrorMessage(error, 'Unable to create account. Please try again.'),
+        );
         this.isLoading.set(false);
       },
     });
@@ -98,7 +106,7 @@ export class Register implements OnInit {
   }
 
   ngOnInit(): void {
-    this.registerForm.valueChanges.subscribe(() => {
+    this.registerForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.serverError.set(null);
     });
   }

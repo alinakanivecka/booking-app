@@ -11,9 +11,9 @@
     </span>
 
     <div class="guest-control__amount">
-      <button type="button" (click)="decrease()">−</button>
+      <button type="button" (click)="decrease()" [disabled]="value <= 1"><i class="fa-solid fa-minus"></i></button>
       <strong>{{ value }}</strong>
-      <button type="button" (click)="increase()">+</button>
+      <button type="button" (click)="increase()"><i class="fa-solid fa-plus"></i></button>
     </div>
   </div>
 </div>

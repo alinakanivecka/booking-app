@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { HostAccommodation } from '../../../../models/host-accommodations.model';
 import { HostService } from '../../../../core/services/host.service';
 import { RouterLink } from '@angular/router';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-host-accommodations',
@@ -35,9 +36,16 @@ export class HostAccommodations {
   }
 
   deleteAccommodation() {
+    if (this.isDeleting()) {
+      return;
+    }
+
     const id = this.selectedAccommodationId();
 
-    if (id === null) return;
+    if (id === null) {
+      this.deleteErrorMessage.set('Accommodation id is missing.');
+      return;
+    }
 
     this.isDeleting.set(true);
     this.deleteErrorMessage.set('');
@@ -48,9 +56,11 @@ export class HostAccommodations {
         this.isDeleting.set(false);
         this.closeModal();
       },
-      error: () => {
+      error: (error) => {
         this.isDeleting.set(false);
-        this.deleteErrorMessage.set('Unable to delete accommodation');
+        this.deleteErrorMessage.set(
+          getApiErrorMessage(error, 'Unable to delete accommodation. Please try again.'),
+        );
       },
     });
   }

@@ -1,7 +1,4 @@
 <section class="accommodations-section">
-  @if (getDestinationName()) {
-  <h2>{{getDestinationName()}}: {{totalItems()}} properties found</h2>
-  }
   @if (isLoading()) {
   <div class="accommodations-list">
     @for (_ of [1, 2, 3]; track _) {
@@ -9,15 +6,32 @@
     }
   </div>
   } @else if (errorMessage()) {
-  <p class="error-text">{{ errorMessage() }}</p>
+  <div class="state-card error-state">
+    <div class="state-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+
+    <h2>Something went wrong</h2>
+    <p>{{ errorMessage() }}</p>
+  </div>
+
   } @else if (noResults()) {
-  <div class="not-found-result">
+  <div class="state-card empty-state">
+    <div class="state-icon">
+      @if (emptyState() === 'search') {
+      <i class="fa-solid fa-magnifying-glass"></i>
+      } @else {
+      <i class="fa-regular fa-heart"></i>
+      }
+    </div>
+
+    <h2>{{ emptyTitle() }}</h2>
+
     @if (emptyState() === 'search') {
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <p>Try changing your destination, dates, guests or filters.</p>
     } @else {
-    <i class="fa-regular fa-heart"></i>
+    <p>Save accommodations you like and they will appear here.</p>
     }
-    <h1>{{emptyTitle()}}</h1>
   </div>
   } @else {
   <div class="accommodations-list">

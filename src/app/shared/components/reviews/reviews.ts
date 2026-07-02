@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { getApiErrorMessage } from '../../utils/http-error-message';
 
 @Component({
   selector: 'app-reviews',
@@ -43,9 +44,11 @@ export class Reviews {
         this.noResults.set(response.length === 0);
         this.isLoading.set(false);
       },
-      error: () => {
+      error: (error) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Something went wrong');
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to load reviews. Please try again.'),
+        );
       },
     });
   }

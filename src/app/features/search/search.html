@@ -1,16 +1,29 @@
 <app-search-panel [filters]="activeFilters()" (search)="onFilterChanged($event)"></app-search-panel>
 
+@if (!hasSearched()) {
+<section class="search-start">
+  <div class="search-start-card">
+    <i class="fa-solid fa-magnifying-glass-location"></i>
+
+    <h2>Start your search</h2>
+    <p>Enter a destination, dates and guests to discover the perfect place to stay.</p>
+  </div>
+</section>
+} @else {
 <main class="main">
   <app-filter-system [filters]="activeFilters()" [accItems]="accItems()"
     (filterChanged)="onFilterChanged($event)"></app-filter-system>
 
   <div class="main-wrap">
+    @if (getDestinationName()) {
+    <h2 class="found-properties">{{getDestinationName()}}: {{totalItems()}} properties found</h2>
+    }
     <app-sorting-system [sortOptions]="sortOptions" [selectedSort]="selectedSort()"
       (sortChanged)="selectSortMode($event)"></app-sorting-system>
     <app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()" [accItems]="accItems()"
-      [totalItems]="totalItems()" [noResults]="noResults()" [getDestinationName]="getDestinationName()"
-      [isFavorite]="isFavorite" (toggleFavorite)="toggleFavorite($event)"
-      [emptyTitle]="'No properties found in ' + getDestinationName()" [emptyState]="'search'">
+      [totalItems]="totalItems()" [noResults]="noResults()" [isFavorite]="isFavorite"
+      (toggleFavorite)="toggleFavorite($event)" [emptyState]="'search'">
     </app-accommodations-list>
   </div>
 </main>
+}

@@ -12,7 +12,15 @@ describe('AccommodationsList', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(AccommodationsList);
+
+    fixture.componentRef.setInput('isLoading', false);
+    fixture.componentRef.setInput('errorMessage', '');
+    fixture.componentRef.setInput('accItems', []);
+    fixture.componentRef.setInput('noResults', false);
+
     component = fixture.componentInstance;
+    fixture.detectChanges();
+
     await fixture.whenStable();
   });
 

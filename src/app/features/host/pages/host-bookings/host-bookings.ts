@@ -3,7 +3,8 @@ import { HostService } from '../../../../core/services/host.service';
 import { HostFiltersType } from '../../../../models/filters-type.model';
 import { HostBooking } from '../../../../models/host-bookings.model';
 import { HostAccommodation } from '../../../../models/host-accommodations.model';
-import { Dropdown } from "../../../../shared/components/dropdown/dropdown";
+import { Dropdown } from '../../../../shared/components/dropdown/dropdown';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
 
 type HostBookingsFilterUpdate = {
   status?: string;
@@ -26,10 +27,13 @@ export class HostBookings {
 
   totalItems = signal(0);
   totalPages = signal(0);
-  noResults = computed(() => !this.isLoading() && this.bookings().length === 0);
+  noResults = computed(() => !this.isBookingsLoading() && this.bookings().length === 0);
   page = signal(0);
   pageSize = signal(20);
-  isLoading = signal(false);
+  isBookingsLoading = signal(false);
+  isAccommodationsLoading = signal(false);
+
+  isLoading = computed(() => this.isBookingsLoading() || this.isAccommodationsLoading());
   errorMessage = signal('');
 
   buildFilters(): HostFiltersType {
@@ -57,12 +61,12 @@ export class HostBookings {
   loadBookings() {
     const filters = this.buildFilters();
 
-    this.isLoading.set(true);
+    this.isBookingsLoading.set(true);
     this.errorMessage.set('');
 
     this.hostService.getHostBookings(filters).subscribe({
       next: (response) => {
-        this.isLoading.set(false);
+        this.isBookingsLoading.set(false);
         this.bookings.set(response.items);
         this.totalItems.set(response.totalItems ?? 0);
         this.totalPages.set(response.totalPages);
@@ -70,24 +74,28 @@ export class HostBookings {
         this.pageSize.set(response.pageSize);
       },
       error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Unable to load bookings');
+        this.isBookingsLoading.set(false);
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to load bookings. Please try again'),
+        );
       },
     });
   }
 
   loadAccommodations() {
-    this.isLoading.set(true);
+    this.isAccommodationsLoading.set(true);
     this.errorMessage.set('');
 
     this.hostService.getHostAccommodations().subscribe({
       next: (response) => {
         this.accommodations.set(response);
-        this.isLoading.set(false);
+        this.isAccommodationsLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Something went wrong');
-        this.isLoading.set(false);
+      error: (error) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to load accommodations. Please try again'),
+        );
+        this.isAccommodationsLoading.set(false);
       },
     });
   }

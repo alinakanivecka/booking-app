@@ -18,6 +18,8 @@ import { DateRange } from '../../../models/date-range.model';
   ],
 })
 export class DateRangePicker implements ControlValueAccessor {
+  today = new Date(new Date().setHours(0, 0, 0, 0));
+
   value: DateRange = {
     start: null,
     end: null,

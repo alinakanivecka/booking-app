@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NotificationsService } from '../../../../core/services/notifications.service';
 import { DatePipe } from '@angular/common';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-notifications',
@@ -31,7 +32,15 @@ export class Notifications {
 
   removeNotification(id: number) {
     this.closeDropdown();
-    return this.notificationsService.deleteNotification(id);
+    this.errorMessage.set('');
+
+    this.notificationsService.deleteNotification(id).subscribe({
+      error: (error) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to delete notification. Please try again.'),
+        );
+      },
+    });
   }
 
   toggleDropdown(notificationId: number, event: MouseEvent) {

@@ -12,7 +12,13 @@ describe('FilterSystem', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(FilterSystem);
+
+    fixture.componentRef.setInput('accItems', []);
+    fixture.componentRef.setInput('filters', {});
+
     component = fixture.componentInstance;
+    fixture.detectChanges();
+
     await fixture.whenStable();
   });
 
