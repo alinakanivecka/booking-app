@@ -30,7 +30,11 @@ export class AuthService {
     localStorage.setItem('accessToken', response.accessToken);
     this.currentUser.set(response.user);
 
-    this.favoritesService.loadFavorites().subscribe();
+    this.favoritesService.loadFavorites().subscribe({
+      error: () => {
+        this.favoritesService.clearFavorites();
+      },
+    });
   }
 
   login(payload: LoginPayload): Observable<AuthResponse> {
@@ -70,7 +74,11 @@ export class AuthService {
     this.me().subscribe({
       next: (user) => {
         this.currentUser.set(user);
-        this.favoritesService.loadFavorites().subscribe();
+        this.favoritesService.loadFavorites().subscribe({
+          error: () => {
+            this.favoritesService.clearFavorites();
+          },
+        });
       },
       error: () => {
         this.clearSession();

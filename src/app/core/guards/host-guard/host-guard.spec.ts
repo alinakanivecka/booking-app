@@ -1,12 +1,19 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
+
 import { hostGuard } from './host-guard';
 import { AuthService } from '../../services/auth.service';
 
 describe('hostGuard', () => {
+  const currentUser = signal<any>(null);
+
   let authServiceMock: {
     getAccessToken: () => string | null;
-    userRoles: () => string[];
+    currentUser: typeof currentUser;
+    me: () => any;
+    clearSession: () => void;
   };
 
   let routerMock: {
@@ -16,9 +23,13 @@ describe('hostGuard', () => {
   const runGuard = () => TestBed.runInInjectionContext(() => hostGuard({} as any, {} as any));
 
   beforeEach(() => {
+    currentUser.set(null);
+
     authServiceMock = {
       getAccessToken: () => null,
-      userRoles: () => [],
+      currentUser,
+      me: () => of(null),
+      clearSession: () => {},
     };
 
     routerMock = {
@@ -43,7 +54,13 @@ describe('hostGuard', () => {
 
   it('should allow access when user has host role', () => {
     authServiceMock.getAccessToken = () => 'access-token';
-    authServiceMock.userRoles = () => ['user', 'host'];
+    currentUser.set({
+      id: 1,
+      email: 'host@test.com',
+      name: 'Host User',
+      avatarUrl: '',
+      roles: ['user', 'host'],
+    });
 
     const result = runGuard();
 
@@ -52,7 +69,13 @@ describe('hostGuard', () => {
 
   it('should redirect to profile when authenticated user is not host', () => {
     authServiceMock.getAccessToken = () => 'access-token';
-    authServiceMock.userRoles = () => ['user'];
+    currentUser.set({
+      id: 1,
+      email: 'user@test.com',
+      name: 'Regular User',
+      avatarUrl: '',
+      roles: ['user'],
+    });
 
     const result = runGuard();
 

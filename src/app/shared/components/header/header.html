@@ -10,7 +10,7 @@
     <a routerLink="/login">Sign in</a>
     } @else {
 
-    @if (authService.currentUser()?.roles!.includes('host')) {
+    @if (authService.currentUser()?.roles?.includes('host')) {
     <button type="button" class="notifications-link" (click)="toggleDrawer()">
 
       @if (notificationsService.unreadCount()) {
@@ -34,7 +34,7 @@
         Profile
       </button>
 
-      @if (authService.currentUser()?.roles!.includes('host')) {
+      @if (authService.currentUser()?.roles?.includes('host')) {
       <button type="button" class="dropdown-row" routerLink="/host/dashboard">
         <i class="fa-solid fa-table-columns"></i>
         Host dashboard

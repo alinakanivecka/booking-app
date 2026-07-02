@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-
-declare const google: any;
+import { GoogleAccountsApi } from '../../models/google-accounts.model';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class Login implements AfterViewInit {
   private authService = inject(AuthService);
   private formBuilder = inject(NonNullableFormBuilder);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   isLoading = signal(false);
   serverError = signal<string | null>(null);
@@ -25,7 +27,7 @@ export class Login implements AfterViewInit {
       validators: [Validators.required, Validators.email],
     }),
     password: this.formBuilder.control('', {
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.minLength(8)],
     }),
   });
 
@@ -36,19 +38,26 @@ export class Login implements AfterViewInit {
     }
 
     const formValue = this.loginForm.getRawValue();
+    const loginPayload = {
+      email: formValue.email.trim().toLowerCase(),
+      password: formValue.password,
+    };
 
     this.isLoading.set(true);
     this.serverError.set(null);
 
-    this.authService.login(formValue).subscribe({
+    this.authService.login(loginPayload).subscribe({
       next: (response) => {
         this.authService.saveAuthData(response);
         this.router.navigate(['/search']);
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.log('error:', error);
-        this.serverError.set('Invalid email or password.');
+        this.serverError.set(
+          error.status === 400 || error.status === 401
+            ? 'Invalid email or password.'
+            : getApiErrorMessage(error),
+        );
         this.isLoading.set(false);
       },
     });
@@ -79,14 +88,24 @@ export class Login implements AfterViewInit {
       return 'Password is required.';
     }
 
+    if (password.hasError('minlength')) {
+      return 'Password must be at least 8 characters.';
+    }
+
     return null;
   }
 
   ngAfterViewInit() {
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
+    const googleApi = (globalThis as typeof globalThis & { google?: GoogleAccountsApi }).google;
 
-      callback: (googleResponse: any) => {
+    if (!googleApi?.accounts?.id) {
+      this.serverError.set('Google login is temporarily unavailable.');
+      return;
+    }
+
+    googleApi.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: (googleResponse) => {
         const identityToken = googleResponse.credential;
 
         this.isLoading.set(true);
@@ -98,7 +117,7 @@ export class Login implements AfterViewInit {
             this.router.navigate(['/search']);
             this.isLoading.set(false);
           },
-          error: (error) => {
+          error: () => {
             this.router.navigate(['/login']);
             this.serverError.set('Google login failed. Please try again.');
             this.isLoading.set(false);
@@ -107,18 +126,18 @@ export class Login implements AfterViewInit {
       },
     });
 
-    google.accounts.id.renderButton(document.getElementById('google-button'), {
+    googleApi.accounts.id.renderButton(document.getElementById('google-button'), {
       theme: 'outline',
       size: 'large',
       text: 'continue_with',
       locale: 'en',
     });
 
-    google.accounts.id.prompt();
+    googleApi.accounts.id.prompt();
   }
 
   ngOnInit(): void {
-    this.loginForm.valueChanges.subscribe(() => {
+    this.loginForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.serverError.set(null);
     });
   }

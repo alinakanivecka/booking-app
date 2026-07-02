@@ -12,7 +12,13 @@ describe('Dropdown', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Dropdown);
+
+    fixture.componentRef.setInput('options', []);
+    fixture.componentRef.setInput('selectedValue', null);
+
     component = fixture.componentInstance;
+    fixture.detectChanges();
+
     await fixture.whenStable();
   });
 

@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 1rem;
 }
 
 .accommodation-card {
@@ -18,7 +17,7 @@
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 4px 14px var(rgba(129, 129, 237, 0.22));
+    box-shadow: 0 4px 14px var(--primary-shadow-card);
   }
 }
 
@@ -220,5 +219,65 @@
 
   to {
     background-position: -200% 0;
+  }
+}
+
+.state-card {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 24px var(--shadow-black-sof);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .state-icon {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 1.4rem;
+    font-size: 2rem;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--color-text-title);
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  p {
+    max-width: 28rem;
+    margin: 0.8rem auto 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+}
+
+.empty-state {
+  .state-icon {
+    background: var(--primary-bg-soft);
+    color: var(--color-primary);
+  }
+}
+
+.error-state {
+  border-color: var(--border-color-error);
+  background: #fffafa;
+
+  .state-icon {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--color-danger);
+  }
+
+  h2 {
+    color: var(--color-danger);
   }
 }

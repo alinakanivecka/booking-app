@@ -31,7 +31,15 @@ export class NotificationsService {
     );
   }
 
-  deleteNotification(id: number) {
-    this.notifications.update((items) => items.filter((item) => item.id !== id));
+  deleteNotification(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/notifications/${id}`).pipe(
+      tap(() => {
+        this.notifications.update((items) => items.filter((item) => item.id !== id));
+      }),
+    );
+  }
+
+  clearNotifications() {
+    this.notifications.set([]);
   }
 }

@@ -4,7 +4,8 @@ import { forkJoin } from 'rxjs';
 import { HostService } from '../../../../core/services/host.service';
 import { HostAccommodation } from '../../../../models/host-accommodations.model';
 import { HostBooking } from '../../../../models/host-bookings.model';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,11 +48,13 @@ export class HostDashboard {
         this.bookings.set(bookingsResponse.items);
         this.isLoading.set(false);
       },
-      error: () => {
+      error: (error) => {
         this.accommodations.set([]);
         this.bookings.set([]);
         this.isLoading.set(false);
-        this.errorMessage.set('Something went wrong');
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to load dashboard data. Please try again.'),
+        );
       },
     });
   }

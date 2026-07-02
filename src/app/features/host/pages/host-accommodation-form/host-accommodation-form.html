@@ -135,8 +135,11 @@
       </div>
       }
 
-      <button class="submit-btn" type="submit"
-        [disabled]="isLoading() || hostAccommodationForm.invalid || (editMode() && !hostAccommodationForm.dirty && selectedFiles().length === 0)">
+      <button class="submit-btn" type="submit" [disabled]="
+    isLoading() ||
+    hostAccommodationForm.invalid ||
+    (!editMode() && selectedFiles().length === 0) ||
+    (editMode() && !hostAccommodationForm.dirty && selectedFiles().length === 0)">
         @if (isLoading()) {
         @if(editMode()) {
         Saving...

@@ -18,7 +18,6 @@ export class AccommodationsList {
   errorMessage = input.required<string>();
   accItems = input.required<Accommodation[]>();
   totalItems = input<number>();
-  getDestinationName = input<string | undefined>();
   noResults = input.required();
   emptyTitle = input('No properties found');
   emptyState = input<'search' | 'favorites'>('search');

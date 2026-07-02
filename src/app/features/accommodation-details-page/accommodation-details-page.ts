@@ -15,6 +15,8 @@ import { BookingsService } from '../../core/services/bookings.service';
 import { Reviews } from '../../shared/components/reviews/reviews';
 import { ReviewForm } from '../../shared/components/review-form/review-form';
 import { SnackbarService } from '../../core/services/snackbar.service';
+import { formatDateForApi } from '../../shared/utils/date-format';
+import { getApiErrorMessage } from '../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-accommodation-details-page',
@@ -55,14 +57,6 @@ export class AccommodationDetailsPage {
     guests: this.fb.control(1),
   });
 
-  private formatDate(date: Date | null | undefined): string {
-    if (!date) {
-      return '';
-    }
-
-    return date.toISOString().split('T')[0];
-  }
-
   canLeaveReview = computed(() => {
     const accommodation = this.accommodation();
 
@@ -82,7 +76,13 @@ export class AccommodationDetailsPage {
   });
 
   reloadReviews() {
-    this.reviewsComponent.loadReviews(this.accommodation()!.id);
+    const accommodation = this.accommodation();
+
+    if (!accommodation || !this.reviewsComponent) {
+      return;
+    }
+
+    this.reviewsComponent.loadReviews(accommodation.id);
   }
 
   onReviewCreated() {
@@ -107,8 +107,8 @@ export class AccommodationDetailsPage {
 
     const bookingsPayload: CreateBookingPayload = {
       accommodationId: accommodation.id,
-      checkIn: this.formatDate(dateRange.start),
-      checkOut: this.formatDate(dateRange.end),
+      checkIn: formatDateForApi(dateRange.start),
+      checkOut: formatDateForApi(dateRange.end),
       guests: Number(this.bookingForm.controls.guests.value),
     };
 
@@ -121,20 +121,9 @@ export class AccommodationDetailsPage {
       },
       error: (error) => {
         this.isLoading.set(false);
-
-        const guestsError = error.error?.errors?.guests?.[0];
-        const datesError = error.error?.errors?.dates;
-
-        if (error.status === 400 && guestsError) {
-          this.errorMessage.set(guestsError);
-          return;
-        }
-
-        if (error.status === 400 && datesError) {
-          this.errorMessage.set(datesError);
-          return;
-        }
-        this.errorMessage.set('Something went wrong. Please try again.');
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to create booking. Please try again.'),
+        );
       },
     });
   }
@@ -146,7 +135,7 @@ export class AccommodationDetailsPage {
   getMainImage(accommodation: Accommodation): string {
     const image = this.selectedImage() || accommodation.images?.[0];
 
-    return image ? `${environment.apiUrl}${image}` : 'assets/placeholder.jpg';
+    return image ? `${environment.apiUrl}${image}` : 'assets/logo.png';
   }
 
   getImageUrlByPath(image: string): string {

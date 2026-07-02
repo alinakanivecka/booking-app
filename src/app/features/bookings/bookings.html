@@ -113,8 +113,12 @@
       the booking status to cancelled.</p>
 
     <div class="modal-actions">
-      <button type="button" class="danger-btn" (click)="confirmCancelBooking()">
+      <button type="button" class="danger-btn" (click)="confirmCancelBooking()" [disabled]="isLoading()">
+        @if (isLoading()) {
+        Cancelling...
+        } @else {
         Yes, cancel
+        }
       </button>
 
       <button type="button" class="secondary-btn" (click)="closeModal()">

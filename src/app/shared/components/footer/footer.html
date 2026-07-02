@@ -1,6 +1,56 @@
 <footer class="footer">
-  <div class="auth-menu">
-    <a routerLink="/register">Register</a>
-    <a routerLink="/login">Sign in</a>
+  <div class="footer-container">
+
+    <div class="footer-top">
+
+      <div class="footer-column brand">
+        <div class="logo">
+          <img src="assets/logo.png" alt="Booking">
+          <span>Booking</span>
+        </div>
+
+        <p>
+          Discover apartments, hotels and unique stays around the world.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h3>Explore</h3>
+
+        <a routerLink="/search">Search</a>
+        <a routerLink="/favorites">Favorites</a>
+        <a routerLink="/bookings">My bookings</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>Support</h3>
+
+        <a href="#">Help Centre</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>Follow us</h3>
+
+        <div class="socials">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#"><i class="fa-brands fa-github"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Booking. All rights reserved.</span>
+
+      <button type="button" (click)="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+        Back to top
+      </button>
+    </div>
+
   </div>
 </footer>

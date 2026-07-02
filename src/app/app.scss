@@ -1,7 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;
 }
 
 main {
@@ -11,6 +11,14 @@ main {
 mat-drawer {
   width: 50%;
   border-radius: 0;
+}
+
+mat-drawer-container {
+  min-height: 100vh;
+}
+
+mat-drawer-content {
+  overflow: visible;
 }
 
 ::ng-deep .mat-drawer-inner-container::-webkit-scrollbar {

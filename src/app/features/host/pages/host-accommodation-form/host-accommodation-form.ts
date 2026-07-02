@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CreateHostAccommodationPayload } from '../../../../models/host-accommodations.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AccommodationsService } from '../../../../core/services/accommodations.service';
+import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
 
 @Component({
   selector: 'app-host-accommodation-form',
@@ -46,15 +47,12 @@ export class HostAccommodationForm {
     this.imageError.set('');
 
     if (files.length === 0) {
-      this.clearSelectedImages();
-      this.imageError.set('Please select at least one image.');
       return;
     }
 
     const invalidFile = files.find((file) => !file.type.startsWith('image/'));
 
     if (invalidFile) {
-      this.clearSelectedImages();
       input.value = '';
       this.imageError.set('Only image files are allowed.');
       return;
@@ -65,7 +63,6 @@ export class HostAccommodationForm {
     const tooLargeFile = files.find((file) => file.size > maxFileSize);
 
     if (tooLargeFile) {
-      this.clearSelectedImages();
       input.value = '';
       this.imageError.set('Each image must be smaller than 5 MB.');
       return;
@@ -88,8 +85,17 @@ export class HostAccommodationForm {
   }
 
   submitForm() {
+    if (this.isLoading()) {
+      return;
+    }
+
     if (this.hostAccommodationForm.invalid) {
       this.hostAccommodationForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.editMode() && this.selectedFiles().length === 0) {
+      this.imageError.set('Please select at least one image.');
       return;
     }
 
@@ -101,12 +107,24 @@ export class HostAccommodationForm {
     }
 
     const formValue = this.hostAccommodationForm.getRawValue();
+    const amenities = formValue.amenities
+      .split(',')
+      .map((amenity) => amenity.trim())
+      .filter((amenity) => amenity.length > 0);
+
+    if (amenities.length === 0) {
+      this.errorMessage.set('Please enter at least one valid amenity.');
+      return;
+    }
+    
     const createPayload: CreateHostAccommodationPayload = {
-      ...formValue,
-      amenities: formValue.amenities
-        .split(',')
-        .map((amenity) => amenity.trim())
-        .filter((amenity) => amenity.length > 0),
+      name: formValue.name.trim(),
+      description: formValue.description.trim(),
+      city: formValue.city.trim(),
+      country: formValue.country.trim(),
+      maxGuests: formValue.maxGuests,
+      pricePerNight: formValue.pricePerNight,
+      amenities,
     };
 
     this.isLoading.set(true);
@@ -117,7 +135,7 @@ export class HostAccommodationForm {
 
       if (!id) {
         this.isLoading.set(false);
-        this.errorMessage.set('');
+        this.errorMessage.set('Accommodation id is missing.');
         return;
       }
 
@@ -130,8 +148,10 @@ export class HostAccommodationForm {
           this.router.navigate(['/host/accommodations']);
           this.isLoading.set(false);
         },
-        error: () => {
-          this.errorMessage.set('Something went wrong');
+        error: (error) => {
+          this.errorMessage.set(
+            getApiErrorMessage(error, 'Unable to save accommodation. Please try again.'),
+          );
           this.isLoading.set(false);
         },
       });
@@ -141,17 +161,14 @@ export class HostAccommodationForm {
       next: (response) => {
         const id = response.id;
         this.createdAccommodationId.set(id);
-
-        if (this.selectedFiles().length > 0) {
-          this.uploadImages(id);
-          return;
-        }
-
+        this.uploadImages(id);
         this.router.navigate(['/host/accommodations']);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Something went wrong');
+      error: (error) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to create accommodation. Please try again.'),
+        );
         this.isLoading.set(false);
       },
     });
@@ -160,7 +177,7 @@ export class HostAccommodationForm {
   uploadImages(id: number) {
     const files = this.selectedFiles();
 
-    if (this.selectedFiles().length === 0) {
+    if (files.length === 0) {
       return;
     }
 
@@ -174,9 +191,12 @@ export class HostAccommodationForm {
       },
       error: (error) => {
         this.isLoading.set(false);
-
-        const filesError = error.error?.errors?.files?.[0];
-        this.imageError.set(filesError || `Upload failed. Status: ${error.status}`);
+        this.imageError.set(
+          getApiErrorMessage(
+            error,
+            'Accommodation was created, but images were not uploaded. Please try uploading images again.',
+          ),
+        );
       },
     });
   }
@@ -194,9 +214,9 @@ export class HostAccommodationForm {
         });
         this.hostAccommodationForm.markAsPristine();
       },
-      error: () => {
+      error: (error) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Unable to load accommodation');
+        this.errorMessage.set(getApiErrorMessage(error, 'Unable to load accommodation.'));
       },
     });
   }
@@ -215,11 +235,5 @@ export class HostAccommodationForm {
     this.destroyRef.onDestroy(() => {
       this.previewUrls().forEach((url) => URL.revokeObjectURL(url));
     });
-  }
-
-  private clearSelectedImages() {
-    this.previewUrls().forEach((url) => URL.revokeObjectURL(url));
-    this.selectedFiles.set([]);
-    this.previewUrls.set([]);
   }
 }

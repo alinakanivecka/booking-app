@@ -3,9 +3,8 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { NotificationsService } from '../../../core/services/notifications.service';
-import { MatBadge, MatBadgeModule } from '@angular/material/badge';
-import { MatSidenavModule, MatDrawer } from '@angular/material/sidenav';
-import { Notifications } from "../../../features/host/pages/notifications/notifications";
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-header',
@@ -20,10 +19,10 @@ export class Header {
 
   isDropdownOpen = signal(false);
 
-  drawer = input<MatDrawer>()
+  drawer = input<MatDrawer>();
 
-   toggleDrawer() {
-    this.drawer()!.toggle();
+  toggleDrawer() {
+    this.drawer()?.toggle();
   }
 
   toggleDropdown() {
@@ -54,7 +53,11 @@ export class Header {
       const user = this.authService.currentUser();
 
       if (user?.roles.includes('host')) {
-        this.notificationsService.loadNotifications().subscribe();
+        this.notificationsService.loadNotifications().subscribe({
+          error: () => {
+            this.notificationsService.clearNotifications();
+          },
+        });
       }
     });
   }

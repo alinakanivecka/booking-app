@@ -59,7 +59,7 @@ export class AccommodationsService {
     const firstImage = item.images[0];
 
     if (!firstImage) {
-      return 'assets/no-image.png';
+      return 'assets/logo.png';
     }
 
     return `${environment.apiUrl}${firstImage}`;

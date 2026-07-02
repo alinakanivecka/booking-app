@@ -2,6 +2,7 @@ import { Component, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { CreateReviewPayload } from '../../../models/reviews.model';
+import { getApiErrorMessage } from '../../utils/http-error-message';
 
 @Component({
   selector: 'app-review-form',
@@ -50,11 +51,9 @@ export class ReviewForm {
       },
       error: (error) => {
         this.isLoading.set(false);
-        if (error.status === 400) {
-          this.errorMessage.set('You already reviewed this accommodation');
-          return;
-        }
-        this.errorMessage.set('Something went wrong. Please try again.');
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unable to submit review. Please try again.'),
+        );
       },
     });
   }
