@@ -9,6 +9,11 @@
         </p>
       </div>
 
+      <button type="button" class="mobile-only dialog-close-btn" aria-label="Close notifications"
+        (click)="closeDrawer.emit()" mat-icon-button>
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
       @if (notifications().length) {
       <div class="summary-card">
         <span class="summary-number">{{ notificationsService.unreadCount() }}</span>

@@ -1,76 +1,52 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Booking } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
-import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterLink } from '@angular/router';
 import { getApiErrorMessage } from '../../shared/utils/http-error-message';
+import { MatDialog } from '@angular/material/dialog';
+import { CancelBookingDialog } from '../../shared/components/dialogs/cancel-booking-dialog/cancel-booking-dialog';
 
 @Component({
   selector: 'app-bookings',
-  imports: [ClickOutsideDirective, RouterLink],
+  imports: [RouterLink],
   templateUrl: './bookings.html',
   styleUrl: './bookings.scss',
 })
 export class Bookings {
   private bookingsService = inject(BookingsService);
+  private dialog = inject(MatDialog);
   authService = inject(AuthService);
 
   bookingsItems = signal<Booking[]>([]);
-  isModalOpen = signal(false);
-  selectedBookingId = signal<number | null>(null);
-
   isLoading = signal(false);
   noResults = signal(false);
   errorMessage = signal('');
 
-  selectedBooking = computed(() =>
-    this.bookingsItems().find((booking) => booking.id === this.selectedBookingId()),
-  );
+  openModal(id: number) {
+    const booking = this.bookingsItems().find((item) => item.id === id);
 
-  confirmCancelBooking() {
-    if (this.isLoading()) {
-      return;
-    }
-
-    const id = this.selectedBookingId();
-
-    if (id === null) {
+    if (!booking) {
       this.errorMessage.set('Booking id is missing.');
-      this.isModalOpen.set(false);
       return;
     }
 
-    this.isModalOpen.set(false);
-    this.isLoading.set(true);
-    this.errorMessage.set('');
+    const dialogRef = this.dialog.open(CancelBookingDialog, {
+      data: {
+        booking,
+      },
+      width: 'min(100vw - 2rem, 28rem)',
+      maxWidth: '28rem',
+      panelClass: 'custom-modal-dialog',
+    });
 
-    this.bookingsService.cancelBooking(id).subscribe({
-      next: () => {
+    dialogRef.afterClosed().subscribe((wasCancelled: boolean) => {
+      if (wasCancelled) {
         this.bookingsItems.update((items) =>
           items.map((item) => (item.id === id ? { ...item, status: 'cancelled' } : item)),
         );
-
-        this.isLoading.set(false);
-        this.selectedBookingId.set(null);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(
-          getApiErrorMessage(error, 'Unable to cancel booking. Please try again.'),
-        );
-      },
+      }
     });
-  }
-
-  openModal(id: number) {
-    this.selectedBookingId.set(id);
-    this.isModalOpen.set(true);
-  }
-
-  closeModal() {
-    this.isModalOpen.set(false);
-    this.selectedBookingId.set(null);
   }
 
   constructor() {

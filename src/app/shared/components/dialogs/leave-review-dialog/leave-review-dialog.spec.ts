@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReviewForm } from './review-form';
+import { LeaveReviewDialog } from './leave-review-dialog';
 
-describe('ReviewForm', () => {
-  let component: ReviewForm;
-  let fixture: ComponentFixture<ReviewForm>;
+describe('LeaveReviewDialog', () => {
+  let component: LeaveReviewDialog;
+  let fixture: ComponentFixture<LeaveReviewDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReviewForm],
+      imports: [LeaveReviewDialog],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ReviewForm);
+    fixture = TestBed.createComponent(LeaveReviewDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

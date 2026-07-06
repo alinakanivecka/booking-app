@@ -1,8 +1,3 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use "@angular/material" as mat;
 
 html {
@@ -34,7 +29,7 @@ html {
   @include mat.snack-bar-overrides(
     (
       button-color: var(--color-primary),
-      container-color: var(--color-surface-hover-soft),
+      container-color: var(--color-surface-muted),
       supporting-text-color: var(--color-text-strong)
     )
   );
@@ -48,13 +43,12 @@ html {
   --color-primary-hover: rgb(112, 112, 224);
   --color-primary-action-hover: rgb(101, 101, 206);
 
-  --color-white: #ffffff;
   --color-surface: #ffffff;
-  --color-surface-soft: #fbfbff;
-  --color-surface-muted: rgb(242, 240, 240);
-  --color-surface-hover: rgb(236, 234, 234);
-  --color-surface-hover-soft: #f2eded;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-muted: #f2f2f2;
+  --color-surface-hover: #ececec;
 
+  --color-text: var(--color-text-body);
   --color-text-strong: #111;
   --color-text-title: #1a1a1a;
   --color-text-main: #252545;
@@ -69,63 +63,44 @@ html {
   --color-icon-muted: #918f8f;
 
   --color-border: #dedede;
-  --color-border-soft: #ececec;
-  --color-border-form: #d9d9ef;
-  --color-border-dropdown: #e5e5f4;
-  --color-border-search: rgb(213, 213, 213);
-  --color-border-menu-hover: rgb(220, 216, 216);
-
-  --color-error: red;
+  --color-border-subtle: rgba(0, 0, 0, 0.06);
   --color-disabled: #c8c8ee;
 
-  --color-skeleton-base: #eee;
-  --color-skeleton-highlight: #f7f7f7;
+  --color-skeleton-base: var(--color-surface-hover);
+  --color-skeleton-mid: var(--color-surface-soft);
+  --color-skeleton-highlight: var(--color-surface-soft);
 
-  --shadow-black-soft: rgba(0, 0, 0, 0.18);
-  --shadow-black-medium: rgba(0, 0, 0, 0.25);
-  --shadow-dropdown: rgba(30, 30, 70, 0.16);
+  --shadow-color: rgba(0, 0, 0, 0.16);
+  --shadow-card: 0 0.5rem 1.5rem var(--shadow-color);
+  --shadow-elevated: 0 0.75rem 1.8rem var(--shadow-color);
+  --shadow-modal: 0 1.5rem 4rem var(--shadow-color);
+  --shadow-danger: 0 0.5rem 1rem rgba(220, 38, 38, 0.2);
 
   --primary-bg-hover: rgba(var(--color-primary-rgb), 0.08);
   --primary-bg-soft: rgba(var(--color-primary-rgb), 0.1);
   --primary-bg-focus: rgba(var(--color-primary-rgb), 0.14);
   --primary-bg-range: rgba(var(--color-primary-rgb), 0.18);
+  --primary-bg-range-strong: rgba(var(--color-primary-rgb), 0.15);
   --primary-shadow-soft: rgba(var(--color-primary-rgb), 0.12);
-  --primary-shadow-card: rgba(var(--color-primary-rgb), 0.22);
-  --primary-shadow-button: rgba(var(--color-primary-rgb), 0.28);
-  --primary-shadow-button-hover: rgba(var(--color-primary-rgb), 0.34);
+  --color-primary-soft: var(--primary-bg-soft);
 
   --white-bg-hover: rgba(255, 255, 255, 0.12);
+  --overlay-dark: rgba(0, 0, 0, 0.65);
 
+  --color-status-neutral-soft: #eef2ff;
   --color-warning-soft: #fef3c7;
   --color-success-soft: #dcfce7;
   --color-danger-soft: #fee2e2;
   --color-warning: #92400e;
   --color-success: #166534;
-  --color-danger: #991b1b;
-  --border-color-error: rgba(220, 53, 69, 0.25);
-  --border-color-error-bg: rgba(220, 53, 69, 0.1);
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-border: #fecaca;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 0.25rem 0.75rem var(--shadow-color);
+  --shadow-md: 0 0.5rem 1.5rem var(--shadow-color);
 }
 
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
-  margin: 0;
-  height: 100%;
-}
 * {
   margin: 0;
   padding: 0;
@@ -134,11 +109,16 @@ body {
 
 html {
   height: 100%;
-}
 
-body {
-  font-family: "Roboto";
-  height: 100%;
+  body {
+    color-scheme: light;
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-body-medium);
+    font-family: "Roboto";
+    margin: 0;
+    height: 100%;
+  }
 }
 
 button {
@@ -151,12 +131,12 @@ button {
 }
 
 .error-text {
-  color: var(--color-error);
+  color: var(--color-danger);
   font-size: 0.8rem;
 }
 
 .input-error {
-  outline: 1px solid var(--color-error);
+  outline: 1px solid var(--color-danger);
 }
 
 .submit-btn {
@@ -165,11 +145,11 @@ button {
   border-radius: 0.8rem;
   padding: 0.9rem 1rem;
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-surface);
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0.75rem 1.5rem var(--primary-shadow-button);
+  box-shadow: var(--shadow-sm);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -178,7 +158,7 @@ button {
   &:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 1rem 1.8rem var(--primary-shadow-button-hover);
+    box-shadow: var(--shadow-md);
   }
 
   &:active:not(:disabled) {
@@ -210,7 +190,7 @@ button {
 
     input {
       width: 100%;
-      border: 1px solid var(--color-border-form);
+      border: 1px solid var(--color-border);
       border-radius: 0.4rem;
       padding: 0.8rem 1rem;
       font-size: 0.9rem;
@@ -228,7 +208,7 @@ button {
 
       &:focus {
         border-color: var(--color-primary);
-        background-color: #ffffff;
+        background-color: var(--color-surface);
         box-shadow: 0 0 0 0.25rem var(--primary-bg-focus);
       }
     }
@@ -241,7 +221,7 @@ button {
   }
 
   .mat-calendar-body-in-range::before {
-    background-color: rgba(129, 129, 237, 0.18);
+    background-color: var(--primary-bg-range);
   }
 
   .mat-calendar-body-today:not(.mat-calendar-body-selected) {
@@ -265,4 +245,54 @@ button {
   i {
     font-size: 2.5rem;
   }
+}
+
+.mobile-user-menu-dialog,
+.mobile-filter-system-dialog {
+  .mat-mdc-dialog-surface {
+    border-radius: 0;
+  }
+}
+
+.custom-modal-dialog {
+  .mat-mdc-dialog-surface {
+    border-radius: 1rem;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+}
+
+.dialog-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--primary-bg-soft);
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
 }

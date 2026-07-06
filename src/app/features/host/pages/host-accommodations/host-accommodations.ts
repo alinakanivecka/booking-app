@@ -2,7 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { HostAccommodation } from '../../../../models/host-accommodations.model';
 import { HostService } from '../../../../core/services/host.service';
 import { RouterLink } from '@angular/router';
-import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteAccommodationDialog } from '../../../../shared/components/dialogs/delete-accommodation-dialog/delete-accommodation-dialog';
 
 @Component({
   selector: 'app-host-accommodations',
@@ -12,12 +13,10 @@ import { getApiErrorMessage } from '../../../../shared/utils/http-error-message'
 })
 export class HostAccommodations {
   private hostService = inject(HostService);
+  private dialog = inject(MatDialog);
   accommodations = signal<HostAccommodation[]>([]);
   isLoading = signal(false);
-  isDeleting = signal(false);
   errorMessage = signal('');
-  deleteErrorMessage = signal('');
-  isDeleteModalOpen = signal(false);
   selectedAccommodationId = signal<number | null>(null);
 
   constructor() {
@@ -25,43 +24,21 @@ export class HostAccommodations {
   }
 
   openDeleteModal(id: number) {
-    this.deleteErrorMessage.set('');
-    this.isDeleteModalOpen.set(true);
-    this.selectedAccommodationId.set(id);
-  }
-
-  closeModal() {
-    this.isDeleteModalOpen.set(false);
-    this.selectedAccommodationId.set(null);
-  }
-
-  deleteAccommodation() {
-    if (this.isDeleting()) {
-      return;
-    }
-
-    const id = this.selectedAccommodationId();
-
-    if (id === null) {
-      this.deleteErrorMessage.set('Accommodation id is missing.');
-      return;
-    }
-
-    this.isDeleting.set(true);
-    this.deleteErrorMessage.set('');
-
-    this.hostService.removeHostAccommodation(id).subscribe({
-      next: () => {
-        this.accommodations.update((items) => items.filter((item) => item.id !== id));
-        this.isDeleting.set(false);
-        this.closeModal();
+    const dialogRef = this.dialog.open(DeleteAccommodationDialog, {
+      data: {
+        accommodationId: id,
       },
-      error: (error) => {
-        this.isDeleting.set(false);
-        this.deleteErrorMessage.set(
-          getApiErrorMessage(error, 'Unable to delete accommodation. Please try again.'),
-        );
-      },
+      width: 'min(100vw - 2rem, 28rem)',
+      maxWidth: '28rem',
+      panelClass: 'custom-modal-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((wasDeleted: boolean) => {
+      if (!wasDeleted) {
+        return;
+      }
+
+      this.accommodations.update((items) => items.filter((item) => item.id !== id));
     });
   }
 

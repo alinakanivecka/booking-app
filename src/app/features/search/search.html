@@ -11,15 +11,22 @@
 </section>
 } @else {
 <main class="main">
-  <app-filter-system [filters]="activeFilters()" [accItems]="accItems()"
+  <app-filter-system class="desktop-only" [filters]="activeFilters()" [accItems]="accItems()"
     (filterChanged)="onFilterChanged($event)"></app-filter-system>
 
-  <div class="main-wrap">
+  <div class="main-wrap" #resultsSection>
     @if (getDestinationName()) {
-    <h2 class="found-properties">{{getDestinationName()}}: {{totalItems()}} properties found</h2>
+    <h2 class="found-properties desktop-only">{{getDestinationName()}}: {{totalItems()}} properties found</h2>
     }
-    <app-sorting-system [sortOptions]="sortOptions" [selectedSort]="selectedSort()"
-      (sortChanged)="selectSortMode($event)"></app-sorting-system>
+
+    <div class="filter-sort-wrap">
+      <button class="filters mobile-only" type="button" (click)="openFilterSystem()">
+        Filter
+      </button>
+      <app-sorting-system [sortOptions]="sortOptions" [selectedSort]="selectedSort()"
+        (sortChanged)="selectSortMode($event)"></app-sorting-system>
+    </div>
+
     <app-accommodations-list [isLoading]="isLoading()" [errorMessage]="errorMessage()" [accItems]="accItems()"
       [totalItems]="totalItems()" [noResults]="noResults()" [isFavorite]="isFavorite"
       (toggleFavorite)="toggleFavorite($event)" [emptyState]="'search'">

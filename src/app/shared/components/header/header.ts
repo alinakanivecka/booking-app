@@ -1,10 +1,13 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, HostListener, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { NotificationsService } from '../../../core/services/notifications.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDrawer } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import { MobileUserMenu } from '../mobile-dialogs/mobile-user-menu/mobile-user-menu';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-header',
@@ -13,9 +16,13 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrl: './header.scss',
 })
 export class Header {
+  private dialog = inject(MatDialog);
+  private breakpointObserver = inject(BreakpointObserver);
   authService = inject(AuthService);
   notificationsService = inject(NotificationsService);
   router = inject(Router);
+
+  isMobile = signal(false);
 
   isDropdownOpen = signal(false);
 
@@ -26,7 +33,30 @@ export class Header {
   }
 
   toggleDropdown() {
+    if (this.isMobile()) {
+      this.openMobileUserMenu();
+      return;
+    }
+    
     this.isDropdownOpen.set(!this.isDropdownOpen());
+  }
+
+  openMobileUserMenu() {
+    const dialogRef = this.dialog.open(MobileUserMenu, {
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      panelClass: 'mobile-user-menu-dialog',
+      data: {
+        user: this.authService.currentUser(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((action) => {
+      if (action === 'logout') {
+        this.logout();
+      }
+    });
   }
 
   logout() {
@@ -59,6 +89,10 @@ export class Header {
           },
         });
       }
+    });
+
+    this.breakpointObserver.observe('(max-width: 768px)').subscribe((result) => {
+      this.isMobile.set(result.matches);
     });
   }
 }

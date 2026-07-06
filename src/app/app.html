@@ -1,6 +1,6 @@
 <mat-drawer-container>
   <mat-drawer #drawer>
-    <app-notifications></app-notifications>
+    <app-notifications (closeDrawer)="drawer.close()"></app-notifications>
   </mat-drawer>
   <mat-drawer-content>
     <app-header [drawer]="drawer" />
