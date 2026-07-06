@@ -20,6 +20,8 @@ import { SortingSystem } from '../../shared/components/sorting-system/sorting-sy
 import { FavoritesService } from '../../core/services/favorites.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { MobileFilterSystem } from '../../shared/components/mobile-dialogs/mobile-filter-system/mobile-filter-system';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -34,8 +36,11 @@ export class Search implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private dialog = inject(MatDialog);
   private filtersChanged$ = new Subject<Partial<FiltersType>>();
   private accommodationsRequestId = 0;
+
+  @HostListener('window:scroll')
 
   accItems = signal<Accommodation[]>([]);
   hasSearched = signal(false);
@@ -43,6 +48,7 @@ export class Search implements OnInit {
   totalPages = signal(0);
   currentPage = signal(1);
   pageSize = signal(20);
+  isMobile = signal(false);
 
   errorMessage = signal('');
   isLoading = signal(false);
@@ -97,7 +103,6 @@ export class Search implements OnInit {
     });
   }
 
-  @HostListener('window:scroll')
   onWindowScroll() {
     const scrollPosition = window.innerHeight + window.scrollY;
     const pageHeight = document.documentElement.scrollHeight;
@@ -272,6 +277,30 @@ export class Search implements OnInit {
       filters.checkOut ||
       filters.amenities?.length,
     );
+  }
+
+  openFilterSystem() {
+    const dialogRef = this.dialog.open(MobileFilterSystem, {
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      panelClass: 'mobile-filter-system-dialog',
+      data: {
+        filters: this.activeFilters(),
+        accItems: this.accItems(),
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((filters: Partial<FiltersType> | undefined) => {
+        if (!filters) {
+          return;
+        }
+
+        this.applyFilters(filters);
+      });
   }
 
   ngOnInit(): void {

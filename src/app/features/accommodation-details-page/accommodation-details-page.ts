@@ -13,14 +13,15 @@ import { GuestControl } from '../../shared/components/guest-control/guest-contro
 import { Booking, CreateBookingPayload } from '../../models/bookings.model';
 import { BookingsService } from '../../core/services/bookings.service';
 import { Reviews } from '../../shared/components/reviews/reviews';
-import { ReviewForm } from '../../shared/components/review-form/review-form';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { formatDateForApi } from '../../shared/utils/date-format';
 import { getApiErrorMessage } from '../../shared/utils/http-error-message';
+import { MatDialog } from '@angular/material/dialog';
+import { LeaveReviewDialog } from '../../shared/components/dialogs/leave-review-dialog/leave-review-dialog';
 
 @Component({
   selector: 'app-accommodation-details-page',
-  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews, ReviewForm],
+  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews],
   templateUrl: './accommodation-details-page.html',
   styleUrl: './accommodation-details-page.scss',
 })
@@ -30,13 +31,13 @@ export class AccommodationDetailsPage {
   private favoritesService = inject(FavoritesService);
   private snackbarService = inject(SnackbarService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   authService = inject(AuthService);
   fb = inject(FormBuilder);
 
   accommodation = signal<Accommodation | null>(null);
   selectedImage = signal<string | null>(null);
   reviewsCount = signal(0);
-  isReviewModalOpen = signal(false);
   hasCurrentUserReview = signal<boolean | null>(null);
 
   userBookings = signal<Booking[]>([]);
@@ -48,6 +49,23 @@ export class AccommodationDetailsPage {
 
   @ViewChild(Reviews)
   reviewsComponent!: Reviews;
+
+  openFormReviewModal(accommodationId: number) {
+    const dialogRef = this.dialog.open(LeaveReviewDialog, {
+      data: {
+        accommodationId,
+      },
+      width: 'min(100vw - 2rem, 34rem)',
+      maxWidth: '34rem',
+      panelClass: 'custom-modal-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((reviewCreated: boolean) => {
+      if (reviewCreated) {
+        this.onReviewCreated();
+      }
+    });
+  }
 
   bookingForm = this.fb.group({
     dateRange: this.fb.control<DateRange>({

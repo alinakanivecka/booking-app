@@ -9,7 +9,7 @@ main {
 }
 
 mat-drawer {
-  width: 50%;
+  width: min(100vw, 28rem);
   border-radius: 0;
 }
 
@@ -36,4 +36,24 @@ mat-drawer-content {
 
 ::ng-deep .mat-drawer-inner-container::-webkit-scrollbar-thumb:hover {
   background: var(--color-border);
+}
+
+@media (max-width: 1100px) {
+  main {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 2rem 1rem;
+  }
+
+  .header {
+    padding: 2rem 1rem;
+  }
+
+  mat-drawer {
+    width: 100vw;
+  }
 }

@@ -1,7 +1,6 @@
 .host-bookings-page {
   min-height: 100vh;
   background-color: var(--color-surface-soft);
-  padding: 2rem 1rem 4rem;
 }
 
 .host-bookings-container {
@@ -251,7 +250,14 @@ tbody tr {
   }
 }
 
-@media (max-width: 720px) {
+app-dropdown {
+  --dropdown-width: 100%;
+  --dropdown-min-width: 100%;
+  --dropdown-strong-margin-left: auto;
+  --dropdown-max-width: none;
+}
+
+@media (max-width: 768px) {
   .page-header {
     flex-direction: column;
   }
@@ -263,11 +269,4 @@ tbody tr {
   .filters-card {
     grid-template-columns: 1fr;
   }
-}
-
-app-dropdown {
-  --dropdown-width: 100%;
-  --dropdown-min-width: 100%;
-  --dropdown-strong-margin-left: auto;
-  --dropdown-max-width: none;
 }

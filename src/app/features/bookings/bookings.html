@@ -77,7 +77,7 @@
           @if (booking.totalPrice) {
           <div class="price">
             <span>Total price</span>
-            <strong>€{{ booking.totalPrice }}</strong>
+            <strong>&euro;{{ booking.totalPrice }}</strong>
           </div>
           }
         </div>
@@ -87,44 +87,3 @@
     }
   </div>
 </section>
-
-@if (isModalOpen()) {
-<div class="modal-backdrop">
-  <div class="modal-window">
-    <div class="modal-top">
-      <h1>Cancel booking</h1>
-      <button type="button" class="modal-close" (click)="closeModal()" appClickOutside
-        (appClickOutside)="isModalOpen.set(false)">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    @if (selectedBooking(); as booking) {
-    <div class="modal-booking-card">
-      <div>
-        <h3>{{ booking.accommodationName }}</h3>
-        <p>{{ booking.checkIn }} — {{ booking.checkOut }}</p>
-        <span>{{ booking.status }}</span>
-      </div>
-    </div>
-    }
-
-    <p>Are you sure you want to cancel this booking? This action will change
-      the booking status to cancelled.</p>
-
-    <div class="modal-actions">
-      <button type="button" class="danger-btn" (click)="confirmCancelBooking()" [disabled]="isLoading()">
-        @if (isLoading()) {
-        Cancelling...
-        } @else {
-        Yes, cancel
-        }
-      </button>
-
-      <button type="button" class="secondary-btn" (click)="closeModal()">
-        No, keep it
-      </button>
-    </div>
-  </div>
-</div>
-}

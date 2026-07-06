@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { NotificationsService } from '../../../../core/services/notifications.service';
 import { DatePipe } from '@angular/common';
 import { getApiErrorMessage } from '../../../../shared/utils/http-error-message';
@@ -11,6 +11,7 @@ import { getApiErrorMessage } from '../../../../shared/utils/http-error-message'
 })
 export class Notifications {
   notificationsService = inject(NotificationsService);
+  closeDrawer = output<void>()
 
   notifications = this.notificationsService.notifications;
   openedDropdownId = signal<number | null>(null);
@@ -68,6 +69,10 @@ export class Notifications {
         this.errorMessage.set('Unable to load notifications');
       },
     });
+  }
+
+  close() {
+    this.closeDrawer.emit()
   }
 
   constructor() {

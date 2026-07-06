@@ -8,7 +8,7 @@
   display: grid;
   grid-template-columns: 16rem 1fr;
   gap: 1rem;
-  background-color: white;
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 0.6rem;
   padding: 1rem;
@@ -17,7 +17,7 @@
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 4px 14px var(--primary-shadow-card);
+    box-shadow: var(--shadow-sm);
   }
 }
 
@@ -44,11 +44,11 @@
   height: 2.3rem;
   border: none;
   border-radius: 50%;
-  background-color: white;
+  background-color: var(--color-surface);
   color: var(--color-text-neutral);
   font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 2px 8px var(--shadow-black-soft);
+  box-shadow: 0 2px 8px var(--shadow-color);
   z-index: 2;
 
   &::before,
@@ -64,7 +64,7 @@
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--color-text-form-label);
-    color: #fff;
+    color: var(--color-surface);
     padding: 0.5rem 0.8rem;
     border-radius: 4px;
     white-space: nowrap;
@@ -155,13 +155,13 @@
 
   span {
     font-size: 0.75rem;
-    color: #666;
+    color: var(--color-text-muted);
   }
 }
 
 .rating-badge {
   background-color: var(--color-primary-strong);
-  color: white !important;
+  color: var(--color-surface) !important;
   padding: 0.5rem 0.6rem;
   border-radius: 0.35rem;
   font-size: 0.9rem !important;
@@ -190,7 +190,7 @@
 .details-btn {
   border: none;
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-surface);
   padding: 0.75rem 1rem;
   border-radius: 0.35rem;
   font-weight: 700;
@@ -207,7 +207,12 @@
 
 .skeleton-card {
   height: 16rem;
-  background: linear-gradient(90deg, #eee 25%, #f7f7f7 50%, #eee 75%);
+  background: linear-gradient(
+    90deg,
+    var(--color-skeleton-base) 25%,
+    var(--color-skeleton-highlight) 50%,
+    var(--color-skeleton-base) 75%
+  );
   background-size: 200% 100%;
   animation: skeleton-loading 1.3s infinite;
 }
@@ -223,12 +228,12 @@
 }
 
 .state-card {
-  background: white;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 0.9rem;
   padding: 3rem 2rem;
   text-align: center;
-  box-shadow: 0 8px 24px var(--shadow-black-sof);
+  box-shadow: var(--shadow-md);
 
   display: flex;
   flex-direction: column;
@@ -269,15 +274,116 @@
 }
 
 .error-state {
-  border-color: var(--border-color-error);
-  background: #fffafa;
+  border-color: var(--color-danger-border);
+  background: var(--color-danger-soft);
 
   .state-icon {
-    background: rgba(220, 53, 69, 0.1);
+    background: var(--color-surface);
     color: var(--color-danger);
   }
 
   h2 {
     color: var(--color-danger);
+  }
+}
+
+@media (max-width: 992px) {
+  .accommodation-card {
+    grid-template-columns: 13rem 1fr;
+    padding: 0.8rem;
+  }
+
+  .image-wrapper {
+    height: 12.5rem;
+  }
+
+  .accommodation-content {
+    grid-template-columns: 1fr 11rem;
+  }
+
+  .price-box strong {
+    font-size: 1.15rem;
+  }
+
+  .details-btn {
+    padding: 0.7rem 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .accommodation-card {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .image-wrapper {
+    height: 13.5rem;
+    overflow: hidden;
+  }
+
+  .accommodation-content {
+    grid-template-columns: 1fr;
+  }
+
+  .main-info h3 {
+    font-size: 1.15rem;
+  }
+
+  .side-info {
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .rating-row {
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .price-box {
+    align-items: flex-start;
+  }
+
+  .details-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .favorite-btn:hover::after {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .accommodation-card {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
+
+  .image-wrapper {
+    height: 12rem;
+  }
+
+  .amenities span {
+    font-size: 0.7rem;
+  }
+
+  .state-card {
+    padding: 2.2rem 1.2rem;
+
+    .state-icon {
+      width: 4rem;
+      height: 4rem;
+      font-size: 1.6rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
   }
 }

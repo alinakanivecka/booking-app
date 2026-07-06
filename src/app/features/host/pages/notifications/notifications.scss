@@ -4,11 +4,6 @@
   background: var(--color-surface-soft);
 }
 
-.notifications-container {
-  max-width: 60rem;
-  margin: 0 auto;
-}
-
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -94,12 +89,9 @@
   height: 3rem;
   border-radius: 50%;
   flex-shrink: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background: var(--color-primary-soft);
 
   i {
     color: var(--color-primary);
@@ -126,7 +118,6 @@
 .unread-badge {
   padding: 0.25rem 0.7rem;
   border-radius: 999px;
-  background: var(--color-primary-soft);
   color: var(--color-primary);
   font-size: 0.75rem;
   font-weight: 700;
@@ -141,7 +132,7 @@
   cursor: pointer;
 
   &:hover {
-    background: var(--color-border-menu-hover);
+    background: var(--color-border);
   }
 }
 
@@ -150,10 +141,10 @@
   top: 3.2rem;
   right: 1rem;
   z-index: 10;
-  background-color: #ffffff;
-  border: 1px solid var(--color-border-dropdown);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 0.8rem;
-  box-shadow: 0 1rem 2rem var(--shadow-dropdown);
+  box-shadow: 0 1rem 2rem var(--shadow-color);
   padding: 0.35rem;
 
   .dropdown-btn-row {
@@ -239,12 +230,71 @@
 }
 
 @media (max-width: 768px) {
+  .notifications-page {
+    position: relative;
+    min-height: 100dvh;
+    padding: 1.5rem;
+  }
+
+  .notifications-container {
+    max-width: none;
+    width: 100%;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .drawer-close-btn {
+    display: block;
+  }
+
+  .notification-content {
+    min-width: 0;
+  }
+
+  .notification-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .notification-title,
+  .message {
+    overflow-wrap: anywhere;
+  }
+
+  .dropdown {
+    right: 0.75rem;
+    max-width: calc(100% - 1.5rem);
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .notifications-page {
+    padding: 1rem 0.75rem;
+  }
+
   .page-header {
     flex-direction: column;
   }
 
-  .notification-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .summary-card {
+    width: 100%;
+  }
+
+  .notification-card {
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .notification-icon {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 }

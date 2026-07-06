@@ -114,15 +114,9 @@
           } @else if (hasCurrentUserReview()) {
           <p class="message">You already reviewed this accommodation.</p>
           } @else if (canLeaveReview()) {
-          <button type="button" class="leave-review-btn" (click)="isReviewModalOpen.set(true)">
+          <button type="button" class="leave-review-btn" (click)="openFormReviewModal(accommodation.id)">
             Leave your review
           </button>
-
-          @if (isReviewModalOpen()) {
-          <app-review-form [accommodationId]="accommodation.id" (close)="isReviewModalOpen.set(false)"
-            (reviewCreated)="onReviewCreated()">
-          </app-review-form>
-          }
           } @else {
           <p class="message">You can leave a review after your stay.</p>
           }

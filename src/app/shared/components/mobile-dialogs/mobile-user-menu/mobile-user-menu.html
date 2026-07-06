@@ -1,0 +1,37 @@
+<button class="dialog-close-btn" type="button" (click)="close()" mat-icon-button>
+  <i class="fa-solid fa-xmark"></i>
+</button>
+
+<div type="button" class="user-info">
+  <div class="user-name-icon">{{ showFirstLetterCurrentUser() }}</div>
+  <span class="user-name desktop-only">{{ authService.currentUser()?.name }}</span>
+</div>
+
+<div class="mobile-menu-list">
+  <button type="button" class="menu-row" routerLink="/profile" (click)="close()">
+    <i class="fa-regular fa-user"></i>
+    Profile
+  </button>
+
+  @if (authService.currentUser()?.roles?.includes('host')) {
+  <button type="button" class="menu-row" routerLink="/host/dashboard" (click)="close()">
+    <i class="fa-solid fa-table-columns"></i>
+    Host dashboard
+  </button>
+  }
+
+  <button type="button" class="menu-row" routerLink="/bookings" (click)="close()">
+    <i class="fa-solid fa-suitcase"></i>
+    Bookings
+  </button>
+
+  <button type="button" class="menu-row" routerLink="/favorites" (click)="close()">
+    <i class="fa-regular fa-heart"></i>
+    Favorites
+  </button>
+
+  <button type="button" class="menu-row" (click)="logoutClicked()">
+    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    Sign out
+  </button>
+</div>

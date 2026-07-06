@@ -1,0 +1,18 @@
+<div class="mobile-filter">
+  <div class="mobile-filter__header">
+    <h2>Filters</h2>
+    <button class="dialog-close-btn" type="button" (click)="close()" mat-icon-button>
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="mobile-filter__body">
+    <app-filter-system [filters]="data.filters" [accItems]="data.accItems"
+      (filterChanged)="setFilters($event)"></app-filter-system>
+  </div>
+
+  <div class="mobile-filter__actions">
+    <button type="button" class="secondary-btn" (click)="close()">Cancel</button>
+    <button type="button" class="apply-btn" (click)="applyFilters()">Apply</button>
+  </div>
+</div>

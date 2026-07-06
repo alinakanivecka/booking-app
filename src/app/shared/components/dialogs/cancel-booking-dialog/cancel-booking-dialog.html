@@ -1,0 +1,42 @@
+<div class="modal-window">
+  <div class="modal-top">
+    <h1>Cancel booking</h1>
+
+    <button type="button" class="modal-close" (click)="close()" [disabled]="isCancelling()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="modal-booking-card">
+    <div>
+      <h3>{{ data.booking.accommodationName }}</h3>
+      <p>{{ data.booking.checkIn }} - {{ data.booking.checkOut }}</p>
+      <span>{{ data.booking.status }}</span>
+    </div>
+  </div>
+
+  <p>
+    Are you sure you want to cancel this booking? This action will change
+    the booking status to cancelled.
+  </p>
+
+  @if (errorMessage()) {
+  <div class="modal-error">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <div class="modal-actions">
+    <button type="button" class="danger-btn" (click)="cancelBooking()" [disabled]="isCancelling()">
+      @if (isCancelling()) {
+      Cancelling...
+      } @else {
+      Yes, cancel
+      }
+    </button>
+
+    <button type="button" class="secondary-btn" (click)="close()" [disabled]="isCancelling()">
+      No, keep it
+    </button>
+  </div>
+</div>
