@@ -167,7 +167,6 @@ export class HostAccommodationForm {
         const id = response.id;
         this.createdAccommodationId.set(id);
         this.uploadImages(id);
-        this.isLoading.set(false);
       },
       error: (error) => {
         this.errorMessage.set(

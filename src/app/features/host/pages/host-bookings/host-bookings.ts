@@ -34,7 +34,8 @@ export class HostBookings {
   isBookingsLoading = signal(false);
   isAccommodationsLoading = signal(false);
   isLoading = computed(() => this.isBookingsLoading() || this.isAccommodationsLoading());
-  errorMessage = signal('');
+  bookingsErrorMessage = signal('');
+  accommodationsErrorMessage = signal('');
 
   prevPage = computed(() => this.currentPage() > 1 && !this.isBookingsLoading());
   nextPage = computed(() => this.currentPage() < this.totalPages() && !this.isBookingsLoading());
@@ -75,7 +76,7 @@ export class HostBookings {
     const filters = this.buildFilters();
 
     this.isBookingsLoading.set(true);
-    this.errorMessage.set('');
+    this.bookingsErrorMessage.set('');
 
     this.hostService.getHostBookings(filters).subscribe({
       next: (response) => {
@@ -89,7 +90,7 @@ export class HostBookings {
       },
       error: (error) => {
         this.isBookingsLoading.set(false);
-        this.errorMessage.set(
+        this.bookingsErrorMessage.set(
           getApiErrorMessage(error, 'Unable to load bookings. Please try again'),
         );
       },
@@ -98,7 +99,7 @@ export class HostBookings {
 
   loadAccommodations() {
     this.isAccommodationsLoading.set(true);
-    this.errorMessage.set('');
+    this.accommodationsErrorMessage.set('');
 
     this.hostService.getHostAccommodations().subscribe({
       next: (response) => {
@@ -106,7 +107,7 @@ export class HostBookings {
         this.isAccommodationsLoading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set(
+        this.accommodationsErrorMessage.set(
           getApiErrorMessage(error, 'Unable to load accommodations. Please try again'),
         );
         this.isAccommodationsLoading.set(false);

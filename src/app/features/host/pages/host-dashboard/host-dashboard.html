@@ -9,6 +9,7 @@
 
     @if (isLoading()) {
     <div class="state-card">
+      <div class="loader"></div>
       Loading dashboard...
     </div>
     } @else if (errorMessage()) {
@@ -28,7 +29,7 @@
         <span class="stat-label">Total bookings</span>
         <strong>{{ totalBookings() }}</strong>
 
-         <button class="manage-btn" type="button" routerLink="/host/bookings">View bookings</button>
+        <button class="manage-btn" type="button" routerLink="/host/bookings">View bookings</button>
       </article>
     </div>
 
