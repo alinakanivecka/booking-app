@@ -103,6 +103,20 @@
         </tbody>
       </table>
     </div>
+
+    @if (totalPages() > 1) {
+    <div class="pagination">
+      <button type="button" [disabled]="!prevPage()" (click)="goToPreviousPage()">
+        Previous
+      </button>
+
+      <span>{{ pageInfo() }}</span>
+
+      <button type="button" [disabled]="!nextPage()" (click)="goToNextPage()">
+        Next
+      </button>
+    </div>
+    }
     }
   </div>
 </section>

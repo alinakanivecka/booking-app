@@ -3,6 +3,7 @@ import { NotFound } from './features/not-found/not-found';
 import { authGuard } from './core/guards/auth-guard/auth-guard';
 import { authRoutes } from './features/auth/auth.routes';
 import { hostGuard } from './core/guards/host-guard/host-guard';
+import { unsavedChangesGuard } from './core/guards/unsaved-changes-guard/unsaved-changes-guard';
 
 export const routes: Routes = [
   {
@@ -70,6 +71,7 @@ export const routes: Routes = [
         (c) => c.HostAccommodationForm,
       ),
     canActivate: [authGuard, hostGuard],
+    canDeactivate: [unsavedChangesGuard],
   },
 
   {
@@ -79,6 +81,7 @@ export const routes: Routes = [
         (c) => c.HostAccommodationForm,
       ),
     canActivate: [authGuard, hostGuard],
+    canDeactivate: [unsavedChangesGuard],
   },
 
   {

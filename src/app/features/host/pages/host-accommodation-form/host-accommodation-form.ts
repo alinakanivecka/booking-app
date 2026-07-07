@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, HostListener, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HostService } from '../../../../core/services/host.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +29,10 @@ export class HostAccommodationForm {
   imageError = signal('');
   editMode = signal(false);
   accommodationId = signal<number | null>(null);
+
+  hasUnsavedChanges = computed(() => {
+    return this.hostAccommodationForm.dirty || this.selectedFiles().length > 0;
+  });
 
   hostAccommodationForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
@@ -116,7 +120,7 @@ export class HostAccommodationForm {
       this.errorMessage.set('Please enter at least one valid amenity.');
       return;
     }
-    
+
     const createPayload: CreateHostAccommodationPayload = {
       name: formValue.name.trim(),
       description: formValue.description.trim(),
@@ -145,6 +149,7 @@ export class HostAccommodationForm {
             this.uploadImages(id);
             return;
           }
+          this.hostAccommodationForm.markAsPristine();
           this.router.navigate(['/host/accommodations']);
           this.isLoading.set(false);
         },
@@ -162,7 +167,6 @@ export class HostAccommodationForm {
         const id = response.id;
         this.createdAccommodationId.set(id);
         this.uploadImages(id);
-        this.router.navigate(['/host/accommodations']);
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -172,6 +176,10 @@ export class HostAccommodationForm {
         this.isLoading.set(false);
       },
     });
+  }
+
+  canLeavePage(): boolean {
+    return !this.hasUnsavedChanges();
   }
 
   uploadImages(id: number) {
@@ -186,6 +194,12 @@ export class HostAccommodationForm {
 
     this.hostService.uploadHostAccommodationImages(id, files).subscribe({
       next: () => {
+        this.selectedFiles.set([]);
+        this.previewUrls().forEach((url) => URL.revokeObjectURL(url));
+        this.previewUrls.set([]);
+
+        this.hostAccommodationForm.markAsPristine();
+
         this.isLoading.set(false);
         this.router.navigate(['/host/accommodations']);
       },
@@ -219,6 +233,14 @@ export class HostAccommodationForm {
         this.errorMessage.set(getApiErrorMessage(error, 'Unable to load accommodation.'));
       },
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent) {
+    if (this.hasUnsavedChanges()) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
   }
 
   constructor(route: ActivatedRoute) {

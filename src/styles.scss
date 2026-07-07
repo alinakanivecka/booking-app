@@ -33,6 +33,12 @@ html {
       supporting-text-color: var(--color-text-strong)
     )
   );
+  @include mat.tooltip-overrides(
+    (
+      container-color: var(--color-text-form-label),
+      supporting-text-color: var(--color-surface)
+    )
+  );
 }
 
 :root {

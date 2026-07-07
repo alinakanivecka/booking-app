@@ -6,10 +6,11 @@ import { RouterLink } from '@angular/router';
 import { getApiErrorMessage } from '../../shared/utils/http-error-message';
 import { MatDialog } from '@angular/material/dialog';
 import { CancelBookingDialog } from '../../shared/components/dialogs/cancel-booking-dialog/cancel-booking-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-bookings',
-  imports: [RouterLink],
+  imports: [RouterLink, MatTooltipModule],
   templateUrl: './bookings.html',
   styleUrl: './bookings.scss',
 })
