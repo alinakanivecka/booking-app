@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class GuestControl implements ControlValueAccessor {
   value = 1;
+  max = input<number | null>(null);
 
   private onChange: (value: number) => void = () => {};
   private onTouched: () => void = () => {};
@@ -32,6 +33,12 @@ export class GuestControl implements ControlValueAccessor {
   }
 
   increase(): void {
+    const max = this.max();
+
+    if (max !== null && this.value >= max) {
+      return;
+    }
+
     this.setValue(this.value + 1);
   }
 
@@ -45,5 +52,10 @@ export class GuestControl implements ControlValueAccessor {
     this.value = value;
     this.onChange(this.value);
     this.onTouched();
+  }
+
+  isIncreaseDisabled(): boolean {
+    const max = this.max();
+    return max !== null && this.value >= max;
   }
 }

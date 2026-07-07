@@ -6,9 +6,8 @@
 
       @if (authService.isAuthenticated()) {
       <button type="button" class="favorite-btn" [class.active]="isFavorite(accommodation.id)"
-        [matTooltip]="isFavorite(accommodation.id) ? 'Remove this item' : 'Save this item'"
-        matTooltipPosition="above"
-        aria-label="Button that displays a tooltip when focused or hovered over"
+        [matTooltip]="isFavorite(accommodation.id) ? 'Remove this item' : 'Save this item'" matTooltipPosition="above"
+        [attr.aria-label]="isFavorite(accommodation.id) ? 'Remove from favorites' : 'Save to favorites'"
         (click)="toggleFavorite(accommodation.id)">
         <i class="fa-heart" [class.fa-solid]="isFavorite(accommodation.id)"
           [class.fa-regular]="!isFavorite(accommodation.id)"></i>
@@ -40,48 +39,83 @@
       </div>
 
       <aside class="booking-card">
-        <div class="rating-box">
-          <div>
-            <strong>{{ accommodationRatingLabel() }}</strong>
-            <span>{{reviewsCount()}} reviews</span>
+        <div class="booking-card__top">
+          <div class="rating-box">
+            <div>
+              <strong>{{ accommodationRatingLabel() }}</strong>
+              <span>{{reviewsCount()}} reviews</span>
+            </div>
+
+            <span class="rating-badge">
+              {{ accommodation.rating || '—' }}
+            </span>
           </div>
 
-          <span class="rating-badge">
-            {{ accommodation.rating || '—' }}
-          </span>
+          <div class="price">
+            <strong><i class="fa-solid fa-euro-sign"></i> {{ accommodation.pricePerNight }}</strong>
+            <span>per night</span>
+          </div>
+
+          <div class="mini-info">
+            <span>
+              <i class="fa-solid fa-user-group"></i>
+              Up to {{ accommodation.maxGuests }} guests
+            </span>
+
+            <span>
+              <i class="fa-solid fa-star"></i>
+              {{ accommodation.rating || 'No rating yet' }}
+            </span>
+          </div>
         </div>
 
-        <div class="price">
-          <strong>€{{ accommodation.pricePerNight }}</strong>
-          <span>per night</span>
-        </div>
+        <div class="booking-card__bottom">
+          @if (authService.isAuthenticated()) {
+          <form class="booking-form" [formGroup]="bookingForm">
 
-        <div class="mini-info">
-          <span>
-            <i class="fa-solid fa-user-group"></i>
-            Up to {{ accommodation.maxGuests }} guests
-          </span>
+            <app-date-range-picker formControlName="dateRange"></app-date-range-picker>
+            <app-guest-control [max]="accommodation.maxGuests" formControlName="guests"></app-guest-control>
 
-          <span>
-            <i class="fa-solid fa-star"></i>
-            {{ accommodation.rating || 'No rating yet' }}
-          </span>
-        </div>
+            @if (nightsCount() > 0) {
+            <div class="price-summary">
+              <div class="summary-row">
+                <span>
+                  <i class="fa-solid fa-euro-sign"></i> {{ accommodation.pricePerNight }} x {{ nightsCount() }}
+                  {{ nightsCount() === 1 ? 'night' : 'nights' }}
+                </span>
 
-        @if (authService.isAuthenticated()) {
-        <form class="booking-form" [formGroup]="bookingForm">
-          <app-date-range-picker formControlName="dateRange"></app-date-range-picker>
-          <app-guest-control formControlName="guests"></app-guest-control>
-          <button type="button" (click)="bookNow()">Book now</button>
-        </form>
-        @if (errorMessage()) {
-        <div class="error">
-          <p class="error-text">{{errorMessage()}}</p>
+                <strong><i class="fa-solid fa-euro-sign"></i> {{ totalPrice() }}</strong>
+              </div>
+
+              <div class="summary-total">
+                <span>Total</span>
+                <strong><i class="fa-solid fa-euro-sign"></i> {{ totalPrice() }}</strong>
+              </div>
+            </div>
+            } @else {
+            <p class="booking-hint">Select dates to see the total price.</p>
+            }
+
+            <button class="booking-btn" type="button" (click)="bookNow()">
+              @if (isBookingLoading()) {
+              Booking...
+              } @else {
+              Book now
+              }
+            </button>
+
+          </form>
+
+          <div class="error" [class.visible]="bookingErrorMessage()">
+            @if (bookingErrorMessage()) {
+            <p class="error-text">{{ bookingErrorMessage() }}</p>
+            }
+          </div>
+
+          } @else {
+          <span class="message">Sign in to reserve this accommodation</span>
+          }
         </div>
-        }
-        } @else {
-        <span class="message">Sign in to reserve this accommodation</span>
-        }
 
       </aside>
     </div>
@@ -147,6 +181,23 @@
           </div>
         </section>
       </main>
+    </div>
+  </div>
+</section>
+} @else if (isAccommodationLoading()) {
+<section class="details-page">
+  <div class="details-container">
+    <div class="state-card">
+      <div class="loader"></div>
+      Loading accommodation...
+    </div>
+  </div>
+</section>
+} @else if (errorMessage()) {
+<section class="details-page">
+  <div class="details-container">
+    <div class="state-card error">
+      <p>{{ errorMessage() }}</p>
     </div>
   </div>
 </section>

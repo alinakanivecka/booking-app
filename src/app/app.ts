@@ -3,8 +3,8 @@ import { Header } from './shared/components/header/header';
 import { Footer } from './shared/components/footer/footer';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
-import { MatDrawerContainer, MatDrawer, MatDrawerContent, MatSidenavContainer, MatSidenavModule } from "@angular/material/sidenav";
-import { Notifications } from "./features/host/pages/notifications/notifications";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { Notifications } from './features/host/pages/notifications/notifications';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ import { Notifications } from "./features/host/pages/notifications/notifications
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
 
   ngOnInit() {
     this.authService.restoreSession();

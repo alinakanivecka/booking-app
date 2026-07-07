@@ -44,9 +44,11 @@ export class AccommodationDetailsPage {
   userBookings = signal<Booking[]>([]);
   bookingsLoaded = signal(false);
 
-  isLoading = signal(false);
+  isAccommodationLoading = signal(false);
+  isBookingLoading = signal(false);
   noResults = signal(false);
   errorMessage = signal('');
+  bookingErrorMessage = signal('');
 
   @ViewChild(Reviews)
   reviewsComponent!: Reviews;
@@ -114,13 +116,30 @@ export class AccommodationDetailsPage {
       return;
     }
 
-    this.errorMessage.set('');
+    if (this.isBookingLoading()) {
+      return;
+    }
+
+    this.bookingErrorMessage.set('');
 
     const accommodation = this.accommodation();
     const dateRange = this.bookingForm.controls.dateRange.value;
+    const guests = Number(this.bookingForm.controls.guests.value);
 
-    if (!accommodation || !dateRange?.start || !dateRange?.end) {
-      this.errorMessage.set('Please select check-in and check-out dates.');
+    if (!accommodation || !dateRange?.start || !dateRange?.end || this.nightsCount() === 0) {
+      this.bookingErrorMessage.set('Please select at least one night.');
+      return;
+    }
+
+    if (guests < 1) {
+      this.bookingErrorMessage.set('Please select at least one guest.');
+      return;
+    }
+
+    if (guests > accommodation.maxGuests) {
+      this.bookingErrorMessage.set(
+        `This accommodation allows up to ${accommodation.maxGuests} guests.`,
+      );
       return;
     }
 
@@ -128,19 +147,19 @@ export class AccommodationDetailsPage {
       accommodationId: accommodation.id,
       checkIn: formatDateForApi(dateRange.start),
       checkOut: formatDateForApi(dateRange.end),
-      guests: Number(this.bookingForm.controls.guests.value),
+      guests,
     };
 
-    this.isLoading.set(true);
+    this.isBookingLoading.set(true);
 
     this.bookingsService.bookingCreate(bookingsPayload).subscribe({
       next: () => {
-        this.isLoading.set(false);
+        this.isBookingLoading.set(false);
         this.router.navigate(['/bookings']);
       },
       error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(
+        this.isBookingLoading.set(false);
+        this.bookingErrorMessage.set(
           getApiErrorMessage(error, 'Unable to create booking. Please try again.'),
         );
       },
@@ -219,21 +238,51 @@ export class AccommodationDetailsPage {
     });
   }
 
+  nightsCount(): number {
+    const dateRange = this.bookingForm.controls.dateRange.value;
+
+    if (!dateRange?.start || !dateRange?.end) {
+      return 0;
+    }
+
+    const start = new Date(dateRange.start);
+    const end = new Date(dateRange.end);
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    const diff = end.getTime() - start.getTime();
+
+    return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
+  }
+
+  totalPrice(): number {
+    const accommodation = this.accommodation();
+
+    if (!accommodation || this.nightsCount() === 0) {
+      return 0;
+    }
+
+    return accommodation.pricePerNight * this.nightsCount();
+  }
+
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const id = Number(params.get('id'));
 
-      this.isLoading.set(true);
+      this.accommodation.set(null);
+      this.errorMessage.set('');
+      this.isAccommodationLoading.set(true);
 
       this.accommodationService.getAccommodationById(id).subscribe({
         next: (response) => {
           this.hasCurrentUserReview.set(null);
           this.accommodation.set(response);
           this.loadUserBookings();
-          this.isLoading.set(false);
+          this.isAccommodationLoading.set(false);
         },
         error: () => {
-          this.isLoading.set(false);
+          this.isAccommodationLoading.set(false);
           this.errorMessage.set('Unable to load accommodation');
         },
       });
@@ -247,6 +296,10 @@ export class AccommodationDetailsPage {
         end: params.get('checkOut') ? new Date(params.get('checkOut')!) : null,
       },
       guests: params.get('guests') ? Number(params.get('guests')) : 1,
+    });
+
+    this.bookingForm.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.bookingErrorMessage.set('');
     });
   }
 }

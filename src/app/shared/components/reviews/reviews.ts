@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { ReviewsService } from '../../../core/services/reviews.service';
 import { Review } from '../../../models/reviews.model';
 import { Accommodation } from '../../../models/accommodations.model';
@@ -30,6 +30,7 @@ export class Reviews {
   loadReviews(id: number) {
     this.isLoading.set(true);
     this.errorMessage.set('');
+    this.noResults.set(false);
 
     this.reviewsService.getAccommodationsReviews(id).subscribe({
       next: (response) => {
@@ -46,6 +47,7 @@ export class Reviews {
       },
       error: (error) => {
         this.isLoading.set(false);
+        this.noResults.set(false);
         this.errorMessage.set(
           getApiErrorMessage(error, 'Unable to load reviews. Please try again.'),
         );

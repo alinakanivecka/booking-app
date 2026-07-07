@@ -5,7 +5,7 @@
     <div class="accommodation-card skeleton-card"></div>
     }
   </div>
-  } @else if (errorMessage()) {
+  } @else if (errorMessage() && accItems().length === 0) {
   <div class="state-card error-state">
     <div class="state-icon">
       <i class="fa-solid fa-triangle-exclamation"></i>
@@ -58,7 +58,6 @@
             {{ item.city }}, {{ item.country }}
           </p>
 
-
         </div>
 
         <div class="side-info">
@@ -98,6 +97,12 @@
     @for (_ of [1, 2, 3]; track _) {
     <div class="accommodation-card skeleton-card"></div>
     }
+    }
+    @if (errorMessage() && accItems().length > 0) {
+    <div class="load-more-error">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ errorMessage() }}</span>
+    </div>
     }
   </div>
   }

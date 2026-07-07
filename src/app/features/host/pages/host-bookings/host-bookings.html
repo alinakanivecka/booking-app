@@ -20,7 +20,7 @@
         <label for="status">Status</label>
 
         <app-dropdown label="Status" [options]="statusOptions" [selectedValue]="selectedStatus()"
-          [disabled]="isLoading()" (valueChanged)="updateFilters({ status: $event?.toString() || '' })">
+          [disabled]="isBookingsLoading()" (valueChanged)="updateFilters({ status: $event?.toString() || '' })">
         </app-dropdown>
 
       </div>
@@ -29,21 +29,25 @@
         <label for="accommodation">Accommodation</label>
 
         <app-dropdown label="Accommodation" [options]="accommodationOptions()"
-          [selectedValue]="selectedAccommodationId()" [disabled]="isLoading()"
+          [selectedValue]="selectedAccommodationId()" [disabled]="isBookingsLoading() || isAccommodationsLoading()"
           (valueChanged)="updateFilters({ accommodationId: $event === null ? null : +$event })">
         </app-dropdown>
+
+        @if (accommodationsErrorMessage()) {
+        <p class="field-error">{{ accommodationsErrorMessage() }}</p>
+        }
       </div>
     </div>
 
-    @if (isLoading()) {
+    @if (isBookingsLoading()) {
     <div class="state-card">
       <div class="loader"></div>
       <p>Loading bookings...</p>
     </div>
-    } @else if (errorMessage()) {
+    } @else if (bookingsErrorMessage()) {
     <div class="state-card error">
       <i class="fa-solid fa-circle-exclamation"></i>
-      <p>{{ errorMessage() }}</p>
+      <p>{{ bookingsErrorMessage() }}</p>
     </div>
     } @else if (noResults()) {
     <div class="state-card empty">
@@ -90,7 +94,7 @@
             <td>{{ booking.guests }}</td>
 
             <td>
-              <strong>€{{ booking.totalPrice }}</strong>
+              <strong><i class="fa-solid fa-euro-sign"></i> {{ booking.totalPrice }}</strong>
             </td>
 
             <td>

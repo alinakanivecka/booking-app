@@ -1,4 +1,4 @@
-import { Component, computed, effect, HostListener, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
@@ -8,6 +8,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { MobileUserMenu } from '../mobile-dialogs/mobile-user-menu/mobile-user-menu';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -37,7 +38,7 @@ export class Header {
       this.openMobileUserMenu();
       return;
     }
-    
+
     this.isDropdownOpen.set(!this.isDropdownOpen());
   }
 
@@ -91,8 +92,11 @@ export class Header {
       }
     });
 
-    this.breakpointObserver.observe('(max-width: 768px)').subscribe((result) => {
-      this.isMobile.set(result.matches);
-    });
+    this.breakpointObserver
+      .observe('(max-width: 768px)')
+      .pipe(takeUntilDestroyed())
+      .subscribe((result) => {
+        this.isMobile.set(result.matches);
+      });
   }
 }

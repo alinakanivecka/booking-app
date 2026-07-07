@@ -14,7 +14,7 @@ describe('HostBookings', () => {
         items: [],
         totalItems: 0,
         totalPages: 0,
-        page: 0,
+        page: 1,
         pageSize: 20,
       }),
     getHostAccommodations: () => of([]),

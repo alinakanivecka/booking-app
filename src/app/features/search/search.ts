@@ -203,16 +203,20 @@ export class Search implements OnInit {
     });
   }
 
-  loadAccommodations(reset = false) {
+  loadAccommodations(reset = false, page = this.currentPage()) {
     if (this.isLoading() && !reset) return;
 
     if (reset) {
+      page = 1;
       this.currentPage.set(1);
       this.accItems.set([]);
     }
 
     const requestId = ++this.accommodationsRequestId;
-    const filters = this.buildFilters();
+    const filters = {
+      ...this.buildFilters(),
+      page,
+    };
 
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -232,6 +236,7 @@ export class Search implements OnInit {
           this.accItems.update((items) => [...items, ...response.items]);
         }
 
+        this.currentPage.set(page);
         this.isLoading.set(false);
         this.noResults.set(response.totalItems === 0);
       },
@@ -248,9 +253,9 @@ export class Search implements OnInit {
   loadNextPage() {
     if (this.isLoading() || !this.hasMore()) return;
 
-    this.currentPage.update((page) => page + 1);
+    const nextPage = this.currentPage() + 1;
 
-    this.loadAccommodations();
+    this.loadAccommodations(false, nextPage);
   }
 
   getDestinationName() {
