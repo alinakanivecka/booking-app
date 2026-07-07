@@ -23,7 +23,7 @@ export class HostDashboard {
   errorMessage = signal('');
 
   accommodationsCount = computed(() => this.accommodations().length);
-  totalBookings = computed(() => this.bookings().length);
+  totalBookings = signal(0);
 
   recentBookings = computed(() =>
     [...this.bookings()]
@@ -46,6 +46,7 @@ export class HostDashboard {
       next: ({ accommodations, bookingsResponse }) => {
         this.accommodations.set(accommodations);
         this.bookings.set(bookingsResponse.items);
+        this.totalBookings.set(bookingsResponse.totalItems);
         this.isLoading.set(false);
       },
       error: (error) => {

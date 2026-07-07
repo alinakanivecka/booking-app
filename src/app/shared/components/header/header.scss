@@ -49,12 +49,12 @@
       font-size: 1.6rem;
       color: var(--color-surface);
       padding: 0.5rem;
+      border-radius: 0.75rem;
       transition: background-color 0.2s ease;
       cursor: pointer;
 
       &:hover {
         background-color: var(--white-bg-hover);
-        border-radius: 0.75rem;
       }
     }
 
@@ -63,6 +63,7 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem;
+      border-radius: 0.75rem;
       transition: background-color 0.2s ease;
       background-color: transparent;
       border: none;
@@ -70,7 +71,6 @@
 
       &:hover {
         background-color: var(--white-bg-hover);
-        border-radius: 0.75rem;
       }
     }
 

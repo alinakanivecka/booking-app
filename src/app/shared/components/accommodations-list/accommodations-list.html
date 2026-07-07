@@ -1,5 +1,5 @@
 <section class="accommodations-section">
-  @if (isLoading()) {
+  @if (isLoading() && accItems().length === 0) {
   <div class="accommodations-list">
     @for (_ of [1, 2, 3]; track _) {
     <div class="accommodation-card skeleton-card"></div>
@@ -42,8 +42,8 @@
 
         @if (authService.isAuthenticated()) {
         <button type="button" class="favorite-btn" [class.active]="isFavorite()(item.id)"
-          [attr.data-tooltip]="isFavorite()(item.id) ? 'Remove this item' : 'Save this item'"
-          (click)="favoriteClicked(item.id)">
+          [matTooltip]="isFavorite()(item.id) ? 'Remove this item' : 'Save this item'" matTooltipPosition="above"
+          aria-label="Button that displays a tooltip when focused or hovered over" (click)="favoriteClicked(item.id)">
           <i class="fa-heart" [class.fa-solid]="isFavorite()(item.id)" [class.fa-regular]="!isFavorite()(item.id)"></i>
         </button>
         }
@@ -92,6 +92,12 @@
         </div>
       </div>
     </article>
+    }
+
+    @if (isLoading()) {
+    @for (_ of [1, 2, 3]; track _) {
+    <div class="accommodation-card skeleton-card"></div>
+    }
     }
   </div>
   }

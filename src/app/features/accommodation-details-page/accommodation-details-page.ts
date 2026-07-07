@@ -18,10 +18,11 @@ import { formatDateForApi } from '../../shared/utils/date-format';
 import { getApiErrorMessage } from '../../shared/utils/http-error-message';
 import { MatDialog } from '@angular/material/dialog';
 import { LeaveReviewDialog } from '../../shared/components/dialogs/leave-review-dialog/leave-review-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-accommodation-details-page',
-  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews],
+  imports: [DateRangePicker, ReactiveFormsModule, GuestControl, Reviews, MatTooltipModule],
   templateUrl: './accommodation-details-page.html',
   styleUrl: './accommodation-details-page.scss',
 })

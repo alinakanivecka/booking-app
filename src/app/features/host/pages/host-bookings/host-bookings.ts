@@ -28,19 +28,30 @@ export class HostBookings {
   totalItems = signal(0);
   totalPages = signal(0);
   noResults = computed(() => !this.isBookingsLoading() && this.bookings().length === 0);
-  page = signal(0);
+  currentPage = signal(1);
   pageSize = signal(20);
+
   isBookingsLoading = signal(false);
   isAccommodationsLoading = signal(false);
-
   isLoading = computed(() => this.isBookingsLoading() || this.isAccommodationsLoading());
   errorMessage = signal('');
+
+  prevPage = computed(() => this.currentPage() > 1 && !this.isBookingsLoading());
+  nextPage = computed(() => this.currentPage() < this.totalPages() && !this.isBookingsLoading());
+
+  pageInfo = computed(() => {
+    if (this.totalItems() === 0) {
+      return 'No bookings';
+    }
+
+    return `Page ${this.currentPage()} of ${this.totalPages()}`;
+  });
 
   buildFilters(): HostFiltersType {
     return {
       accommodationId: this.selectedAccommodationId() ?? undefined,
       status: this.selectedStatus() || undefined,
-      page: this.page(),
+      page: this.currentPage(),
       pageSize: this.pageSize(),
     };
   }
@@ -54,11 +65,13 @@ export class HostBookings {
       this.selectedAccommodationId.set(filters.accommodationId);
     }
 
-    this.page.set(0);
+    this.currentPage.set(1);
     this.loadBookings();
   }
 
   loadBookings() {
+    if (this.isBookingsLoading()) return;
+
     const filters = this.buildFilters();
 
     this.isBookingsLoading.set(true);
@@ -66,12 +79,13 @@ export class HostBookings {
 
     this.hostService.getHostBookings(filters).subscribe({
       next: (response) => {
-        this.isBookingsLoading.set(false);
         this.bookings.set(response.items);
         this.totalItems.set(response.totalItems ?? 0);
         this.totalPages.set(response.totalPages);
-        this.page.set(response.page);
+        this.currentPage.set(response.page);
         this.pageSize.set(response.pageSize);
+
+        this.isBookingsLoading.set(false);
       },
       error: (error) => {
         this.isBookingsLoading.set(false);
@@ -98,6 +112,20 @@ export class HostBookings {
         this.isAccommodationsLoading.set(false);
       },
     });
+  }
+
+  goToPreviousPage() {
+    if (!this.prevPage()) return;
+
+    this.currentPage.update((page) => page - 1);
+    this.loadBookings();
+  }
+
+  goToNextPage() {
+    if (!this.nextPage()) return;
+
+    this.currentPage.update((page) => page + 1);
+    this.loadBookings();
   }
 
   statusOptions = [

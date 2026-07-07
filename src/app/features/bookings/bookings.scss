@@ -132,22 +132,6 @@
       &:hover {
         background-color: var(--color-border);
       }
-
-      &:hover::after {
-        content: attr(data-tooltip);
-        display: block;
-        position: absolute;
-        bottom: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--color-text-form-label);
-        color: var(--color-surface);
-        padding: 0.5rem 0.8rem;
-        border-radius: 4px;
-        white-space: nowrap;
-        font-size: 0.8rem;
-        z-index: 10;
-      }
     }
   }
 }

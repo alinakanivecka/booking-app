@@ -6,7 +6,9 @@
 
       @if (authService.isAuthenticated()) {
       <button type="button" class="favorite-btn" [class.active]="isFavorite(accommodation.id)"
-        [attr.data-tooltip]="isFavorite(accommodation.id) ? 'Remove this item' : 'Save this item'"
+        [matTooltip]="isFavorite(accommodation.id) ? 'Remove this item' : 'Save this item'"
+        matTooltipPosition="above"
+        aria-label="Button that displays a tooltip when focused or hovered over"
         (click)="toggleFavorite(accommodation.id)">
         <i class="fa-heart" [class.fa-solid]="isFavorite(accommodation.id)"
           [class.fa-regular]="!isFavorite(accommodation.id)"></i>

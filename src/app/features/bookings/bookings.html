@@ -68,7 +68,8 @@
               {{ booking.status }}
             </span>
             @if (booking.status !== 'cancelled' && authService.isAuthenticated()) {
-            <button type="button" class="cancel-btn" (click)="openModal(booking.id)" data-tooltip="Cancel booking">
+            <button type="button" class="cancel-btn" (click)="openModal(booking.id)" matTooltip="Cancel booking"
+              matTooltipPosition="above" aria-label="Button that displays a tooltip when focused or hovered over">
               <i class="fa-solid fa-xmark"></i>
             </button>
             }

@@ -40,8 +40,6 @@ export class Search implements OnInit {
   private filtersChanged$ = new Subject<Partial<FiltersType>>();
   private accommodationsRequestId = 0;
 
-  @HostListener('window:scroll')
-
   accItems = signal<Accommodation[]>([]);
   hasSearched = signal(false);
   totalItems = signal(0);
@@ -103,6 +101,7 @@ export class Search implements OnInit {
     });
   }
 
+  @HostListener('window:scroll')
   onWindowScroll() {
     const scrollPosition = window.innerHeight + window.scrollY;
     const pageHeight = document.documentElement.scrollHeight;

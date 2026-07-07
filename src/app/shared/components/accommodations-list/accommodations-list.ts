@@ -3,10 +3,11 @@ import { Accommodation } from '../../../models/accommodations.model';
 import { RouterLink } from '@angular/router';
 import { AccommodationsService } from '../../../core/services/accommodations.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-accommodations-list',
-  imports: [RouterLink],
+  imports: [RouterLink, MatTooltipModule],
   templateUrl: './accommodations-list.html',
   styleUrl: './accommodations-list.scss',
 })
